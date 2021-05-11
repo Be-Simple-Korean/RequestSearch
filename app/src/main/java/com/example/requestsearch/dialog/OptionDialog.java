@@ -40,6 +40,7 @@ public class OptionDialog {
  //   private BookAdapter bookAdapter;
     private ClientDataVO clientData;
     private String sort;
+    private String d_range;
     //private Retrofit retrofit;
 
     private ArrayList<Item> detailMainItemArrayList;
@@ -52,9 +53,10 @@ public class OptionDialog {
         this.onItemClick = onItemClick;
     }
 
-    public OptionDialog(Context context,String sort) {
+    public OptionDialog(Context context,String sort,String d_range) {
         this.context = context;
         this.sort=sort;
+        this.d_range=d_range;
     }
 
     public void showDialog() {
@@ -74,27 +76,29 @@ public class OptionDialog {
           uiSetOptionSort();
 //        uiSetRange();
         dialog.show();
+
         ImageView ivCloseDialog = dialog.findViewById(R.id.imageview_dialog_close); // X(닫기) 이미지 버튼형식
         ivCloseDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.e("수행","!");
                 dialog.dismiss();
             }
         });
 
-//        //정렬-관련도순
-//        tvOptionSortRelevance.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                dialog.dismiss();
-//                if (!sortData.getSort().equals("sim")) {
-//                    sortData.setSort("sim");
-//                    searchWithDRange();
-//                }
-//            }
-//        });
-//
+        //정렬-관련도순
+        tvOptionSortRelevance.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!sort.equals("sim")){
+                    dialog.dismiss();
+                    if(onItemClick!=null){
+                        dialog.dismiss();
+                        onItemClick.onItemClick(v,0);
+                    }
+                }
+            }
+        });
+
         //정렬-출간일순
         tvOptionSortPublicationDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,82 +123,45 @@ public class OptionDialog {
                 }
             }
         });
-//
-//        //정렬-판매일순
-//        tvOptionSortSales.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                dialog.dismiss();
-//                if (!sortData.getSort().equals("count")) {
-//                    sortData.setSort("count");
-//                    searchWithDRange();
-//                }
-//            }
-//        });
-//
-//        //범위 - 전체
-//        tvOptionRangeAll.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                dialog.dismiss();
-//                if (curData.getCurWord().length() == 0) {
-//                    noWordGuideDialog.show();
-//                } else {
-//                    sortData.setD_range("전체");
-//                    searchWithDRange();
-//                }
-//
-//            }
-//        });
-//
-//        //범위 - 책제목
-//        tvOptionRangeTitle.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (!sortData.getD_range().equals("책제목")) {
-//                    dialog.dismiss();
-//                    if (curData.getCurWord().length() == 0) {
-//                        noWordGuideDialog.show();
-//                    } else {
-//                        sortData.setD_range("책제목");
-//                        searchWithDRange();
-//                    }
-//                }
-//            }
-//        });
-//
-//        //범위 - 저자
-//        tvOptionRangeAuthor.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (!sortData.getD_range().equals("저자")) {
-//                    dialog.dismiss();
-//                    if (curData.getCurWord().length() == 0) {
-//                        noWordGuideDialog.show();
-//                    } else {
-//                        sortData.setD_range("저자");
-//                        searchWithDRange();
-//                    }
-//                }
-//            }
-//        });
-//
-//        //범위 - 출판사
-//        tvOptionRangePublisher.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (!sortData.getD_range().equals("출판사")) {
-//                    dialog.dismiss();
-//                    if (curData.getCurWord().length() == 0) {
-//                        noWordGuideDialog.show();
-//                    } else {
-//                        sortData.setD_range("출판사");
-//                        searchWithDRange();
-//                    }
-//                }
-//
-//            }
-//        });
+
+        //범위 - 책제목
+        tvOptionRangeTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!d_range.equals("책제목")) {
+                    if(onItemClick!=null){
+                        dialog.dismiss();
+                        onItemClick.onItemClick(v,3);
+                    }
+                }
+            }
+        });
+
+        //범위 - 저자
+        tvOptionRangeAuthor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!d_range.equals("저자")) {
+                    if(onItemClick!=null){
+                        dialog.dismiss();
+                        onItemClick.onItemClick(v,3);
+                    }
+                }
+            }
+        });
+
+        //범위 - 출판사
+        tvOptionRangePublisher.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!d_range.equals("출판사")){
+                    if(onItemClick!=null){
+                        dialog.dismiss();
+                        onItemClick.onItemClick(v,3);
+                    }
+                }
+            }
+        });
 
     }
 

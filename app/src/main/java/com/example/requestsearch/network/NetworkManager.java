@@ -3,10 +3,15 @@ package com.example.requestsearch.network;
 import android.util.Log;
 
 import com.example.requestsearch.OnBookDataCallback;
+import com.example.requestsearch.OnDetailBookDataCallback;
 import com.example.requestsearch.OnMovieDataCallback;
 import com.example.requestsearch.data.ClientDataVO;
 import com.example.requestsearch.data.book.SearchBook;
+import com.example.requestsearch.data.detail.Item;
+import com.example.requestsearch.data.detail.Rss;
 import com.example.requestsearch.data.movie.SearchMovie;
+
+import java.util.PropertyResourceBundle;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -24,6 +29,8 @@ public class NetworkManager {
     private Response<SearchBook> tmpBookResponse=null;
     private Call<SearchMovie> callMovieData;
     private Response<SearchMovie> tmpMovieResponse = null;
+    private Call<Rss> callDetailBookData;
+    private Response<Rss> tmpDetailResponse = null;
     private Throwable t = null;
 
     public NetworkManager() {
@@ -50,6 +57,37 @@ public class NetworkManager {
             public void onFailure(Call<SearchBook> call, Throwable t) {
                 if (onBookDataCallback != null) {
                     onBookDataCallback.onFailure(callBookData, t);
+                }
+            }
+        });
+    }
+
+    public void requestDetailBookData(String d_range, String word, int start, int display, String sort, OnDetailBookDataCallback onDetailBookDataCallback){
+        switch (d_range){
+            case "책제목":
+                callDetailBookData=naverAPI.getRangeDataByTitle(clientDataVO.getClientId(),clientDataVO.getClientSecret(),start,display,sort,word);
+                break;
+            case "저자":
+                callDetailBookData=naverAPI.getRangeDataByAuthor(clientDataVO.getClientId(),clientDataVO.getClientSecret(),start,display,sort,word);
+                break;
+            case "출판사":
+                callDetailBookData=naverAPI.getRangeDataByPubl(clientDataVO.getClientId(),clientDataVO.getClientSecret(),start,display,sort,word);
+                break;
+        }
+        callDetailBookData.enqueue(new Callback<Rss>() {
+            @Override
+            public void onResponse(Call<Rss> call, Response<Rss> response) {
+                tmpDetailResponse=response;
+                if(onDetailBookDataCallback!=null){
+                    onDetailBookDataCallback.onResponse(callDetailBookData,tmpDetailResponse);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Rss> call, Throwable t) {
+                t = t;
+                if (onDetailBookDataCallback != null) {
+                    onDetailBookDataCallback.onFailure(callDetailBookData, t);
                 }
             }
         });

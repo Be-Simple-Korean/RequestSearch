@@ -63,8 +63,7 @@ public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         if(number==0){ //ㄱ기본
             return bookMainItemsArrayList.get(position).getViewType();
         }else{ //상세
-            //return
-            return 0;
+            return detailMainItemArrayList.get(position).getViewType();
         }
     }
 

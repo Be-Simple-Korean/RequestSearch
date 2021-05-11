@@ -2,6 +2,7 @@ package com.example.requestsearch.network;
 
 
 import com.example.requestsearch.data.book.SearchBook;
+import com.example.requestsearch.data.detail.Rss;
 import com.example.requestsearch.data.movie.SearchMovie;
 
 import retrofit2.Call;
@@ -36,29 +37,32 @@ public interface NaverAPI {
             @Query("display")int display,
             @Query("sort")String sort
     );
-//    @GET("/v1/search/book_adv.xml")
-//    Call<Rss> getRangeDataByTitle(
-//            @Header("X-Naver-Client-Id")String id,
-//            @Header("X-Naver-Client-Secret")String secret,
-//            @Query("display")int display,
-//            @Query("sort")String sort,
-//            @Query("d_titl")String d_titl
-//    );
-//    @GET("/v1/search/book_adv.xml")
-//    Call<Rss> getRangeDataByAuthor(
-//            @Header("X-Naver-Client-Id")String id,
-//            @Header("X-Naver-Client-Secret")String secret,
-//            @Query("display")int display,
-//            @Query("sort")String sort,
-//            @Query("d_auth")String d_author
-//    );
-//    @GET("/v1/search/book_adv.xml")
-//    Call<Rss> getRangeDataByPubl(
-//            @Header("X-Naver-Client-Id")String id,
-//            @Header("X-Naver-Client-Secret")String secret,
-//            @Query("display")int display,
-//            @Query("sort")String sort,
-//            @Query("d_publ")String d_publ
-//    );
+    @GET("/v1/search/book_adv.xml")
+    Call<Rss> getRangeDataByTitle(
+            @Header("X-Naver-Client-Id")String id,
+            @Header("X-Naver-Client-Secret")String secret,
+            @Query("start")int start,
+            @Query("display")int display,
+            @Query("sort")String sort,
+            @Query("d_titl")String d_titl
+    );
+    @GET("/v1/search/book_adv.xml")
+    Call<Rss> getRangeDataByAuthor(
+            @Header("X-Naver-Client-Id")String id,
+            @Header("X-Naver-Client-Secret")String secret,
+            @Query("start")int start,
+            @Query("display")int display,
+            @Query("sort")String sort,
+            @Query("d_auth")String d_author
+    );
+    @GET("/v1/search/book_adv.xml")
+    Call<Rss> getRangeDataByPubl(
+            @Header("X-Naver-Client-Id")String id,
+            @Header("X-Naver-Client-Secret")String secret,
+            @Query("start")int start,
+            @Query("display")int display,
+            @Query("sort")String sort,
+            @Query("d_publ")String d_publ
+    );
 
 }

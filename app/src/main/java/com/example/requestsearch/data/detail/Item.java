@@ -25,6 +25,15 @@ public class Item {
     String description;
     @Element(name = "pubdate",required = false)
     String pubdate;
+    int viewType;
+
+    public int getViewType() {
+        return viewType;
+    }
+
+    public void setViewType(int viewType) {
+        this.viewType = viewType;
+    }
 
     public Item() {
     }

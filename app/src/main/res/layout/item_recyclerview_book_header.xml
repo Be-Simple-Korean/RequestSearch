@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <RelativeLayout
+        android:id="@+id/layout_main_sort"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/white">
+
+        <RelativeLayout
+            android:id="@+id/layout_main_option"
+            android:layout_width="72dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true">
+
+            <TextView
+                android:id="@+id/textview_main_sort_option"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
+                android:layout_marginRight="10dp"
+                android:text="@string/main_sort_set"
+                android:textColor="@color/baseTextColor" />
+
+            <ImageView
+                android:id="@+id/imageview_main_sort_option"
+                android:layout_width="30dp"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:layout_toLeftOf="@id/textview_main_sort_option"
+                android:src="@drawable/main_sort_option_icon_24dp" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_marginRight="5dp"
+                android:layout_toLeftOf="@id/imageview_main_sort_option"
+                android:background="@color/baseTextColor" />
+        </RelativeLayout>
+    </RelativeLayout>
+</FrameLayout>

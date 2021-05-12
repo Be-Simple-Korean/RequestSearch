@@ -99,7 +99,7 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     @Override
     public int getItemCount() {
-        return movieMainItemsArrayList.size();
+        return movieMainItemsArrayList==null?0:movieMainItemsArrayList.size();
     }
 
     /**

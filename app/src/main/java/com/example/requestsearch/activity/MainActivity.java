@@ -51,7 +51,7 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity {
     //    private ArrayList<Item> detailMainItemArrayList, detailSubItemArrayList;
 
-    private static final String URL="url";
+    private static final String URL = "url";
     private static final int EMPTY_SIZE = 0;
     private static final int START_POSITION = 1;
     private static final String TAG = "MainActivity";
@@ -86,11 +86,12 @@ public class MainActivity extends AppCompatActivity {
     private int curPosition = 0;
     private String type = "book";
     private String sort = "sim";
- //   private String d_range = "전체";
+    //   private String d_range = "전체";
     private boolean isOpen = true;
 
 
-    //TODO
+    //TODO 탭클릭시 애니메이션동작x
+//            isopen바꿔주기
 
     //          *한번에 긴코드는 메소드로 따로 빼기
 
@@ -116,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.addItemDecoration(new ItemDecoration(this));
         bookAdapter = new BookAdapter();
-        movieAdapter=new MovieAdapter();
+        movieAdapter = new MovieAdapter();
         recyclerView.setAdapter(bookAdapter);
 
         movieAdapter.setOnItemClick(onItemClick);
@@ -235,6 +236,7 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case R.id.textview_main_movietab: //탭 - 영화
                     if (!type.equals(TYPE_MOVIE)) {
+                        Log.e("수행","1");
                         recyclerView.setAdapter(movieAdapter);
                         start = 1;
                         type = TYPE_MOVIE;
@@ -314,12 +316,16 @@ public class MainActivity extends AppCompatActivity {
      */
     private void requestSearchData(String type, String word) {
         if (type.equals(TYPE_MOVIE)) {
+            Log.e("영화검색수행","2");
             recycleMovieList();
+            Log.e("영화검색수행","0");
             networkManager.requestMovieData(word, start, DISPLAY, new OnMovieDataCallback() {
                 @Override
                 public void onResponse(Call<SearchMovieVO> call, Response<SearchMovieVO> response) {
+                    Log.e("영화검색수행","0-1");
                     if (response.code() == SUCCESS_CODE) {
                         if (response.body() != null) {
+                            Log.e("영화검색수행","4");
                             setMovieDataInList(response, word);
                         } else {
                             setNoResultMovieDataInList(word);
@@ -347,7 +353,8 @@ public class MainActivity extends AppCompatActivity {
                 public void onResponse(Call<SearchBookVO> call, Response<SearchBookVO> response) {
                     if (response.code() == SUCCESS_CODE) {
                         if (response.body() != null) {
-                            setBookDataInList(response,word);
+                            Log.e("수행", "1");
+                            setBookDataInList(response, word);
                         } else { //size==0
                             showNoResultBookData(word);
                         }
@@ -484,10 +491,13 @@ public class MainActivity extends AppCompatActivity {
      * 영화 데이터 리스트 초기화
      */
     private void recycleMovieList() {
-        if(start==START_POSITION){
-            if(movieMainItemsArrayList==null){
-                movieMainItemsArrayList=new ArrayList<>();
-            }else{
+        Log.e("영화검색수행","3");
+        if (start == START_POSITION) {
+            if (movieMainItemsArrayList == null) {
+                Log.e("영화검색수행","3-1");
+                movieMainItemsArrayList = new ArrayList<>();
+            } else {
+                Log.e("영화검색수행","3-2");
                 movieMainItemsArrayList.clear();
             }
         }
@@ -495,12 +505,14 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * 책 검색 데이터 리스트에 세팅
+     *
      * @param response
      * @param word
      */
     private void setBookDataInList(Response<SearchBookVO> response, String word) {
         maxBookSize = response.body().getTotal();
         if (maxBookSize != EMPTY_SIZE) {
+            Log.e("수행", "2");
             if (start == START_POSITION) {
                 BookItemsVO header = new BookItemsVO();
                 header.setViewType(HEADER_TYPE);
@@ -514,6 +526,7 @@ public class MainActivity extends AppCompatActivity {
         }
         if (maxBookSize > DISPLAY) { //더보기
             if (maxBookSize > start + DISPLAY) {
+                Log.e("수행", "2");
                 BookItemsVO btnBookItems = new BookItemsVO();
                 btnBookItems.setViewType(LOADMORE_TYPE);
                 bookMainItemsArrayList.add(btnBookItems); //더보기 버튼 처리
@@ -523,6 +536,7 @@ public class MainActivity extends AppCompatActivity {
         bookAdapter.setList(bookMainItemsArrayList);
         bookAdapter.setWord(word);
         tvBookTab.setText("책(" + maxBookSize + ")");
+        bookAdapter.notifyDataSetChanged();
     }
 
     /**
@@ -538,7 +552,7 @@ public class MainActivity extends AppCompatActivity {
         bookAdapter.setWord(word);
         bookAdapter.setList(bookMainItemsArrayList);
         tvBookTab.setText("책");
-
+        bookAdapter.notifyDataSetChanged();
     }
 
     /**
@@ -548,9 +562,12 @@ public class MainActivity extends AppCompatActivity {
      * @param word
      */
     private void setMovieDataInList(Response<SearchMovieVO> response, String word) {
+        Log.e("영화검색수행","5");
         maxMovieSize = response.body().getTotal();
         if (maxMovieSize != EMPTY_SIZE) {
+            Log.e("영화검색수행","6");
             if (start == START_POSITION) {
+                Log.e("영화검색수행","7");
                 MovieItemsVO movieHeader = new MovieItemsVO();
                 movieHeader.setViewType(HEADER_TYPE);
                 movieMainItemsArrayList.add(0, movieHeader); //헤더처리
@@ -569,9 +586,11 @@ public class MainActivity extends AppCompatActivity {
                     start += DISPLAY;
                 }
             }
+            Log.e("size",movieMainItemsArrayList.size()+"");
             tvMovieTab.setText("영화(" + maxMovieSize + ")");
             movieAdapter.setWord(word);
             movieAdapter.setMovieMainItemsArrayList(movieMainItemsArrayList);
+            movieAdapter.notifyDataSetChanged();
         } else {
             setNoResultMovieDataInList(word);
         }
@@ -713,5 +732,6 @@ public class MainActivity extends AppCompatActivity {
         movieAdapter.setWord(word);
         movieAdapter.setMovieMainItemsArrayList(movieMainItemsArrayList);
         tvMovieTab.setText("영화");
+        movieAdapter.notifyDataSetChanged();
     }
 }

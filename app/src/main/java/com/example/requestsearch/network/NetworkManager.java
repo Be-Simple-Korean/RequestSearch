@@ -1,5 +1,7 @@
 package com.example.requestsearch.network;
 
+import android.util.Log;
+
 import com.example.requestsearch.listenerInterface.OnBookDataCallback;
 import com.example.requestsearch.listenerInterface.OnMovieDataCallback;
 import com.example.requestsearch.data.ClientDataVO;
@@ -127,11 +129,13 @@ public class NetworkManager {
      * @param onMovieDataCallback
      */
     public void requestMovieData(String word, int start, int display, OnMovieDataCallback onMovieDataCallback) {
+        Log.e("수행","10");
         callMovieData = naverAPI.getMovieData(clientDataVO.getClientId(), clientDataVO.getClientSecret(), word, start, display);
         callMovieData.enqueue(new Callback<SearchMovieVO>() {
             @Override
             public void onResponse(Call<SearchMovieVO> call, Response<SearchMovieVO> response) {
                 tmpMovieResponse = response;
+                Log.e("수행","10-1");
                 if (onMovieDataCallback != null) {
                     onMovieDataCallback.onResponse(callMovieData, tmpMovieResponse);
                 }
@@ -140,6 +144,7 @@ public class NetworkManager {
             @Override
             public void onFailure(Call<SearchMovieVO> call, Throwable t) {
                 t = t;
+                Log.e("수행","10-2");
                 if (onMovieDataCallback != null) {
                     onMovieDataCallback.onFailure(callMovieData, t);
                 }

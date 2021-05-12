@@ -2,16 +2,13 @@ package com.example.requestsearch.network;
 
 import android.util.Log;
 
-import com.example.requestsearch.OnBookDataCallback;
-import com.example.requestsearch.OnDetailBookDataCallback;
-import com.example.requestsearch.OnMovieDataCallback;
+import com.example.requestsearch.listenerInterface.OnBookDataCallback;
+import com.example.requestsearch.listenerInterface.OnDetailBookDataCallback;
+import com.example.requestsearch.listenerInterface.OnMovieDataCallback;
 import com.example.requestsearch.data.ClientDataVO;
 import com.example.requestsearch.data.book.SearchBook;
-import com.example.requestsearch.data.detail.Item;
 import com.example.requestsearch.data.detail.Rss;
 import com.example.requestsearch.data.movie.SearchMovie;
-
-import java.util.PropertyResourceBundle;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -62,36 +59,57 @@ public class NetworkManager {
         });
     }
 
-    public void requestDetailBookData(String d_range, String word, int start, int display, String sort, OnDetailBookDataCallback onDetailBookDataCallback){
-        switch (d_range){
-            case "책제목":
-                callDetailBookData=naverAPI.getRangeDataByTitle(clientDataVO.getClientId(),clientDataVO.getClientSecret(),start,display,sort,word);
-                break;
-            case "저자":
-                callDetailBookData=naverAPI.getRangeDataByAuthor(clientDataVO.getClientId(),clientDataVO.getClientSecret(),start,display,sort,word);
-                break;
-            case "출판사":
-                callDetailBookData=naverAPI.getRangeDataByPubl(clientDataVO.getClientId(),clientDataVO.getClientSecret(),start,display,sort,word);
-                break;
-        }
-        callDetailBookData.enqueue(new Callback<Rss>() {
-            @Override
-            public void onResponse(Call<Rss> call, Response<Rss> response) {
-                tmpDetailResponse=response;
-                if(onDetailBookDataCallback!=null){
-                    onDetailBookDataCallback.onResponse(callDetailBookData,tmpDetailResponse);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Rss> call, Throwable t) {
-                t = t;
-                if (onDetailBookDataCallback != null) {
-                    onDetailBookDataCallback.onFailure(callDetailBookData, t);
-                }
-            }
-        });
-    }
+//    /**
+//     * xml로 데이터를 받지 않기 때문에 사용안함
+//     * @param d_range
+//     * @param word
+//     * @param start
+//     * @param display
+//     * @param sort
+//     * @param onDetailBookDataCallback
+//     */
+//    public void requestDetailBookData(String d_range, String word, int start, int display, String sort, OnDetailBookDataCallback onDetailBookDataCallback){
+//
+//        retrofit = new Retrofit.Builder()
+//                .baseUrl("https://openapi.naver.com")
+//                .addConverterFactory(SimpleXmlConverterFactory.create())
+//                .build();
+//        naverAPI = retrofit.create(NaverAPI.class);
+//        Log.e("send in network",d_range+"/"+word+"/"+start+"/"+display+"/"+sort);
+//        switch (d_range){
+//            case "책제목":
+//                callDetailBookData=naverAPI.getRangeDataByTitle(clientDataVO.getClientId(),clientDataVO.getClientSecret(),word,start,display,sort);
+//                break;
+//            case "저자":
+//                Log.e("수행",7+"");
+//                callDetailBookData=naverAPI.getRangeDataByAuthor(clientDataVO.getClientId(),clientDataVO.getClientSecret(),word,start,display,sort);
+//                break;
+//            case "출판사":
+//                callDetailBookData=naverAPI.getRangeDataByPubl(clientDataVO.getClientId(),clientDataVO.getClientSecret(),word,start,display,sort);
+//                break;
+//        }
+//        Log.e("수행",8+"");
+//        callDetailBookData.enqueue(new Callback<Rss>() {
+//            @Override
+//            public void onResponse(Call<Rss> call, Response<Rss> response) {
+//                Log.e("수행",9+"");
+//                tmpDetailResponse=response;
+//                if(onDetailBookDataCallback!=null){
+//                    Log.e("수행",10+"");
+//                    onDetailBookDataCallback.onResponse(callDetailBookData,tmpDetailResponse);
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<Rss> call, Throwable t) {
+//                Log.e("수행","9-1");
+//                t = t;
+//                if (onDetailBookDataCallback != null) {
+//                    onDetailBookDataCallback.onFailure(callDetailBookData, t);
+//                }
+//            }
+//        });
+//    }
 
     public void requestMovieData(String word, int start, int display, OnMovieDataCallback onMovieDataCallback) {
         callMovieData = naverAPI.getMovieData(clientDataVO.getClientId(), clientDataVO.getClientSecret(), word, start, display);

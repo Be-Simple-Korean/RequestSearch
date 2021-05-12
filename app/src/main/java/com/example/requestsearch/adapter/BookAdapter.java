@@ -2,7 +2,6 @@ package com.example.requestsearch.adapter;
 
 import android.content.Intent;
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.requestsearch.OnItemClick;
+import com.example.requestsearch.listenerInterface.OnItemClick;
 import com.example.requestsearch.R;
 import com.example.requestsearch.activity.WebViewActivty;
 import com.example.requestsearch.data.book.BookItems;
@@ -150,16 +149,18 @@ public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public class BookItemViewHolder extends RecyclerView.ViewHolder { //메인 아이템 뷰홀더
         protected TextView tvBookTitle, tvBookAuthor, tvBookPublisher, tvBookPubDate, tvBookPrice;
         protected ImageView tvBookImage;
+        protected RelativeLayout layoutBookItem;
 
         public BookItemViewHolder(@NonNull View itemView) {
             super(itemView);
+            layoutBookItem=itemView.findViewById(R.id.layout_book_item);
             tvBookTitle = itemView.findViewById(R.id.textview_bookitem_title);
             tvBookAuthor = itemView.findViewById(R.id.textview_bookitem_author);
             tvBookPublisher = itemView.findViewById(R.id.textview_bookitem_publisher);
             tvBookPubDate = itemView.findViewById(R.id.textview_bookitem_pubDate);
             tvBookPrice = itemView.findViewById(R.id.textview_bookitem_price);
             tvBookImage = itemView.findViewById(R.id.imageview_bookitem_image);
-            tvBookTitle.setOnClickListener(new View.OnClickListener() {
+            layoutBookItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     int position=getAdapterPosition();

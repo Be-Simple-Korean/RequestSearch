@@ -41,28 +41,28 @@ public interface NaverAPI {
     Call<Rss> getRangeDataByTitle(
             @Header("X-Naver-Client-Id")String id,
             @Header("X-Naver-Client-Secret")String secret,
+            @Query("d_titl")String d_titl,
             @Query("start")int start,
             @Query("display")int display,
-            @Query("sort")String sort,
-            @Query("d_titl")String d_titl
+            @Query("sort")String sort
     );
     @GET("/v1/search/book_adv.xml")
     Call<Rss> getRangeDataByAuthor(
             @Header("X-Naver-Client-Id")String id,
             @Header("X-Naver-Client-Secret")String secret,
+            @Query("d_auth")String d_author,
             @Query("start")int start,
             @Query("display")int display,
-            @Query("sort")String sort,
-            @Query("d_auth")String d_author
+            @Query("sort")String sort
     );
     @GET("/v1/search/book_adv.xml")
     Call<Rss> getRangeDataByPubl(
             @Header("X-Naver-Client-Id")String id,
             @Header("X-Naver-Client-Secret")String secret,
+            @Query("d_publ")String d_publ,
             @Query("start")int start,
             @Query("display")int display,
-            @Query("sort")String sort,
-            @Query("d_publ")String d_publ
+            @Query("sort")String sort
     );
 
 }

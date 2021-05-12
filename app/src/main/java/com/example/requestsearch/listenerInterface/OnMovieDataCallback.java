@@ -1,4 +1,4 @@
-package com.example.requestsearch;
+package com.example.requestsearch.listenerInterface;
 
 import com.example.requestsearch.data.movie.SearchMovie;
 

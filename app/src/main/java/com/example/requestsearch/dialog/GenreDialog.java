@@ -16,8 +16,8 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.requestsearch.adapter.MovieGenreAdapter;
-import com.example.requestsearch.OnDimissListener;
-import com.example.requestsearch.OnItemClickListener;
+import com.example.requestsearch.listenerInterface.OnDimissListener;
+import com.example.requestsearch.listenerInterface.OnItemClickListener;
 import com.example.requestsearch.R;
 import com.example.requestsearch.data.movie.MovieGenreData;
 

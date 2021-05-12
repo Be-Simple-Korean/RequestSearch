@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 
-import com.example.requestsearch.OnItemClickListener;
+import com.example.requestsearch.listenerInterface.OnItemClickListener;
 import com.example.requestsearch.R;
 import com.example.requestsearch.data.movie.MovieGenreData;
 import com.example.requestsearch.dialog.GenreDialog;

@@ -14,7 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.requestsearch.OnItemClick;
+import com.example.requestsearch.listenerInterface.OnItemClick;
 import com.example.requestsearch.R;
 import com.example.requestsearch.data.movie.MovieItems;
 
@@ -104,15 +104,16 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public class MovieItemViewHolder extends RecyclerView.ViewHolder {
         protected TextView movieTitle, movieOpenDate, moiveGrade, movieDirector;
         protected ImageView movieImage;
-
+        protected RelativeLayout layoutMovieItem;
         public MovieItemViewHolder(@NonNull View itemView) {
             super(itemView);
+            layoutMovieItem=itemView.findViewById(R.id.layout_movie_item);
             movieTitle = itemView.findViewById(R.id.textview_movieitem_title);
             movieOpenDate = itemView.findViewById(R.id.textview_movieitem_openDate);
             moiveGrade = itemView.findViewById(R.id.textview_movieitem_grade);
             movieDirector = itemView.findViewById(R.id.textview_movieitem_director);
             movieImage = itemView.findViewById(R.id.textview_movieitem_image);
-            movieTitle.setOnClickListener(new View.OnClickListener() {
+            layoutMovieItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     int position=getAdapterPosition();

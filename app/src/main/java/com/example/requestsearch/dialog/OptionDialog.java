@@ -14,17 +14,12 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.requestsearch.OnItemClick;
+import com.example.requestsearch.listenerInterface.OnItemClick;
 import com.example.requestsearch.R;
 import com.example.requestsearch.data.ClientDataVO;
 import com.example.requestsearch.data.detail.Item;
 
 import java.util.ArrayList;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
 
 public class OptionDialog {
     private Context context;
@@ -33,11 +28,11 @@ public class OptionDialog {
             tvOptionRangeAll, tvOptionRangeTitle, tvOptionRangeAuthor, tvOptionRangePublisher;
     private ImageView ivOptionSortRelevance, ivOptionSortPublicationDate, ivOptionSortSales, ivOptionRangeAll,
             ivOptionRangeTitle, ivOptionRangeAuthor, ivOptionRangePublisher;
-//    private SortData sortData;
+    //    private SortData sortData;
 //    private CurData curData;
     private NoWordGuideDialog noWordGuideDialog;
     private int maxBookSize;
- //   private BookAdapter bookAdapter;
+    //   private BookAdapter bookAdapter;
     private ClientDataVO clientData;
     private String sort;
     private String d_range;
@@ -47,16 +42,16 @@ public class OptionDialog {
     private ArrayList<Item> detailSubItemArrayList;
     private RecyclerView recyclerView;
 
-    OnItemClick onItemClick=null;
+    OnItemClick onItemClick = null;
 
     public void setOnItemClick(OnItemClick onItemClick) {
         this.onItemClick = onItemClick;
     }
 
-    public OptionDialog(Context context,String sort,String d_range) {
+    public OptionDialog(Context context, String sort, String d_range) {
         this.context = context;
-        this.sort=sort;
-        this.d_range=d_range;
+        this.sort = sort;
+        this.d_range = d_range;
     }
 
     public void showDialog() {
@@ -73,8 +68,8 @@ public class OptionDialog {
             window.setAttributes(params);
             window.setGravity(Gravity.BOTTOM);
         }
-          uiSetOptionSort();
-//        uiSetRange();
+        uiSetOptionSort();
+        uiSetRange();
         dialog.show();
 
         ImageView ivCloseDialog = dialog.findViewById(R.id.imageview_dialog_close); // X(닫기) 이미지 버튼형식
@@ -89,11 +84,11 @@ public class OptionDialog {
         tvOptionSortRelevance.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!sort.equals("sim")){
+                if (!sort.equals("sim")) {
                     dialog.dismiss();
-                    if(onItemClick!=null){
+                    if (onItemClick != null) {
                         dialog.dismiss();
-                        onItemClick.onItemClick(v,0);
+                        onItemClick.onItemClick(v, 0);
                     }
                 }
             }
@@ -103,10 +98,10 @@ public class OptionDialog {
         tvOptionSortPublicationDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!sort.equals("date")){
-                    if(onItemClick!=null){
+                if (!sort.equals("date")) {
+                    if (onItemClick != null) {
                         dialog.dismiss();
-                        onItemClick.onItemClick(v,1);
+                        onItemClick.onItemClick(v, 1);
                     }
                 }
             }
@@ -115,10 +110,10 @@ public class OptionDialog {
         tvOptionSortSales.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!sort.equals("count")){
-                    if(onItemClick!=null){
+                if (!sort.equals("count")) {
+                    if (onItemClick != null) {
                         dialog.dismiss();
-                        onItemClick.onItemClick(v,2);
+                        onItemClick.onItemClick(v, 2);
                     }
                 }
             }
@@ -128,10 +123,13 @@ public class OptionDialog {
         tvOptionRangeTitle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.e("수행","1");
                 if (!d_range.equals("책제목")) {
-                    if(onItemClick!=null){
+                    Log.e("수행","2");
+                    if (onItemClick != null) {
+                        Log.e("수행","3");
                         dialog.dismiss();
-                        onItemClick.onItemClick(v,3);
+                        onItemClick.onItemClick(v, 3);
                     }
                 }
             }
@@ -142,9 +140,9 @@ public class OptionDialog {
             @Override
             public void onClick(View v) {
                 if (!d_range.equals("저자")) {
-                    if(onItemClick!=null){
+                    if (onItemClick != null) {
                         dialog.dismiss();
-                        onItemClick.onItemClick(v,3);
+                        onItemClick.onItemClick(v, 3);
                     }
                 }
             }
@@ -154,10 +152,10 @@ public class OptionDialog {
         tvOptionRangePublisher.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!d_range.equals("출판사")){
-                    if(onItemClick!=null){
+                if (!d_range.equals("출판사")) {
+                    if (onItemClick != null) {
                         dialog.dismiss();
-                        onItemClick.onItemClick(v,3);
+                        onItemClick.onItemClick(v, 3);
                     }
                 }
             }
@@ -165,228 +163,40 @@ public class OptionDialog {
 
     }
 
-//    /**
-//     * 정렬로 상세검색 수행시 범위에 맞게 검색
-//     */
-//    private void searchWithDRange() {
-//        switch (sortData.getD_range()) {
-//            case "전체":
-//                if (curData.getCurWord().length() == 0) {
-//                    noWordGuideDialog.show();
-//                } else {
-//                    requestSerachBookData();
-//                }
-//                break;
-//            case "책제목":
-//                if (curData.getCurWord().length() == 0) {
-//                    noWordGuideDialog.show();
-//                } else {
-//                    uiSetRange();
-//                    requestDetailSearchData("title");
-//                }
-//                break;
-//            case "저자":
-//                Log.e("수행","저자1");
-//                Log.e("word",curData.getCurWord());
-//                if (curData.getCurWord().length() == 0) {
-//                    noWordGuideDialog.show();
-//                } else {
-//                    uiSetRange();
-//                    requestDetailSearchData("author");
-//                }
-//                break;
-//            case "출판사":
-//                if (curData.getCurWord().length() == 0) {
-//                    noWordGuideDialog.show();
-//                } else {
-//                    uiSetRange();
-//                    requestDetailSearchData("publ");
-//                }
-//                break;
-//        }
-//    }
-//
-//
-//    /**
-//     * 상세검색
-//     * @param type 상세검색 유형
-//     */
-//    private void requestDetailSearchData(String type) {
-//        retrofitData = new RetrofitData("xml");
-//        retrofit = retrofitData.getRetrofit();
-//        naverAPI = retrofit.create(NaverAPI.class);
-//        String word = curData.getCurWord();
-//        Call<Rss> call;
-//        detailMainItemArrayList = new ArrayList<>();
-//        detailSubItemArrayList = new ArrayList<>();
-//        if (type.equals("title")) {
-//            call = naverAPI.getRangeDataByTitle(clientData.getClientId(),clientData.getClientSecret(), 100, sortData.getSort(), word);
-//        } else if (type.equals("author")) {
-//            call = naverAPI.getRangeDataByAuthor(clientData.getClientId(),clientData.getClientSecret(), 100, sortData.getSort(), word);
-//        } else {
-//            call = naverAPI.getRangeDataByPubl(clientData.getClientId(),clientData.getClientSecret(), 100, sortData.getSort(), word);
-//        }
-//
-//        call.enqueue(new Callback<Rss>() {
-//            @Override
-//            public void onResponse(Call<Rss> call, Response<Rss> response) {
-//                if (response.body() == null || response.body().getChannel().getTotal().equals("0")) {
-//                    showNoSearchDetailData(word);
-//                } else {
-//                    Channel channel = response.body().getChannel();
-//                    maxBookSize = Integer.parseInt(channel.getTotal());
-//                    if (maxBookSize > 100) maxBookSize = 100;
-//                    detailMainItemArrayList.add(null);
-//                    if (maxBookSize > 15) {
-//                        for (int i = 0; i < 15; i++) {
-//                            detailMainItemArrayList.add(channel.getItem().get(i));
-//                        }
-//                        for (int i = 15; i < maxBookSize; i++) {
-//                            detailSubItemArrayList.add(channel.getItem().get(i));
-//                        }
-//                        detailMainItemArrayList.add(null);
-//                        bookAdapter = new BookAdapter(null,null,detailMainItemArrayList,detailSubItemArrayList,maxBookSize,1,word);
-//                    } else {
-//                        detailMainItemArrayList = channel.getItem();
-//                        bookAdapter = new BookAdapter(null,null,detailMainItemArrayList,null,maxBookSize,1,word);
-//                    }
-//                    recyclerView.setAdapter(bookAdapter);
-//                    bookAdapter.notifyDataSetChanged();
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<Rss> call, Throwable t) {
-//                        showNoSearchDetailData(word);
-//            }
-//        });
-//    }
-//
-//    /**
-//     * 상세검색 결과없음
-//     * @param word
-//     */
-//    private void showNoSearchDetailData(String word){
-//        detailMainItemArrayList.clear();
-//        detailSubItemArrayList.clear();
-//        maxBookSize=0;
-//        detailMainItemArrayList.add(null); //헤더처리
-//        detailMainItemArrayList.add(null); //결과없음처리
-//        bookAdapter = new BookAdapter(null,null,detailMainItemArrayList,null,maxBookSize,-1,word); // -1= 검색 결과 없음
-//        recyclerView.setAdapter(bookAdapter);
-//    }
-//
-//    /**
-//     * 기본 책 데이터 가져오기
-//      */
-//    private void requestSerachBookData() {
-//        clientData = new ClientData();
-//        retrofitData = new RetrofitData("json");
-//        retrofit = retrofitData.getRetrofit();
-//        naverAPI = retrofit.create(NaverAPI.class);
-//        String word = curData.getCurWord();
-//        Call<SearchBook> searchBookCall = naverAPI.getBookData(clientData.getClientId(), clientData.getClientSecret(), word, 100, sortData.getSort());
-//        ArrayList<BookItems> bookMainItemsArrayList = new ArrayList<>();
-//        ArrayList<BookItems> bookSubItemsArrayList = new ArrayList<>();
-//        maxBookSize = 0;
-//        searchBookCall.enqueue(new Callback<SearchBook>() {
-//            @Override
-//            public void onResponse(Call<SearchBook> call, Response<SearchBook> response) {
-//                if (response.body() != null) {
-//                    SearchBook searchBook = response.body();
-//                    if (searchBook.getTotal() >= 100) {
-//                        maxBookSize = 100;
-//                    } else {
-//                        maxBookSize = searchBook.getTotal();
-//                    }
-//                    if (maxBookSize != 0) {
-//                        bookMainItemsArrayList.add(null); //헤더처리
-//                        if (maxBookSize > 15) {
-//                            for (int i = 0; i < 15; i++) {
-//                                if (searchBook.getItems().get(i) == null) {
-//                                    continue;
-//                                } else {
-//                                    bookMainItemsArrayList.add(searchBook.getItems().get(i));
-//                                }
-//                            }
-//                            for (int i = 15; i < maxBookSize; i++) {
-//                                if (searchBook.getItems().get(i) == null) {
-//                                    continue;
-//                                } else {
-//                                    bookSubItemsArrayList.add(searchBook.getItems().get(i));
-//                                }
-//                            }
-//                            bookMainItemsArrayList.add(null); //더보기 버튼 처리
-//                            bookAdapter = new BookAdapter(bookMainItemsArrayList, bookSubItemsArrayList, null, null, maxBookSize, 0, word);
-//                        } else {
-//                            for (int i = 0; i < maxBookSize; i++) {
-//                                if (searchBook.getItems().get(i) == null) {
-//                                    continue;
-//                                } else {
-//                                    bookMainItemsArrayList.add(searchBook.getItems().get(i));
-//                                }
-//                            }
-//                            bookAdapter = new BookAdapter(bookMainItemsArrayList, null, null, null, maxBookSize, 0, word);
-//                        }
-//                        MainActivity mainActivity = new MainActivity();
-//                        mainActivity.setBookText(maxBookSize);
-//                        recyclerView.setAdapter(bookAdapter);
-//                    } else { //maxBookSize == 0
-//                        maxBookSize = -1; //결과없음 상태
-//                        bookMainItemsArrayList.add(null); //헤더
-//                        bookMainItemsArrayList.add(null); //결과없음
-//                        bookAdapter = new BookAdapter(bookMainItemsArrayList, null, null, null, maxBookSize, 0, word);
-//                        recyclerView.setAdapter(bookAdapter);
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<SearchBook> call, Throwable t) {
-//                maxBookSize = -1;
-//                bookMainItemsArrayList.add(null); //헤더
-//                bookMainItemsArrayList.add(null); //결과없음
-//                bookAdapter = new BookAdapter(bookMainItemsArrayList, null, null, null, maxBookSize, 0, word);
-//                recyclerView.setAdapter(bookAdapter);
-//                Log.e("t", t.getMessage());
-//            }
-//        });
-//    }
-//
-//
-//    /**
+    //    /**
 //     * 상세검색 범위 ui set
 //     */
-//    private void uiSetRange() {
-//        tvOptionRangeAll.setTextColor(dialog.getContext().getResources().getColor(R.color.baseTextColor));
-//        ivOptionRangeAll.setImageResource(R.drawable.sort_baseicon);
-//        tvOptionRangeTitle.setTextColor(dialog.getContext().getResources().getColor(R.color.baseTextColor));
-//        ivOptionRangeTitle.setImageResource(R.drawable.sort_baseicon);
-//        tvOptionRangeAuthor.setTextColor(dialog.getContext().getResources().getColor(R.color.baseTextColor));
-//        ivOptionRangeAuthor.setImageResource(R.drawable.sort_baseicon);
-//        tvOptionRangePublisher.setTextColor(dialog.getContext().getResources().getColor(R.color.baseTextColor));
-//        ivOptionRangePublisher.setImageResource(R.drawable.sort_baseicon);
-//        switch (sortData.getD_range()) {
-//            case "전체":
-//                tvOptionRangeAll.setTextColor(dialog.getContext().getResources().getColor(R.color.black));
-//                ivOptionRangeAll.setImageResource(R.drawable.sort_selecticon);
-//                break;
-//            case "책제목":
-//                tvOptionRangeTitle.setTextColor(dialog.getContext().getResources().getColor(R.color.black));
-//                ivOptionRangeTitle.setImageResource(R.drawable.sort_selecticon);
-//                break;
-//            case "저자":
-//                tvOptionRangeAuthor.setTextColor(dialog.getContext().getResources().getColor(R.color.black));
-//                ivOptionRangeAuthor.setImageResource(R.drawable.sort_selecticon);
-//                break;
-//            case "출판사":
-//                tvOptionRangePublisher.setTextColor(dialog.getContext().getResources().getColor(R.color.black));
-//                ivOptionRangePublisher.setImageResource(R.drawable.sort_selecticon);
-//                break;
+    private void uiSetRange() {
+        tvOptionRangeAll.setTextColor(dialog.getContext().getResources().getColor(R.color.baseTextColor));
+        ivOptionRangeAll.setImageResource(R.drawable.sort_baseicon);
+        tvOptionRangeTitle.setTextColor(dialog.getContext().getResources().getColor(R.color.baseTextColor));
+        ivOptionRangeTitle.setImageResource(R.drawable.sort_baseicon);
+        tvOptionRangeAuthor.setTextColor(dialog.getContext().getResources().getColor(R.color.baseTextColor));
+        ivOptionRangeAuthor.setImageResource(R.drawable.sort_baseicon);
+        tvOptionRangePublisher.setTextColor(dialog.getContext().getResources().getColor(R.color.baseTextColor));
+        ivOptionRangePublisher.setImageResource(R.drawable.sort_baseicon);
+        switch (d_range) {
+            case "전체":
+                tvOptionRangeAll.setTextColor(dialog.getContext().getResources().getColor(R.color.black));
+                ivOptionRangeAll.setImageResource(R.drawable.sort_selecticon);
+                break;
+            case "책제목":
+                tvOptionRangeTitle.setTextColor(dialog.getContext().getResources().getColor(R.color.black));
+                ivOptionRangeTitle.setImageResource(R.drawable.sort_selecticon);
+                break;
+            case "저자":
+                tvOptionRangeAuthor.setTextColor(dialog.getContext().getResources().getColor(R.color.black));
+                ivOptionRangeAuthor.setImageResource(R.drawable.sort_selecticon);
+                break;
+            case "출판사":
+                tvOptionRangePublisher.setTextColor(dialog.getContext().getResources().getColor(R.color.black));
+                ivOptionRangePublisher.setImageResource(R.drawable.sort_selecticon);
+                break;
+
+        }
+    }
 //
-//        }
-//    }
-//
+
     /**
      * 상세검색 정렬 ui set
      */

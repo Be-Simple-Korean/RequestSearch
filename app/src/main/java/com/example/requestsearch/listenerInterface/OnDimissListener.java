@@ -2,7 +2,10 @@ package com.example.requestsearch.listenerInterface;
 
 import com.example.requestsearch.dialog.GenreDialog;
 
+/**
+ * 다이얼로그 닫기 리스너
+ */
 public interface OnDimissListener {
-    void onDismissed(GenreDialog v, boolean status,int position);
+    void onDismissed(GenreDialog dialog, boolean isItem,int position);
 
 }

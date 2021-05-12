@@ -11,21 +11,29 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.requestsearch.listenerInterface.OnItemClickListener;
 import com.example.requestsearch.R;
-import com.example.requestsearch.data.movie.MovieGenreData;
+import com.example.requestsearch.data.movie.MovieGenreDataVO;
 import com.example.requestsearch.dialog.GenreDialog;
 
 import java.util.ArrayList;
 
+/**
+ * 영화 장르 데이터 Recyclerview Adapter
+ */
 public class MovieGenreAdapter extends RecyclerView.Adapter<MovieGenreAdapter.GenreViewHolder> {
-    ArrayList<MovieGenreData> genreList;
-    GenreDialog dialog;
-    OnItemClickListener onItemClickListener =null;
 
+    private ArrayList<MovieGenreDataVO> genreList;
+    private GenreDialog dialog;
+    private OnItemClickListener onItemClickListener =null;
+
+    /**
+     * 영화 아이템 클릭 리스너
+     * @param onItemClickListener
+     */
     public void setOnItemClick(OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
     }
 
-    public MovieGenreAdapter(GenreDialog di, ArrayList<MovieGenreData> genreList) {
+    public MovieGenreAdapter(GenreDialog di, ArrayList<MovieGenreDataVO> genreList) {
         this.dialog=di;
         this.genreList = genreList;
     }
@@ -49,24 +57,28 @@ public class MovieGenreAdapter extends RecyclerView.Adapter<MovieGenreAdapter.Ge
         return genreList.size();
     }
 
+    /**
+     * 영화 장르 항목 뷰홀더
+     */
     public class GenreViewHolder extends RecyclerView.ViewHolder {
         protected TextView tvGenre;
+
         public GenreViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvGenre=itemView.findViewById(R.id.textview_movie_dialog_genre);
+            tvGenre = itemView.findViewById(R.id.textview_movie_dialog_genre);
 
             tvGenre.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int position=getAdapterPosition();
-                    for(int i=0;i<genreList.size();i++){
+                    int position = getAdapterPosition();
+                    for (int i = 0; i < genreList.size(); i++) {
                         genreList.get(i).setSelected(false);
                     }
                     genreList.get(position).setSelected(true);
                     notifyDataSetChanged();
-                    if(position!= RecyclerView.NO_POSITION){
-                        if(onItemClickListener !=null){
-                            onItemClickListener.setOnItemClick(v,position+1);
+                    if (position != RecyclerView.NO_POSITION) {
+                        if (onItemClickListener != null) {
+                            onItemClickListener.setOnItemClick(v, position + 1);
                         }
                     }
                 }

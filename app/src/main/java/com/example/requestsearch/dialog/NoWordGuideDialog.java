@@ -12,6 +12,9 @@ import androidx.annotation.NonNull;
 
 import com.example.requestsearch.R;
 
+/**
+ * 검색어 없을시 안내 팝업
+ */
 public class NoWordGuideDialog extends Dialog {
 
     public NoWordGuideDialog(@NonNull Context context) {
@@ -23,16 +26,17 @@ public class NoWordGuideDialog extends Dialog {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_no_word_guide);
         getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        TextView tvCancel = findViewById(R.id.tv_dialog_cancel);
-        TextView tvCheck = findViewById(R.id.tv_dialog_check);
 
-        tvCancel.setOnClickListener(new View.OnClickListener() { //취소 텍스트 클릭
+        // 텍스트뷰 - 취소
+        findViewById(R.id.tv_dialog_cancel).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dismiss();
             }
         });
-        tvCheck.setOnClickListener(new View.OnClickListener() { //확인 텍스트 클릭
+
+        // 텍스트뷰 - 확인
+        findViewById(R.id.tv_dialog_check).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dismiss();

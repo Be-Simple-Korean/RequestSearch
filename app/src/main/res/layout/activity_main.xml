@@ -56,15 +56,22 @@
         android:background="@color/naver_color" />
 
     <FrameLayout
+        android:id="@+id/layout_main_frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerview_main"
+        <LinearLayout
+            android:id="@+id/layout_main_recyclerview_parent"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/backgroundColor"
-            android:paddingTop="50dp" />
+            android:orientation="vertical">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerview_main"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/backgroundColor"
+                 />
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/layout_main_tab"

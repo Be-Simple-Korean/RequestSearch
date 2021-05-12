@@ -21,6 +21,9 @@ import com.example.requestsearch.data.detail.Item;
 
 import java.util.ArrayList;
 
+/**
+ * 책 상세검색 옵션 선택 다이얼로그
+ */
 public class OptionDialog {
     private Context context;
     private Dialog dialog;

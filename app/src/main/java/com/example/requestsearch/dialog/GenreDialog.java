@@ -19,18 +19,28 @@ import com.example.requestsearch.adapter.MovieGenreAdapter;
 import com.example.requestsearch.listenerInterface.OnDimissListener;
 import com.example.requestsearch.listenerInterface.OnItemClickListener;
 import com.example.requestsearch.R;
-import com.example.requestsearch.data.movie.MovieGenreData;
+import com.example.requestsearch.data.movie.MovieGenreDataVO;
 
 import java.util.ArrayList;
 
+/**
+ * 장르 항목 표시 다이얼로그
+ */
 public class GenreDialog extends Dialog {
-    ArrayList<MovieGenreData> genreList;
-    public GenreDialog(@NonNull Context context,ArrayList<MovieGenreData> genreList) {
+
+    private  ArrayList<MovieGenreDataVO> genreList;
+    private  OnDimissListener onDimissListener=null;
+
+    public GenreDialog(@NonNull Context context,ArrayList<MovieGenreDataVO> genreList) {
         super(context);
         this.genreList=genreList;
     }
-    OnDimissListener onDimissListener=null;
 
+
+    /**
+     * 장르 항목 클릭 리스너
+     * @param onDimissListener
+     */
     public void setOnDimissListener(OnDimissListener onDimissListener) {
         this.onDimissListener = onDimissListener;
     }
@@ -39,7 +49,15 @@ public class GenreDialog extends Dialog {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_movie_genre_select);
-        ImageView ivMovieDialogClose= findViewById(R.id.imageview_movie_dialog_close); // X(닫기) 이미지 버튼형식
+
+      // X(닫기) 이미지 버튼형식
+        findViewById(R.id.imageview_movie_dialog_close).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onDimissListener.onDismissed(GenreDialog.this,false,0);
+            }
+        });
+
         Window window = getWindow();
         if(window!=null){
             window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -49,6 +67,7 @@ public class GenreDialog extends Dialog {
             window.setAttributes( params );
             window.setGravity( Gravity.BOTTOM );
         }
+
         RecyclerView recyclerView=findViewById(R.id.recyclerview_movie_dialog);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(),3);
         recyclerView.setLayoutManager(gridLayoutManager);
@@ -61,15 +80,5 @@ public class GenreDialog extends Dialog {
             }
         });
         recyclerView.setAdapter(movieGenreAdapter);
-        ivMovieDialogClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view)
-            {
-               onDimissListener.onDismissed(GenreDialog.this,false,0);
-            }
-        });
-
     }
-
-
 }

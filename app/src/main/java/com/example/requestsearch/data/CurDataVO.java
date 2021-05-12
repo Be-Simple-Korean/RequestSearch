@@ -1,6 +1,9 @@
 package com.example.requestsearch.data;
 
 
+/**
+ * 현재 검색 단어 데이터
+ */
 public class CurDataVO {
     public static String curWord="";
 

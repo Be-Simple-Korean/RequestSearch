@@ -2,14 +2,17 @@ package com.example.requestsearch.data.movie;
 
 import java.util.ArrayList;
 
-public class SearchMovie {
+/**
+ * 영화 전체 검색 데이터
+ */
+public class SearchMovieVO {
     private String lastBuildDate;
     private int total;
     private int start;
     private int display;
-    private ArrayList<MovieItems> items;
+    private ArrayList<MovieItemsVO> items;
 
-    public SearchMovie(String lastBuildDate, int total, int start, int display, ArrayList<MovieItems> items) {
+    public SearchMovieVO(String lastBuildDate, int total, int start, int display, ArrayList<MovieItemsVO> items) {
         this.lastBuildDate = lastBuildDate;
         this.total = total;
         this.start = start;
@@ -33,7 +36,7 @@ public class SearchMovie {
         return display;
     }
 
-    public ArrayList<MovieItems> getItems() {
+    public ArrayList<MovieItemsVO> getItems() {
         return items;
     }
 

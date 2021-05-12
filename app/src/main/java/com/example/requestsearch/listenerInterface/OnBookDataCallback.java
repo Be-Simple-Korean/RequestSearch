@@ -1,12 +1,14 @@
 package com.example.requestsearch.listenerInterface;
 
-import com.example.requestsearch.data.book.SearchBook;
-import com.example.requestsearch.data.movie.SearchMovie;
+import com.example.requestsearch.data.book.SearchBookVO;
 
 import retrofit2.Call;
 import retrofit2.Response;
 
+/**
+ * 책 검색 콜백
+ */
 public interface OnBookDataCallback {
-    void onResponse(Call<SearchBook> call, Response<SearchBook> response);
-    void onFailure(Call<SearchBook> call,  Throwable t);
+    void onResponse(Call<SearchBookVO> call, Response<SearchBookVO> response);
+    void onFailure(Call<SearchBookVO> call, Throwable t);
 }

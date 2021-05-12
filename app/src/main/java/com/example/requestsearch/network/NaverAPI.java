@@ -1,18 +1,21 @@
 package com.example.requestsearch.network;
 
 
-import com.example.requestsearch.data.book.SearchBook;
+import com.example.requestsearch.data.book.SearchBookVO;
 import com.example.requestsearch.data.detail.Rss;
-import com.example.requestsearch.data.movie.SearchMovie;
+import com.example.requestsearch.data.movie.SearchMovieVO;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Query;
 
+/**
+ * 네이버 OPEN API 인터페이스
+ */
 public interface NaverAPI {
     @GET("/v1/search/movie.json")
-    Call<SearchMovie> getMovieData (
+    Call<SearchMovieVO> getMovieData (
             @Header("X-Naver-Client-Id")String id,
             @Header("X-Naver-Client-Secret")String secret,
             @Query("query")String query,
@@ -20,7 +23,7 @@ public interface NaverAPI {
             @Query("display")int display
     );
     @GET("/v1/search/movie.json")
-    Call<SearchMovie> getMovieDataWithGenre (
+    Call<SearchMovieVO> getMovieDataWithGenre (
             @Header("X-Naver-Client-Id")String id,
             @Header("X-Naver-Client-Secret")String secret,
             @Query("query")String query,
@@ -29,7 +32,7 @@ public interface NaverAPI {
             @Query("genre")int genre
     );
     @GET("/v1/search/book.json")
-    Call<SearchBook> getBookData(
+    Call<SearchBookVO> getBookData(
             @Header("X-Naver-Client-Id")String id,
             @Header("X-Naver-Client-Secret")String secret,
             @Query("query")String query,

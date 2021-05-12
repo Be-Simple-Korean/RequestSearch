@@ -1,7 +1,6 @@
 package com.example.requestsearch.adapter;
 
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,25 +15,46 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.requestsearch.listenerInterface.OnItemClick;
 import com.example.requestsearch.R;
-import com.example.requestsearch.data.movie.MovieItems;
+import com.example.requestsearch.data.movie.MovieItemsVO;
 
 import java.util.ArrayList;
 
+/**
+ * 영화 데이터 Recyclerview Adapter
+ */
 public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
     private static final int HEADER_TYPE = 0;
     private static final int NOREUSLT_TYPE = 1;
     private static final int LOADMORE_TYPE = 2;
     private static final int MAIN_TYPE = 3;
-    String word;
-    private ArrayList<MovieItems> movieMainItemsArrayList;
-    OnItemClick onItemClick=null;
 
+    private String word;
+    private ArrayList<MovieItemsVO> movieMainItemsArrayList;
+    private OnItemClick onItemClick=null;
+
+    /**
+     * 영화 리사이클러뷰 아이템 클릭 리스너
+     * @param onItemClick
+     */
     public void setOnItemClick(OnItemClick onItemClick) {
         this.onItemClick = onItemClick;
     }
 
-    public MovieAdapter(String word, ArrayList<MovieItems> movieMainItemsArrayList) {
+
+    /**
+     * 영화 검색결과 없음을 나타내는 단어
+     * @param word
+     */
+    public void setWord(String word) {
         this.word = word;
+    }
+
+    /**
+     * 영화 검색 데이터리스트 세팅
+     * @param movieMainItemsArrayList
+     */
+    public void setMovieMainItemsArrayList(ArrayList<MovieItemsVO> movieMainItemsArrayList) {
         this.movieMainItemsArrayList = movieMainItemsArrayList;
     }
 
@@ -82,6 +102,9 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         return movieMainItemsArrayList.size();
     }
 
+    /**
+     * 영화 데이터 메인 아이템 뷰홀더
+     */
     public class MovieItemViewHolder extends RecyclerView.ViewHolder {
         protected TextView movieTitle, movieOpenDate, moiveGrade, movieDirector;
         protected ImageView movieImage;
@@ -108,6 +131,9 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
     }
 
+    /**
+     * 영화 데이터 헤더 뷰홀더
+     */
     public class MovieHeaderHolder extends RecyclerView.ViewHolder {
         protected RelativeLayout layoutMovieGenre;
 
@@ -128,6 +154,9 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
     }
 
+    /**
+     * 영화데이터 검색결과 없음 뷰홀더
+     */
     public class NoResultViewHolder extends RecyclerView.ViewHolder {
         protected TextView tvFindWord;
 
@@ -137,6 +166,9 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
     }
 
+    /**
+     * 영화 데이터 더보기 뷰홀더
+     */
     public class LoadMoreViewHolder extends RecyclerView.ViewHolder {
         public Button btnLoadMore;
         public LoadMoreViewHolder(@NonNull View itemView) {
@@ -164,7 +196,7 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
      */
     private void showMovieItems(MovieItemViewHolder holder, int position) {
         if (movieMainItemsArrayList.get(position) != null) {
-            MovieItems movieItems = movieMainItemsArrayList.get(position);
+            MovieItemsVO movieItems = movieMainItemsArrayList.get(position);
             if (movieItems.getTitle() == null) {
                 holder.movieTitle.setText("");
             } else {

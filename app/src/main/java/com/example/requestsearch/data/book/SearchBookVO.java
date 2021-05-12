@@ -2,15 +2,18 @@ package com.example.requestsearch.data.book;
 
 import java.util.ArrayList;
 
-public class SearchBook {
+/***
+ * 책 전체 검색 결과 데이터
+ */
+public class SearchBookVO {
     private String lastBuildDate;
     private int total;
     private int start;
     private int display;
-    private ArrayList<BookItems> items;
+    private ArrayList<BookItemsVO> items;
 
 
-    public SearchBook(String lastBuildDate, int total, int start, int display,ArrayList<BookItems> items ) {
+    public SearchBookVO(String lastBuildDate, int total, int start, int display, ArrayList<BookItemsVO> items ) {
         this.lastBuildDate = lastBuildDate;
         this.total = total;
         this.start = start;
@@ -34,7 +37,7 @@ public class SearchBook {
         return display;
     }
 
-    public ArrayList<BookItems> getItems() {
+    public ArrayList<BookItemsVO> getItems() {
         return items;
     }
 

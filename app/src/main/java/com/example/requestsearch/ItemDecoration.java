@@ -8,6 +8,9 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+/**
+ * Recyclerview 아이템 여백 설정
+ */
 public class ItemDecoration extends RecyclerView.ItemDecoration {
     private int top;
 

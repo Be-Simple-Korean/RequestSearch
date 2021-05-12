@@ -1,7 +1,7 @@
 package com.example.requestsearch.data;
 
 /**
- * value object
+ * 클라이언트 정보 데이터
  */
 public class ClientDataVO {
     private static final String CLIENT_ID = "T92xNEy7zmxTD8fIFj6P";

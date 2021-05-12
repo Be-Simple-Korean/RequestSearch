@@ -1,7 +1,10 @@
 package com.example.requestsearch.data.book;
 
 
-public class BookItems {
+/**
+ * 책 검색 데이터
+ */
+public class BookItemsVO {
    private String title;
    private String link;
    private String image;
@@ -12,7 +15,7 @@ public class BookItems {
    private String isbn;
    private String description;
    private String pubdate;
-   private int viewType;
+   private int viewType = 3;
 
     public int getViewType() {
         return viewType;
@@ -22,34 +25,47 @@ public class BookItems {
         this.viewType = viewType;
     }
 
-    public BookItems(String title, String link, String image, String author, String price, String discount, String publisher, String isbn, String description, String pubdate) {
+    public void setTitle(String title) {
         this.title = title;
+    }
+
+    public void setLink(String link) {
         this.link = link;
+    }
+
+    public void setImage(String image) {
         this.image = image;
+    }
+
+    public void setAuthor(String author) {
         this.author = author;
+    }
+
+    public void setPrice(String price) {
         this.price = price;
+    }
+
+    public void setDiscount(String discount) {
         this.discount = discount;
+    }
+
+    public void setPublisher(String publisher) {
         this.publisher = publisher;
+    }
+
+    public void setIsbn(String isbn) {
         this.isbn = isbn;
+    }
+
+    public void setDescription(String description) {
         this.description = description;
+    }
+
+    public void setPubdate(String pubdate) {
         this.pubdate = pubdate;
     }
 
-    @Override
-    public String toString() {
-        return "BookItems{" +
-                "title='" + title + '\'' +
-                ", link='" + link + '\'' +
-                ", image='" + image + '\'' +
-                ", author='" + author + '\'' +
-                ", price='" + price + '\'' +
-                ", discount='" + discount + '\'' +
-                ", publisher='" + publisher + '\'' +
-                ", isbn='" + isbn + '\'' +
-                ", description='" + description + '\'' +
-                ", pubdate='" + pubdate + '\'' +
-                '}';
-    }
+
 
     public String getTitle() {
         return title;
@@ -89,5 +105,21 @@ public class BookItems {
 
     public String getPubdate() {
         return pubdate;
+    }
+
+    @Override
+    public String toString() {
+        return "BookItems{" +
+                "title='" + title + '\'' +
+                ", link='" + link + '\'' +
+                ", image='" + image + '\'' +
+                ", author='" + author + '\'' +
+                ", price='" + price + '\'' +
+                ", discount='" + discount + '\'' +
+                ", publisher='" + publisher + '\'' +
+                ", isbn='" + isbn + '\'' +
+                ", description='" + description + '\'' +
+                ", pubdate='" + pubdate + '\'' +
+                '}';
     }
 }

@@ -1,12 +1,15 @@
 package com.example.requestsearch.data.movie;
 
-public class MovieGenreData {
+/**
+ * 영화 장르 항목 데이터
+ */
+public class MovieGenreDataVO {
 
     private String gName;
 
     private boolean isSelected = false;
 
-    public MovieGenreData(String gName, boolean isSelected) {
+    public MovieGenreDataVO(String gName, boolean isSelected) {
         this.gName = gName;
         this.isSelected = isSelected;
     }

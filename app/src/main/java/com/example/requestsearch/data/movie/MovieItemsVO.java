@@ -2,7 +2,10 @@ package com.example.requestsearch.data.movie;
 
 import com.google.gson.annotations.SerializedName;
 
-public class MovieItems {
+/**
+ * 영화 검색 결과 데이터
+ */
+public class MovieItemsVO {
     private String title;
     private String link;
     @SerializedName("image")
@@ -13,7 +16,71 @@ public class MovieItems {
     private String director;
     private String actor;
     private String userRating;
-    private int viewType;
+    private int viewType=3;
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
+    }
+
+    public String getImgLink() {
+        return imgLink;
+    }
+
+    public void setImgLink(String imgLink) {
+        this.imgLink = imgLink;
+    }
+
+    public String getSubtitle() {
+        return subtitle;
+    }
+
+    public void setSubtitle(String subtitle) {
+        this.subtitle = subtitle;
+    }
+
+    public String getPubDate() {
+        return pubDate;
+    }
+
+    public void setPubDate(String pubDate) {
+        this.pubDate = pubDate;
+    }
+
+    public String getDirector() {
+        return director;
+    }
+
+    public void setDirector(String director) {
+        this.director = director;
+    }
+
+    public String getActor() {
+        return actor;
+    }
+
+    public void setActor(String actor) {
+        this.actor = actor;
+    }
+
+    public String getUserRating() {
+        return userRating;
+    }
+
+    public void setUserRating(String userRating) {
+        this.userRating = userRating;
+    }
 
     public int getViewType() {
         return viewType;
@@ -21,49 +88,6 @@ public class MovieItems {
 
     public void setViewType(int viewType) {
         this.viewType = viewType;
-    }
-
-    public MovieItems(String title, String link, String imgLink, String subtitle, String pubDate, String director, String actor, String userRating) {
-        this.title = title;
-        this.link = link;
-        this.imgLink = imgLink;
-        this.subtitle = subtitle;
-        this.pubDate = pubDate;
-        this.director = director;
-        this.actor = actor;
-        this.userRating = userRating;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public String getLink() {
-        return link;
-    }
-
-    public String getImgLink() {
-        return imgLink;
-    }
-
-    public String getSubtitle() {
-        return subtitle;
-    }
-
-    public String getPubDate() {
-        return pubDate;
-    }
-
-    public String getDirector() {
-        return director;
-    }
-
-    public String getActor() {
-        return actor;
-    }
-
-    public String getUserRating() {
-        return userRating;
     }
 
     @Override

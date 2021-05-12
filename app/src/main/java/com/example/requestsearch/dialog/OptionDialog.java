@@ -88,7 +88,7 @@ public class OptionDialog {
                     dialog.dismiss();
                     if (onItemClick != null) {
                         dialog.dismiss();
-                        onItemClick.onItemClick(v, 0);
+                        onItemClick.onItemClick(v, 0,"");
                     }
                 }
             }
@@ -101,7 +101,7 @@ public class OptionDialog {
                 if (!sort.equals("date")) {
                     if (onItemClick != null) {
                         dialog.dismiss();
-                        onItemClick.onItemClick(v, 1);
+                        onItemClick.onItemClick(v, 1,"");
                     }
                 }
             }
@@ -113,7 +113,7 @@ public class OptionDialog {
                 if (!sort.equals("count")) {
                     if (onItemClick != null) {
                         dialog.dismiss();
-                        onItemClick.onItemClick(v, 2);
+                        onItemClick.onItemClick(v, 2,"");
                     }
                 }
             }
@@ -123,13 +123,13 @@ public class OptionDialog {
         tvOptionRangeTitle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.e("수행","1");
+                Log.e("범위 수행","1");
                 if (!d_range.equals("책제목")) {
                     Log.e("수행","2");
                     if (onItemClick != null) {
                         Log.e("수행","3");
                         dialog.dismiss();
-                        onItemClick.onItemClick(v, 3);
+                        onItemClick.onItemClick(v, 3,"");
                     }
                 }
             }
@@ -142,7 +142,7 @@ public class OptionDialog {
                 if (!d_range.equals("저자")) {
                     if (onItemClick != null) {
                         dialog.dismiss();
-                        onItemClick.onItemClick(v, 3);
+                        onItemClick.onItemClick(v, 3,"");
                     }
                 }
             }
@@ -155,7 +155,7 @@ public class OptionDialog {
                 if (!d_range.equals("출판사")) {
                     if (onItemClick != null) {
                         dialog.dismiss();
-                        onItemClick.onItemClick(v, 3);
+                        onItemClick.onItemClick(v, 3,"");
                     }
                 }
             }

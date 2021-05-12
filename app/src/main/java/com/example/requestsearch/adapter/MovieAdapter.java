@@ -26,19 +26,16 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private static final int LOADMORE_TYPE = 2;
     private static final int MAIN_TYPE = 3;
     String word;
-    ArrayList<MovieItems> movieMainItemsArrayList,movieSubItemsArrayList;
-    int maxMovieSize;
+    private ArrayList<MovieItems> movieMainItemsArrayList;
     OnItemClick onItemClick=null;
 
     public void setOnItemClick(OnItemClick onItemClick) {
         this.onItemClick = onItemClick;
     }
 
-    public MovieAdapter(String word, int maxMovieSize, ArrayList<MovieItems> movieMainItemsArrayList, ArrayList<MovieItems> moviewSubItemsArrayList) {
+    public MovieAdapter(String word, ArrayList<MovieItems> movieMainItemsArrayList) {
         this.word = word;
         this.movieMainItemsArrayList = movieMainItemsArrayList;
-        this.movieSubItemsArrayList = moviewSubItemsArrayList;
-        this.maxMovieSize = maxMovieSize;
     }
 
     @Override
@@ -70,26 +67,10 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
             int viewType=getItemViewType(position);
             switch (viewType) {
-                case HEADER_TYPE:
-                    break;
                 case NOREUSLT_TYPE:
                     ((NoResultViewHolder) holder).tvFindWord.setText(word);
                     break;
-                case LOADMORE_TYPE:
-                    if (position == movieMainItemsArrayList.size() - 1 && maxMovieSize == movieMainItemsArrayList.size() - 1) {
-                        ((LoadMoreViewHolder) holder).btnLoadMore.setVisibility(View.GONE);
-                    }
-                    ((LoadMoreViewHolder) holder).btnLoadMore.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Log.e("수행","수행");
-                            movieMainItemsArrayList.remove(position); //더보기 버튼 클릭시 삭제
-                            notifyDataSetChanged();
-                            addSetMovieItems();
-                        }
-                    });
-                    break;
-                default:
+                case MAIN_TYPE:
                     if (movieMainItemsArrayList.get(position) != null) {
                         showMovieItems((MovieItemViewHolder) holder, position);
                     }
@@ -119,7 +100,7 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     int position=getAdapterPosition();
                     if(position!=RecyclerView.NO_POSITION){
                         if(onItemClick!=null){
-                            onItemClick.onItemClick(view,position);
+                            onItemClick.onItemClick(view,position,word);
                         }
                     }
                 }
@@ -128,18 +109,18 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     public class MovieHeaderHolder extends RecyclerView.ViewHolder {
-        protected RelativeLayout relativeLayout;
+        protected RelativeLayout layoutMovieGenre;
 
         public MovieHeaderHolder(@NonNull View itemView) {
             super(itemView);
-            relativeLayout = itemView.findViewById(R.id.layout_movie_genre);
-            relativeLayout.setOnClickListener(new View.OnClickListener() {
+            layoutMovieGenre = itemView.findViewById(R.id.layout_movie_genre);
+            layoutMovieGenre.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int position=getAdapterPosition();
                     if(position!=RecyclerView.NO_POSITION){
                         if(onItemClick!=null){
-                            onItemClick.onItemClick(v,position);
+                            onItemClick.onItemClick(v,position,word);
                         }
                     }
                 }
@@ -161,6 +142,17 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         public LoadMoreViewHolder(@NonNull View itemView) {
             super(itemView);
             btnLoadMore=itemView.findViewById(R.id.btn_recyclerview_loadmore);
+            btnLoadMore.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position=getAdapterPosition();
+                    if(position!=RecyclerView.NO_POSITION){
+                        if(onItemClick!=null){
+                            onItemClick.onItemClick(v,position,word);
+                        }
+                    }
+                }
+            });
         }
     }
 
@@ -222,37 +214,6 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             }
         }
         return sbDirector.toString();
-    }
-
-    /**
-     * 영화 검색결과 추가 세팅
-     */
-    private void addSetMovieItems() {
-        Log.e("수행","수행2");
-        if (movieSubItemsArrayList.size() >= 15) {
-            for (int i = 0; i < 15; i++) {
-                    movieMainItemsArrayList.add(movieSubItemsArrayList.get(i));
-                    movieMainItemsArrayList.get(i).setViewType(MAIN_TYPE);
-            }
-            for (int i = 0; i < 15; i++) {
-                movieSubItemsArrayList.remove(0);
-            }
-            MovieItems loadMoreMovieItems = new MovieItems("", "", "", "", "", "", "", "");
-            loadMoreMovieItems.setViewType(LOADMORE_TYPE);
-            movieMainItemsArrayList.add(loadMoreMovieItems); //더보기 버튼 처리
-        } else {
-            for (int i = 0; i < movieSubItemsArrayList.size(); i++) {
-                if (movieSubItemsArrayList.get(i) == null) {
-                    continue;
-                } else {
-                    movieMainItemsArrayList.add(movieSubItemsArrayList.get(i));
-                }
-            }
-            for (int i = 0; i < movieSubItemsArrayList.size(); i++) {
-                movieSubItemsArrayList.remove(0);
-            }
-        }
-        notifyDataSetChanged();
     }
 
 }

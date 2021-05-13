@@ -1,10 +1,15 @@
 package com.example.requestsearch.adapter;
 
+import android.os.Build;
 import android.text.Html;
+import android.util.Log;
+import android.util.TypedValue;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -13,6 +18,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.requestsearch.ItemDecoration;
+import com.example.requestsearch.data.detail.Item;
 import com.example.requestsearch.listenerInterface.OnItemClick;
 import com.example.requestsearch.R;
 import com.example.requestsearch.data.book.BookItemsVO;
@@ -33,12 +40,17 @@ public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int LOADMORE_TYPE = 2;
     private static final int MAIN_TYPE = 3;
 
-    private ArrayList<BookItemsVO> bookMainItemsArrayList;
-    //    public static ArrayList<Item> detailMainItemArrayList,
-//            detailSubItemArrayList;
-    //  private int number;
+
+    private ArrayList<Item> detailMainItemArrayList;
     private String word;
     private OnItemClick onItemClick = null;
+    private RecyclerView recyclerView;
+    private View noResultview;
+    private View headerView;
+
+    public BookAdapter(RecyclerView recyclerView) {
+        this.recyclerView = recyclerView;
+    }
 
     public void setOnItemClick(OnItemClick onItemClick) {
         this.onItemClick = onItemClick;
@@ -53,24 +65,18 @@ public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         this.word = word;
     }
 
+    public void setDetailMainItemArrayList(ArrayList<Item> detailMainItemArrayList) {
+        this.detailMainItemArrayList = detailMainItemArrayList;
+    }
+
     /**
      * 데이터 리스트 세팅
-     *
-     * @param bookMainItemsArrayList
      */
-    public void setList(ArrayList<BookItemsVO> bookMainItemsArrayList) {
-        this.bookMainItemsArrayList = bookMainItemsArrayList;
-    }
+
 
     @Override
     public int getItemViewType(int position) {
-        return bookMainItemsArrayList.get(position).getViewType();
-//        if (number == 0) { //ㄱ기본
-//            return bookMainItemsArrayList.get(position).getViewType();
-//        }
-//        else { //상세
-//            return detailMainItemArrayList.get(position).getViewType();
-//        }
+        return detailMainItemArrayList.get(position).getViewType();
     }
 
     @NonNull
@@ -79,11 +85,11 @@ public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         View view;
         switch (viewType) {
             case NOREUSLT_TYPE: //결과없음 화면표시
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recyclerview_noresult, parent, false);
-                return new NoResultViewHolder(view);
+                noResultview = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recyclerview_noresult, parent, false);
+                return new NoResultViewHolder(noResultview);
             case HEADER_TYPE: //헤더표시
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recyclerview_book_header, parent, false);
-                return new HeaderViewHolder(view);
+                headerView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recyclerview_book_header, parent, false);
+                return new HeaderViewHolder(headerView);
             case LOADMORE_TYPE: //더보기표시
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recyclerview_footer, parent, false);
                 return new LoadMoreViewHolder(view);
@@ -100,6 +106,16 @@ public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         switch (type) {
             case NOREUSLT_TYPE: //결과없음 ui 처리
                 ((NoResultViewHolder) holder).tvFindWord.setText(word);
+                int recyclerViewHeight = recyclerView.getHeight(); //리사이클러뷰 높이
+                RecyclerView.LayoutParams header = (RecyclerView.LayoutParams) headerView.getLayoutParams();
+                int headerHeight = header.height; //헤더의 높이
+                RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) noResultview.getLayoutParams();
+                //dp->px
+                int marginTop = (int) TypedValue.applyDimension(
+                        TypedValue.COMPLEX_UNIT_DIP, 70,
+                        holder.itemView.getResources().getDisplayMetrics());
+                params.height = recyclerViewHeight - (headerHeight + marginTop);
+                noResultview.setLayoutParams(params);
                 break;
             case MAIN_TYPE:
                 //메인 아이템 이벤트처리
@@ -110,13 +126,7 @@ public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return bookMainItemsArrayList != null ? bookMainItemsArrayList.size() : 0;
-//        if (number == 0) {
-//            return bookMainItemsArrayList != null ? bookMainItemsArrayList.size() : 0;
-//        }
-//        else {
-//            return detailMainItemArrayList != null ? detailMainItemArrayList.size() : 0;
-//        }
+        return detailMainItemArrayList != null ? detailMainItemArrayList.size() : 0;
     }
 
     /**
@@ -198,10 +208,12 @@ public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
      */
     public class NoResultViewHolder extends RecyclerView.ViewHolder { //결과없음 뷰 홀더
         protected TextView tvFindWord;
+        protected RelativeLayout layoutNoResult;
 
         public NoResultViewHolder(@NonNull View itemView) {
             super(itemView);
             tvFindWord = itemView.findViewById(R.id.tv_find_word);
+            layoutNoResult = itemView.findViewById(R.id.layout_no_result);
         }
     }
 
@@ -212,22 +224,24 @@ public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
      * @param position
      */
     private void showMainItems(BookItemViewHolder holder, int position) {
-        //  if (number == 0) {
-        if (bookMainItemsArrayList.get(position) != null) {
-            BookItemsVO items = bookMainItemsArrayList.get(position);
+
+        if (detailMainItemArrayList.get(position) != null) {
+            Item items = detailMainItemArrayList.get(position);
             if (items.getTitle() == null) {
                 holder.tvBookTitle.setText("");
             } else {
+
                 holder.tvBookTitle.setText(Html.fromHtml(items.getTitle()).toString()); //HTML태그 제거
                 if (items.getAuthor() == null) {
                     holder.tvBookAuthor.setText("");
                 } else {
-                    holder.tvBookAuthor.setText(Html.fromHtml(items.getAuthor()).toString());
+                    String author = (Html.fromHtml(items.getAuthor()).toString());
+                    holder.tvBookAuthor.setText(authorFilter(author));
                 }
                 if (items.getPublisher() == null) {
                     holder.tvBookPublisher.setText("");
                 } else {
-                    holder.tvBookPublisher.setText(items.getPublisher());
+                    holder.tvBookPublisher.setText(Html.fromHtml(items.getPublisher()).toString()); //HTML태그 제거
                 }
                 if (items.getPubdate() == null) {
                     holder.tvBookPubDate.setText("");
@@ -249,58 +263,35 @@ public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                             String.format("%,d", Integer.parseInt(items.getPrice())) //1000단위 표시
                     );
                 }
-                if (items.getImage() == null ) {
+                if (items.getImage() == null) {
                     holder.tvBookImage.setImageResource(R.drawable.recyclerview_errorimage);
-                } else
+                } else {
                     Glide.with(holder.itemView).load(items.getImage()).into(holder.tvBookImage);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        holder.tvBookImage.setClipToOutline(true);
+                    }
+                }
             }
         }
-//            else {
-//                if (detailSubItemArrayList.get(position) != null) {
-//                    Item items = detailMainItemArrayList.get(position);
-//                    if (items.getTitle() != null) {
-//                        holder.tvBookTitle.setText(Html.fromHtml(items.getTitle()).toString()); //HTML태그 제거
-//                        holder.tvBookTitle.setOnClickListener(new View.OnClickListener() {
-//                            @Override
-//                            public void onClick(View v) {
-//                                Intent intent = new Intent(holder.itemView.getContext(), WebViewActivty.class);
-//                                intent.putExtra("url", items.getLink());
-//                                holder.itemView.getContext().startActivity(intent);
-//                            }
-//                        });
-//                    }
-//                    if (items.getAuthor() != null) {
-//                        holder.tvBookAuthor.setText(Html.fromHtml(items.getAuthor()).toString());
-//                    } else {
-//                        holder.tvBookAuthor.setText("");
-//                    }
-//                    if (items.getPublisher() != null) {
-//                        holder.tvBookPublisher.setText(items.getPublisher());
-//                    }
-//                    if (items.getPubdate() != null) {
-//                        SimpleDateFormat oldDataFormat = new SimpleDateFormat("yyyyMMdd");
-//                        SimpleDateFormat newDateFormat = new SimpleDateFormat("yyyy.MM.dd");
-//                        try {
-//                            Date formatDate = oldDataFormat.parse(items.getPubdate());
-//                            String newPubDate = newDateFormat.format(formatDate);
-//                            holder.tvBookPubDate.setText(newPubDate);
-//                        } catch (ParseException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                    if (items.getPrice() != null) {
-//                        holder.tvBookPrice.setText(
-//                                String.format("%,d", Integer.parseInt(items.getPrice())) //1000단위 표시
-//                        );
-//                    }
-//
-//                    if (items.getImage() == null || items.getImage().equals("")) {
-//                        holder.tvBookImage.setImageResource(R.drawable.recyclerview_errorimage);
-//                    } else
-//                        Glide.with(holder.itemView).load(items.getImage()).into(holder.tvBookImage);
-//                }
-//            }
-        // }
-
     }
+
+    /**
+     * 저자 데이터 필터링
+     */
+    private String authorFilter(String author) {
+        StringBuilder sbDirector = new StringBuilder();
+        String[] split = author.split("\\|");
+        if (split != null && split.length > 0) {
+            for (int i = 0; i < split.length; i++) {
+                String s = split[i];
+                if (s != null && s.length() > 0)
+                    sbDirector.append(s);
+
+                if (i < split.length - 1)
+                    sbDirector.append(", ");
+            }
+        }
+        return sbDirector.toString();
+    }
+
 }

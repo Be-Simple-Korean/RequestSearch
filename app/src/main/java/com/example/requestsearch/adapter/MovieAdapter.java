@@ -1,6 +1,8 @@
 package com.example.requestsearch.adapter;
 
 import android.text.Html;
+import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +34,13 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private String word;
     private ArrayList<MovieItemsVO> movieMainItemsArrayList;
     private OnItemClick onItemClick=null;
+    private RecyclerView recyclerView;
+    private View headerView;
+    private View noResultview;
+
+    public MovieAdapter(RecyclerView recyclerView) {
+        this.recyclerView = recyclerView;
+    }
 
     /**
      * 영화 리사이클러뷰 아이템 클릭 리스너
@@ -69,11 +78,11 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         View view=null;
         switch (viewType){
             case HEADER_TYPE:
-                view= LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recyclerview_movie_header,parent,false);
-                return new MovieHeaderHolder(view);
+                headerView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recyclerview_movie_header,parent,false);
+                return new MovieHeaderHolder(headerView);
             case NOREUSLT_TYPE:
-                view= LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recyclerview_noresult,parent,false);
-                return new NoResultViewHolder(view);
+                noResultview = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recyclerview_noresult,parent,false);
+                return new NoResultViewHolder(noResultview);
             case LOADMORE_TYPE:
                 view= LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recyclerview_footer,parent,false);
                 return new LoadMoreViewHolder(view);
@@ -89,6 +98,16 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             switch (viewType) {
                 case NOREUSLT_TYPE:
                     ((NoResultViewHolder) holder).tvFindWord.setText(word);
+                    int recyclerViewHeight=recyclerView.getHeight();
+                    RecyclerView.LayoutParams header=(RecyclerView.LayoutParams)headerView.getLayoutParams();
+                    int headerHeight = header.height;
+                    RecyclerView.LayoutParams params=(RecyclerView.LayoutParams)noResultview.getLayoutParams();
+                    //dp->px
+                    int marginTop=(int) TypedValue.applyDimension(
+                            TypedValue.COMPLEX_UNIT_DIP, 70,
+                            holder.itemView.getResources().getDisplayMetrics());
+                    params.height=recyclerViewHeight-(headerHeight+marginTop);
+                    noResultview.setLayoutParams(params);
                     break;
                 case MAIN_TYPE:
                     if (movieMainItemsArrayList.get(position) != null) {

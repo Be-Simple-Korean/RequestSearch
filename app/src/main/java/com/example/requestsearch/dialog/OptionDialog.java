@@ -31,22 +31,17 @@ public class OptionDialog {
             tvOptionRangeAll, tvOptionRangeTitle, tvOptionRangeAuthor, tvOptionRangePublisher;
     private ImageView ivOptionSortRelevance, ivOptionSortPublicationDate, ivOptionSortSales, ivOptionRangeAll,
             ivOptionRangeTitle, ivOptionRangeAuthor, ivOptionRangePublisher;
-    //    private SortData sortData;
-//    private CurData curData;
+
     private NoWordGuideDialog noWordGuideDialog;
-    private int maxBookSize;
-    //   private BookAdapter bookAdapter;
-    private ClientDataVO clientData;
     private String sort;
     private String d_range;
-    //private Retrofit retrofit;
-
-    private ArrayList<Item> detailMainItemArrayList;
-    private ArrayList<Item> detailSubItemArrayList;
-    private RecyclerView recyclerView;
 
     OnItemClick onItemClick = null;
 
+    /**
+     * 아이템 클릭 리스너 설정
+     * @param onItemClick
+     */
     public void setOnItemClick(OnItemClick onItemClick) {
         this.onItemClick = onItemClick;
     }
@@ -57,6 +52,9 @@ public class OptionDialog {
         this.d_range = d_range;
     }
 
+    /**
+     * 다이얼로그 출력
+     */
     public void showDialog() {
         dialog = new Dialog(context);
         dialog.setContentView(R.layout.layout_option_select);
@@ -122,6 +120,19 @@ public class OptionDialog {
             }
         });
 
+        //범위 - 전체
+        tvOptionRangeAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!d_range.equals("전체")) {
+                    if (onItemClick != null) {
+                        dialog.dismiss();
+                        onItemClick.onItemClick(v, 3,"");
+                    }
+                }
+            }
+        });
+
         //범위 - 책제목
         tvOptionRangeTitle.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -163,9 +174,9 @@ public class OptionDialog {
 
     }
 
-    //    /**
-//     * 상세검색 범위 ui set
-//     */
+        /**
+     * 상세검색 범위 ui set
+     */
     private void uiSetRange() {
         tvOptionRangeAll.setTextColor(dialog.getContext().getResources().getColor(R.color.baseTextColor));
         ivOptionRangeAll.setImageResource(R.drawable.sort_baseicon);

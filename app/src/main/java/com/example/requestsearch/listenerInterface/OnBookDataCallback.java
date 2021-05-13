@@ -1,6 +1,7 @@
 package com.example.requestsearch.listenerInterface;
 
 import com.example.requestsearch.data.book.SearchBookVO;
+import com.example.requestsearch.data.detail.Rss;
 
 import retrofit2.Call;
 import retrofit2.Response;
@@ -9,6 +10,6 @@ import retrofit2.Response;
  * 책 검색 콜백
  */
 public interface OnBookDataCallback {
-    void onResponse(Call<SearchBookVO> call, Response<SearchBookVO> response);
-    void onFailure(Call<SearchBookVO> call, Throwable t);
+    void onResponse(Call<Rss> call, Response<Rss> response);
+    void onFailure(Call<Rss> call, Throwable t);
 }

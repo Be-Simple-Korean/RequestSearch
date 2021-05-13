@@ -28,8 +28,8 @@ public class NetworkManager {
     private Response<SearchBookVO> tmpBookResponse=null;
     private Call<SearchMovieVO> callMovieData;
     private Response<SearchMovieVO> tmpMovieResponse = null;
-    private Call<Rss> callDetailBookData;
-    private Response<Rss> tmpDetailResponse = null;
+//    private Call<Rss> callDetailBookData;
+//    private Response<Rss> tmpDetailResponse = null;
     private Throwable t = null;
 
     public NetworkManager() {
@@ -129,13 +129,11 @@ public class NetworkManager {
      * @param onMovieDataCallback
      */
     public void requestMovieData(String word, int start, int display, OnMovieDataCallback onMovieDataCallback) {
-        Log.e("수행","10");
         callMovieData = naverAPI.getMovieData(clientDataVO.getClientId(), clientDataVO.getClientSecret(), word, start, display);
         callMovieData.enqueue(new Callback<SearchMovieVO>() {
             @Override
             public void onResponse(Call<SearchMovieVO> call, Response<SearchMovieVO> response) {
                 tmpMovieResponse = response;
-                Log.e("수행","10-1");
                 if (onMovieDataCallback != null) {
                     onMovieDataCallback.onResponse(callMovieData, tmpMovieResponse);
                 }
@@ -144,7 +142,6 @@ public class NetworkManager {
             @Override
             public void onFailure(Call<SearchMovieVO> call, Throwable t) {
                 t = t;
-                Log.e("수행","10-2");
                 if (onMovieDataCallback != null) {
                     onMovieDataCallback.onFailure(callMovieData, t);
                 }

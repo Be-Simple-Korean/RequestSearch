@@ -22,7 +22,7 @@ import com.example.requestsearch.data.detail.Item;
 import java.util.ArrayList;
 
 /**
- * 책 상세검색 옵션 선택 다이얼로그
+ * 책 상세검색 옵션 선택 다이얼로그  - 사용 안함
  */
 public class OptionDialog {
     private Context context;
@@ -126,11 +126,8 @@ public class OptionDialog {
         tvOptionRangeTitle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.e("범위 수행","1");
                 if (!d_range.equals("책제목")) {
-                    Log.e("수행","2");
                     if (onItemClick != null) {
-                        Log.e("수행","3");
                         dialog.dismiss();
                         onItemClick.onItemClick(v, 3,"");
                     }

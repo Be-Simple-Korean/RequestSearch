@@ -80,6 +80,7 @@
         android:layout_height="100dp"
         android:scaleType="fitCenter"
         android:layout_centerInParent="true"
+        android:background="@drawable/shpae_imageview_round"
         android:src="@mipmap/ic_launcher_round"
         android:layout_alignParentRight="true"/>
 </RelativeLayout>

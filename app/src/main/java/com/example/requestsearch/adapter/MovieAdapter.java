@@ -1,5 +1,6 @@
 package com.example.requestsearch.adapter;
 
+import android.os.Build;
 import android.text.Html;
 import android.util.Log;
 import android.util.TypedValue;
@@ -244,6 +245,9 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                         .error(R.drawable.recyclerview_errorimage)
                         .fallback(R.drawable.recyclerview_errorimage)
                         .into(holder.movieImage);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    holder.movieImage.setClipToOutline(true);
+                }
             }
         }
     }

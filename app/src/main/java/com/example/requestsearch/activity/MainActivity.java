@@ -24,10 +24,8 @@ import android.widget.TextView;
 
 
 import com.example.requestsearch.ItemDecoration;
-import com.example.requestsearch.data.detail.Channel;
 import com.example.requestsearch.data.detail.Item;
 import com.example.requestsearch.data.detail.Rss;
-import com.example.requestsearch.dialog.OptionDialog;
 import com.example.requestsearch.dialog.SelectOptionDialog;
 import com.example.requestsearch.listenerInterface.OnBookDataCallback;
 import com.example.requestsearch.listenerInterface.OnDetailBookDataCallback;
@@ -38,8 +36,6 @@ import com.example.requestsearch.listenerInterface.OnDimissListener;
 import com.example.requestsearch.listenerInterface.OnItemClick;
 import com.example.requestsearch.R;
 import com.example.requestsearch.data.CurDataVO;
-import com.example.requestsearch.data.book.BookItemsVO;
-import com.example.requestsearch.data.book.SearchBookVO;
 import com.example.requestsearch.data.movie.MovieGenreDataVO;
 import com.example.requestsearch.data.movie.MovieItemsVO;
 import com.example.requestsearch.data.movie.SearchMovieVO;
@@ -104,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
     //         * Q.StringBuilder
     //         * Q.textview- drawble start - bounds
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -139,8 +136,9 @@ public class MainActivity extends AppCompatActivity {
             if (etMainWord.getText().length() == 0) {
                 noWordGuideDialog = new NoWordGuideDialog(this);
                 noWordGuideDialog.show();
+            }else{
+                resetAndSearch();
             }
-            resetAndSearch();
         });
 
         // 영화 장르 리스트 초기화
@@ -167,6 +165,12 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        curDataVO.setCurWord("");
     }
 
     /**
@@ -201,8 +205,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 //변경된 이후
-                if (!etMainWord.getText().equals("")) {
+                if (etMainWord.getText().length()>0) {
                     ibDeleteWord.setVisibility(View.VISIBLE); //삭제버튼 보이기
+                }else if(etMainWord.getText().length()==0){
+                    ibDeleteWord.setVisibility(View.INVISIBLE); //삭제버튼 보이기
                 }
             }
         });
@@ -241,7 +247,6 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case R.id.textview_main_booktab: //탭 - 책
                     if (!type.equals(TYPE_BOOK)) {
-                        recyclerView.setAdapter(bookAdapter);
                         type = TYPE_BOOK;
                         resetAndSearch();
                     }
@@ -281,6 +286,7 @@ public class MainActivity extends AppCompatActivity {
         tvBookTab.setTextColor(getResources().getColor(R.color.naver_color));
 //        tvBookTab.setTextColor(ContextCompat.getColor(this, R.color.naver_color));
         tvMovieTab.setTextColor(getResources().getColor(R.color.black));
+        recyclerView.setAdapter(bookAdapter);
         String word = checkWord();
         if (!word.equals("")) {
             requestResultCount(word);
@@ -387,6 +393,7 @@ public class MainActivity extends AppCompatActivity {
                 public void onResponse(Call<SearchMovieVO> call, Response<SearchMovieVO> response) {
                     if (response.code() == SUCCESS_CODE) {
                         if (response.body() != null) {
+                            Log.e("검색 수행","1");
                             setMovieDataInList(response, word);
                         } else {
                             setNoResultMovieDataInList(word);
@@ -651,9 +658,6 @@ public class MainActivity extends AppCompatActivity {
                         requestSearchData(TYPE_MOVIE, word);
                     }
                 case R.id.layout_main_option: // 탭 - 책 - 옵션
-//                    OptionDialog optionDialog = new OptionDialog(MainActivity.this, sort, d_range);
-//                    optionDialog.showDialog();
-//                    optionDialog.setOnItemClick(onItemClick);
                     SelectOptionDialog selectOptionDialog = new SelectOptionDialog(MainActivity.this,sort,d_range);
                     selectOptionDialog.show();
                     selectOptionDialog.setOnItemClick(onItemClick);

@@ -657,6 +657,7 @@ public class MainActivity extends AppCompatActivity {
                         movieMainItemsArrayList.remove(position);
                         requestSearchData(TYPE_MOVIE, word);
                     }
+                    break;
                 case R.id.layout_main_option: // 탭 - 책 - 옵션
                     SelectOptionDialog selectOptionDialog = new SelectOptionDialog(MainActivity.this,sort,d_range);
                     selectOptionDialog.show();

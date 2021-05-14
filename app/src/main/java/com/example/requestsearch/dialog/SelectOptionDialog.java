@@ -4,33 +4,35 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 
 import com.example.requestsearch.R;
-import com.example.requestsearch.data.movie.MovieGenreDataVO;
-import com.example.requestsearch.listenerInterface.OnDimissListener;
 import com.example.requestsearch.listenerInterface.OnItemClick;
-
-import java.util.ArrayList;
 
 /**
  * 장르 항목 표시 다이얼로그
  */
 public class SelectOptionDialog extends Dialog {
 
-    private TextView tvOptionSortRelevance, tvOptionSortPublicationDate, tvOptionSortSales,
+    private TextView tvOptionSortRelevance; // ....
+    private TextView tvOptionSortPublicationDate, tvOptionSortSales,
             tvOptionRangeAll, tvOptionRangeTitle, tvOptionRangeAuthor, tvOptionRangePublisher;
     private ImageView ivOptionSortRelevance, ivOptionSortPublicationDate, ivOptionSortSales, ivOptionRangeAll,
             ivOptionRangeTitle, ivOptionRangeAuthor, ivOptionRangePublisher;
-
+    private Context context;
     private String sort;
     private String d_range;
 
@@ -41,6 +43,7 @@ public class SelectOptionDialog extends Dialog {
         super(context);
         this.sort = sort;
         this.d_range = d_range;
+        this.context=context;
     }
 
 
@@ -58,8 +61,16 @@ public class SelectOptionDialog extends Dialog {
             window.setAttributes(params);
             window.setGravity(Gravity.BOTTOM);
         }
-        uiSetOptionSort();
-        uiSetRange();
+
+        int index = 0;
+        if(sort.equals("date")){
+            index=1;
+        }else if(sort.equals("count")){
+            index=2;
+        }
+        setSortSelected(index);
+//        uiSetOptionSort();
+//        uiSetRange();
         ImageView ivCloseDialog = findViewById(R.id.imageview_dialog_close); // X(닫기) 이미지 버튼형식
         ivCloseDialog.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -159,6 +170,37 @@ public class SelectOptionDialog extends Dialog {
             }
         });
 
+
+    }
+
+    public void setSortSelected(int index) {
+        ViewGroup ll = findViewById(R.id.ll_sort);
+        int childCount = ll.getChildCount();
+
+        for (int i = 0; i < childCount; i++) {
+            View view = ll.getChildAt(i);
+
+            if(i==index){
+                view.setSelected(true);
+                TextView textView =(TextView) view;
+                Drawable drawable = context.getResources().getDrawable(R.drawable.sort_selecticon);
+                drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight()); //drawble 크기 설정
+                textView.setCompoundDrawables(drawable,null,null,null);
+            }else{
+                view.setSelected(false);
+                TextView textView =(TextView) view;
+                Drawable drawable = context.getResources().getDrawable(R.drawable.sort_baseicon);
+                drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+                textView.setCompoundDrawables(drawable,null,null,null);
+            }
+
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(getContext(), "Selected : " + index, Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 
     /**

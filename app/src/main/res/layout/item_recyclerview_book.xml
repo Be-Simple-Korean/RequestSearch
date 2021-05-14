@@ -117,9 +117,9 @@
         android:id="@+id/imageview_bookitem_image"
         android:layout_width="100dp"
         android:layout_height="100dp"
+        android:maxWidth="100dp"
+        android:maxHeight="100dp"
         android:layout_centerInParent="true"
-        android:adjustViewBounds="true"
-        android:src="@mipmap/ic_launcher_round"
-        android:background="@drawable/shpae_imageview_round"
+        tools:src="@mipmap/ic_launcher_round"
         android:layout_alignParentRight="true"/>
 </RelativeLayout>

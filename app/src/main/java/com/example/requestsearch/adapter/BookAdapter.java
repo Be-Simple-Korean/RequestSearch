@@ -1,15 +1,13 @@
 package com.example.requestsearch.adapter;
 
-import android.os.Build;
 import android.text.Html;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -18,17 +16,17 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.requestsearch.ItemDecoration;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.requestsearch.data.detail.Item;
+import com.example.requestsearch.util.DateForamt;
 import com.example.requestsearch.listenerInterface.OnItemClick;
 import com.example.requestsearch.R;
-import com.example.requestsearch.data.book.BookItemsVO;
+import com.example.requestsearch.util.PriceFormat;
 
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
+
 
 /**
  * 책 검색결과 Recyclerview Adapter
@@ -227,50 +225,30 @@ public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         if (detailMainItemArrayList.get(position) != null) {
             Item items = detailMainItemArrayList.get(position);
-            if (items.getTitle() == null) {
-                holder.tvBookTitle.setText("");
-            } else {
 
-                holder.tvBookTitle.setText(Html.fromHtml(items.getTitle()).toString()); //HTML태그 제거
-                if (items.getAuthor() == null) {
-                    holder.tvBookAuthor.setText("");
-                } else {
-                    String author = (Html.fromHtml(items.getAuthor()).toString());
-                    holder.tvBookAuthor.setText(authorFilter(author));
-                }
-                if (items.getPublisher() == null) {
-                    holder.tvBookPublisher.setText("");
-                } else {
-                    holder.tvBookPublisher.setText(Html.fromHtml(items.getPublisher()).toString()); //HTML태그 제거
-                }
-                if (items.getPubdate() == null) {
-                    holder.tvBookPubDate.setText("");
-                } else {
-                    SimpleDateFormat oldDataFormat = new SimpleDateFormat("yyyyMMdd");
-                    SimpleDateFormat newDateFormat = new SimpleDateFormat("yyyy.MM.dd");
-                    try {
-                        Date formatDate = oldDataFormat.parse(items.getPubdate());
-                        String newPubDate = newDateFormat.format(formatDate);
-                        holder.tvBookPubDate.setText(newPubDate);
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                }
-                if (items.getPrice() == null) {
-                    holder.tvBookPrice.setText("");
-                } else {
-                    holder.tvBookPrice.setText(
-                            String.format("%,d", Integer.parseInt(items.getPrice())) //1000단위 표시
-                    );
-                }
-                if (items.getImage() == null) {
-                    holder.tvBookImage.setImageResource(R.drawable.recyclerview_errorimage);
-                } else {
-                    Glide.with(holder.itemView).load(items.getImage()).into(holder.tvBookImage);
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        holder.tvBookImage.setClipToOutline(true);
-                    }
-                }
+            String title = TextUtils.isEmpty(items.getTitle()) ? "":Html.fromHtml(items.getTitle()).toString();
+            holder.tvBookTitle.setText(title);
+
+            String author = TextUtils.isEmpty(items.getAuthor()) ? "" : authorFilter(Html.fromHtml(items.getAuthor()).toString());
+            holder.tvBookAuthor.setText(author);
+
+            String publisher = TextUtils.isEmpty(items.getPublisher()) ? "" : Html.fromHtml(items.getPublisher()).toString();
+            holder.tvBookPublisher.setText(publisher);
+
+            String date  = new DateForamt().getDateFormat(items.getPubdate());
+            holder.tvBookPubDate.setText(date);
+
+            String price = TextUtils.isEmpty(items.getPrice())?"":new PriceFormat().getPriceFormat(items.getPrice());
+            holder.tvBookPrice.setText(price);
+
+            if (items.getImage() == null) {
+//                holder.tvBookImage.setImageResource(R.drawable.recyclerview_errorimage);
+                    Glide.with(holder.itemView).load(R.drawable.recyclerview_errorimage);
+            } else {
+                RequestOptions options = RequestOptions.bitmapTransform(new RoundedCorners(20));
+                Glide.with(holder.itemView).load(items.getImage())
+                        .apply(options).into(holder.tvBookImage);
+
             }
         }
     }

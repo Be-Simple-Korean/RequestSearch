@@ -2,6 +2,7 @@ package com.example.requestsearch.adapter;
 
 import android.os.Build;
 import android.text.Html;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -16,6 +17,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.requestsearch.listenerInterface.OnItemClick;
 import com.example.requestsearch.R;
 import com.example.requestsearch.data.movie.MovieItemsVO;
@@ -34,7 +37,7 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     private String word;
     private ArrayList<MovieItemsVO> movieMainItemsArrayList;
-    private OnItemClick onItemClick=null;
+    private OnItemClick onItemClick = null;
     private RecyclerView recyclerView;
     private View headerView;
     private View noResultview;
@@ -45,6 +48,7 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     /**
      * 영화 리사이클러뷰 아이템 클릭 리스너
+     *
      * @param onItemClick
      */
     public void setOnItemClick(OnItemClick onItemClick) {
@@ -54,6 +58,7 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     /**
      * 영화 검색결과 없음을 나타내는 단어
+     *
      * @param word
      */
     public void setWord(String word) {
@@ -62,6 +67,7 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     /**
      * 영화 검색 데이터리스트 세팅
+     *
      * @param movieMainItemsArrayList
      */
     public void setMovieMainItemsArrayList(ArrayList<MovieItemsVO> movieMainItemsArrayList) {
@@ -76,50 +82,50 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view=null;
-        switch (viewType){
+        View view = null;
+        switch (viewType) {
             case HEADER_TYPE:
-                headerView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recyclerview_movie_header,parent,false);
+                headerView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recyclerview_movie_header, parent, false);
                 return new MovieHeaderHolder(headerView);
             case NOREUSLT_TYPE:
-                noResultview = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recyclerview_noresult,parent,false);
+                noResultview = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recyclerview_noresult, parent, false);
                 return new NoResultViewHolder(noResultview);
             case LOADMORE_TYPE:
-                view= LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recyclerview_footer,parent,false);
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recyclerview_footer, parent, false);
                 return new LoadMoreViewHolder(view);
             default:
-                view= LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recyclerview_movie,parent,false);
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recyclerview_movie, parent, false);
                 return new MovieItemViewHolder(view);
         }
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-            int viewType=getItemViewType(position);
-            switch (viewType) {
-                case NOREUSLT_TYPE:
-                    ((NoResultViewHolder) holder).tvFindWord.setText(word);
-                    int recyclerViewHeight=recyclerView.getHeight();
-                    RecyclerView.LayoutParams header=(RecyclerView.LayoutParams)headerView.getLayoutParams();
-                    int headerHeight = header.height;
-                    RecyclerView.LayoutParams params=(RecyclerView.LayoutParams)noResultview.getLayoutParams();
-                    //dp->px
-                    int marginTop=(int) TypedValue.applyDimension(
-                            TypedValue.COMPLEX_UNIT_DIP, 70,
-                            holder.itemView.getResources().getDisplayMetrics());
-                    params.height=recyclerViewHeight-(headerHeight+marginTop);
-                    noResultview.setLayoutParams(params);
-                    break;
-                case MAIN_TYPE:
-                    if (movieMainItemsArrayList.get(position) != null) {
-                        showMovieItems((MovieItemViewHolder) holder, position);
-                    }
-            }
+        int viewType = getItemViewType(position);
+        switch (viewType) {
+            case NOREUSLT_TYPE:
+                ((NoResultViewHolder) holder).tvFindWord.setText(word);
+                int recyclerViewHeight = recyclerView.getHeight();
+                RecyclerView.LayoutParams header = (RecyclerView.LayoutParams) headerView.getLayoutParams();
+                int headerHeight = header.height;
+                RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) noResultview.getLayoutParams();
+                //dp->px
+                int marginTop = (int) TypedValue.applyDimension(
+                        TypedValue.COMPLEX_UNIT_DIP, 70,
+                        holder.itemView.getResources().getDisplayMetrics());
+                params.height = recyclerViewHeight - (headerHeight + marginTop);
+                noResultview.setLayoutParams(params);
+                break;
+            case MAIN_TYPE:
+                if (movieMainItemsArrayList.get(position) != null) {
+                    showMovieItems((MovieItemViewHolder) holder, position);
+                }
+        }
     }
 
     @Override
     public int getItemCount() {
-        return movieMainItemsArrayList==null?0:movieMainItemsArrayList.size();
+        return movieMainItemsArrayList == null ? 0 : movieMainItemsArrayList.size();
     }
 
     /**
@@ -129,9 +135,10 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         protected TextView movieTitle, movieOpenDate, moiveGrade, movieDirector;
         protected ImageView movieImage;
         protected RelativeLayout layoutMovieItem;
+
         public MovieItemViewHolder(@NonNull View itemView) {
             super(itemView);
-            layoutMovieItem=itemView.findViewById(R.id.layout_movie_item);
+            layoutMovieItem = itemView.findViewById(R.id.layout_movie_item);
             movieTitle = itemView.findViewById(R.id.textview_movieitem_title);
             movieOpenDate = itemView.findViewById(R.id.textview_movieitem_openDate);
             moiveGrade = itemView.findViewById(R.id.textview_movieitem_grade);
@@ -140,10 +147,10 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             layoutMovieItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    int position=getAdapterPosition();
-                    if(position!=RecyclerView.NO_POSITION){
-                        if(onItemClick!=null){
-                            onItemClick.onItemClick(view,position,word);
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        if (onItemClick != null) {
+                            onItemClick.onItemClick(view, position, word);
                         }
                     }
                 }
@@ -163,10 +170,10 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             layoutMovieGenre.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int position=getAdapterPosition();
-                    if(position!=RecyclerView.NO_POSITION){
-                        if(onItemClick!=null){
-                            onItemClick.onItemClick(v,position,word);
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        if (onItemClick != null) {
+                            onItemClick.onItemClick(v, position, word);
                         }
                     }
                 }
@@ -191,16 +198,17 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
      */
     public class LoadMoreViewHolder extends RecyclerView.ViewHolder {
         public Button btnLoadMore;
+
         public LoadMoreViewHolder(@NonNull View itemView) {
             super(itemView);
-            btnLoadMore=itemView.findViewById(R.id.btn_recyclerview_loadmore);
+            btnLoadMore = itemView.findViewById(R.id.btn_recyclerview_loadmore);
             btnLoadMore.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int position=getAdapterPosition();
-                    if(position!=RecyclerView.NO_POSITION){
-                        if(onItemClick!=null){
-                            onItemClick.onItemClick(v,position,word);
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        if (onItemClick != null) {
+                            onItemClick.onItemClick(v, position, word);
                         }
                     }
                 }
@@ -217,37 +225,25 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private void showMovieItems(MovieItemViewHolder holder, int position) {
         if (movieMainItemsArrayList.get(position) != null) {
             MovieItemsVO movieItems = movieMainItemsArrayList.get(position);
-            if (movieItems.getTitle() == null) {
-                holder.movieTitle.setText("");
-            } else {
-                holder.movieTitle.setText(Html.fromHtml(movieItems.getTitle()).toString());
-            }
-            if (movieItems.getPubDate() == null) {
-                holder.movieOpenDate.setText("");
-            } else {
-                holder.movieOpenDate.setText(movieItems.getPubDate() + "년");
-            }
-            if (movieItems.getUserRating() == null) {
-                holder.moiveGrade.setText("");
-            } else {
-                holder.moiveGrade.setText(movieItems.getUserRating());
-            }
-            if (movieItems.getDirector() == null) {
-                holder.movieDirector.setText("");
-            } else {
-                holder.movieDirector.setText(directorFilter(movieItems.getDirector()));
-            }
+
+            String title = TextUtils.isEmpty(movieItems.getTitle()) ? "" : (Html.fromHtml(movieItems.getTitle()).toString());
+            holder.movieTitle.setText(title);
+
+            String pubDate = TextUtils.isEmpty(movieItems.getPubDate()) ? "" : movieItems.getPubDate() + "년";
+            holder.movieOpenDate.setText(pubDate);
+
+            String userRating = TextUtils.isEmpty(movieItems.getUserRating()) ? "" : movieItems.getUserRating();
+            holder.moiveGrade.setText(userRating);
+
+            String director = TextUtils.isEmpty(movieItems.getDirector()) ? "" : directorFilter(movieItems.getDirector());
+            holder.movieDirector.setText(director);
+
             if (movieItems.getImgLink() == null) {
                 holder.movieImage.setImageResource(R.drawable.recyclerview_errorimage);
             } else {
-                Glide.with(holder.itemView)
-                        .load(movieItems.getImgLink())
-                        .error(R.drawable.recyclerview_errorimage)
-                        .fallback(R.drawable.recyclerview_errorimage)
-                        .into(holder.movieImage);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    holder.movieImage.setClipToOutline(true);
-                }
+                RequestOptions options = RequestOptions.bitmapTransform(new RoundedCorners(20));
+                Glide.with(holder.itemView).load(movieItems.getImgLink())
+                        .apply(options).into(holder.movieImage);
             }
         }
     }

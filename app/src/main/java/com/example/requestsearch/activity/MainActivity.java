@@ -42,6 +42,7 @@ import com.example.requestsearch.data.movie.SearchMovieVO;
 import com.example.requestsearch.dialog.GenreDialog;
 import com.example.requestsearch.dialog.NoWordGuideDialog;
 import com.example.requestsearch.network.NetworkManager;
+import com.example.requestsearch.util.TotalFormat;
 
 import java.util.ArrayList;
 
@@ -304,15 +305,8 @@ public class MainActivity extends AppCompatActivity {
                 if (response.code() == SUCCESS_CODE) {
                     if (response.body() != null) {
                         int total = Integer.parseInt(response.body().getChannel().getTotal());
-                        if (total != 0) {
-                            if (total > 9999) {
-                                tvBookTab.setText("책(9999+)");
-                            } else {
-                                tvBookTab.setText("책(" + total + ")");
-                            }
-                        } else {
-                            tvBookTab.setText("책(" + total + ")");
-                        }
+                        String resultTotal=new TotalFormat().getTotalFormat("책",total);
+                        tvBookTab.setText(resultTotal);
                     }
                 }
             }
@@ -329,15 +323,8 @@ public class MainActivity extends AppCompatActivity {
                 if (response.code() == SUCCESS_CODE) {
                     if (response.body() != null) {
                         int total = response.body().getTotal();
-                        if (total != 0) {
-                            if (total > 9999) {
-                                tvMovieTab.setText("영화(9999+)");
-                            } else {
-                                tvMovieTab.setText("영화(" + total + ")");
-                            }
-                        } else {
-                            tvMovieTab.setText("영화(" + total + ")");
-                        }
+                        String resultTotal=new TotalFormat().getTotalFormat("영화",total);
+                        tvBookTab.setText(resultTotal);
                     }
                 }
             }
@@ -531,12 +518,8 @@ public class MainActivity extends AppCompatActivity {
             if (start != 1) {
                 bookAdapter.notifyDataSetChanged();
             }
-            int total= Integer.parseInt(response.body().getChannel().getTotal());
-            if (total > 9999) {
-                tvBookTab.setText("책(9999+)");
-            } else {
-                tvBookTab.setText("책(" + total + ")");
-            }
+            String resultTotal=new TotalFormat().getTotalFormat("책",maxBookSize);
+            tvBookTab.setText(resultTotal);
             if (maxBookSize > DISPLAY) { //더보기
                 if (maxBookSize > start + DISPLAY) {
                     Item btnBookItems = new Item();
@@ -597,11 +580,8 @@ public class MainActivity extends AppCompatActivity {
                     start += DISPLAY;
                 }
             }
-            if (maxMovieSize > 9999) {
-                tvMovieTab.setText("영화(9999+)");
-            } else {
-                tvMovieTab.setText("영화(" + maxMovieSize + ")");
-            }
+            String resultTotal=new TotalFormat().getTotalFormat("책",maxMovieSize);
+            tvBookTab.setText(resultTotal);
             movieAdapter.setWord(word);
             movieAdapter.setMovieMainItemsArrayList(movieMainItemsArrayList);
             movieAdapter.notifyDataSetChanged();

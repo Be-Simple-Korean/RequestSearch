@@ -109,9 +109,7 @@ public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 int headerHeight = header.height; //헤더의 높이
                 RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) noResultview.getLayoutParams();
                 //dp->px
-                int marginTop = (int) TypedValue.applyDimension(
-                        TypedValue.COMPLEX_UNIT_DIP, 70,
-                        holder.itemView.getResources().getDisplayMetrics());
+                int marginTop = getDpToPx(holder);
                 params.height = recyclerViewHeight - (headerHeight + marginTop);
                 noResultview.setLayoutParams(params);
                 break;
@@ -120,6 +118,17 @@ public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 showMainItems(((BookItemViewHolder) holder), position);
                 break;
         }
+    }
+
+    /**
+     * 초기에 설정한 marginTop값 계산하여 반환
+     * @param holder
+     * @return
+     */
+    private int getDpToPx(RecyclerView.ViewHolder holder) {
+        return (int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, 70,
+                holder.itemView.getResources().getDisplayMetrics());
     }
 
     @Override

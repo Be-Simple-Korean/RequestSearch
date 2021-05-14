@@ -664,6 +664,7 @@ public class MainActivity extends AppCompatActivity {
                     selectOptionDialog.setOnItemClick(onItemClick);
                     break;
                 case R.id.textview_option_sort_relevance: //옵션 - 정렬 - 관련도순
+                    Log.e("관련도","1");
                     start=1;
                     sort = "sim";
                     word = checkWord();
@@ -676,6 +677,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     break;
                 case R.id.textview_option_sort_publicationDate: //옵션 - 정렬 - 출간일
+                    Log.e("출간일","1");
                     start=1;
                     sort = "date";
                     word = checkWord();
@@ -689,6 +691,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     break;
                 case R.id.textview_option_sort_sales: //옵션 - 정렬 - 판매일
+                    Log.e("판매량","1");
                     start=1;
                     sort = "count";
                     word = checkWord();

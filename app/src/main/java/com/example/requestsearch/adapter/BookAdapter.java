@@ -226,7 +226,7 @@ public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         if (detailMainItemArrayList.get(position) != null) {
             Item items = detailMainItemArrayList.get(position);
 
-            String title = TextUtils.isEmpty(items.getTitle()) ? "":Html.fromHtml(items.getTitle()).toString();
+            String title = TextUtils.isEmpty(items.getTitle()) ? "" : Html.fromHtml(items.getTitle()).toString();
             holder.tvBookTitle.setText(title);
 
             String author = TextUtils.isEmpty(items.getAuthor()) ? "" : authorFilter(Html.fromHtml(items.getAuthor()).toString());
@@ -235,15 +235,15 @@ public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             String publisher = TextUtils.isEmpty(items.getPublisher()) ? "" : Html.fromHtml(items.getPublisher()).toString();
             holder.tvBookPublisher.setText(publisher);
 
-            String date  = new DateForamt().getDateFormat(items.getPubdate());
+            String date = new DateForamt().getDateFormat(items.getPubdate());
             holder.tvBookPubDate.setText(date);
 
-            String price = TextUtils.isEmpty(items.getPrice())?"":new PriceFormat().getPriceFormat(items.getPrice());
+            String price = TextUtils.isEmpty(items.getPrice()) ? "" : new PriceFormat().getPriceFormat(items.getPrice());
             holder.tvBookPrice.setText(price);
 
             if (items.getImage() == null) {
 //                holder.tvBookImage.setImageResource(R.drawable.recyclerview_errorimage);
-                    Glide.with(holder.itemView).load(R.drawable.recyclerview_errorimage);
+                Glide.with(holder.itemView).load(R.drawable.recyclerview_errorimage);
             } else {
                 RequestOptions options = RequestOptions.bitmapTransform(new RoundedCorners(20));
                 Glide.with(holder.itemView).load(items.getImage())

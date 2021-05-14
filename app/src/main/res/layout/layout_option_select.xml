@@ -32,96 +32,30 @@
                 android:textColor="@color/black"
                 android:textSize="25dp" />
 
-            <RelativeLayout
-                android:id="@+id/lay2"
-                android:layout_marginTop="20dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/tv_option">
-
-                <ImageView
-                    android:id="@+id/imageview_option_sort_relevance"
-                    android:layout_width="5dp"
-                    android:layout_height="5dp"
-                    android:layout_centerInParent="true"
-                    android:layout_marginLeft="10dp"
-                    android:layout_alignParentLeft="true"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/sort_selecticon" />
-
-                <TextView
-                    android:id="@+id/textview_option_sort_relevance"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:layout_marginLeft="5dp"
-                    android:layout_toRightOf="@+id/imageview_option_sort_relevance"
-                    android:text="@string/relevance"
-                    android:textColor="@color/black" />
-
-                <ImageView
-                    android:id="@+id/imageview_option_sort_publicationDate"
-                    android:layout_width="5dp"
-                    android:layout_height="5dp"
-                    android:layout_toRightOf="@id/textview_option_sort_relevance"
-                    android:layout_centerInParent="true"
-                    android:layout_marginLeft="20dp"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/sort_baseicon" />
-
-                <TextView
-                    android:id="@+id/textview_option_sort_publicationDate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:layout_marginLeft="5dp"
-                    android:layout_toRightOf="@+id/imageview_option_sort_publicationDate"
-                    android:text="@string/pDate"
-                    android:textColor="@color/baseTextColor" />
-                <ImageView
-                    android:id="@+id/imageview_option_sort_sales"
-                    android:layout_width="5dp"
-                    android:layout_height="5dp"
-                   android:layout_toRightOf="@id/textview_option_sort_publicationDate"
-                    android:layout_marginLeft="20dp"
-                    android:layout_centerInParent="true"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/sort_baseicon" />
-
-                <TextView
-                    android:id="@+id/textview_option_sort_sales"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:layout_marginLeft="5dp"
-                    android:layout_toRightOf="@+id/imageview_option_sort_sales"
-                    android:text="@string/sales"
-                    android:textColor="@color/baseTextColor" />
-            </RelativeLayout>
-
             <LinearLayout
                 android:id="@+id/ll_sort"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_below="@id/tv_option">
 
                 <TextView
+                    android:id="@+id/textview_option_sort_relevance"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/sort_selecticon"
+                    android:drawableLeft="@drawable/selector_option_dialog"
                     android:drawablePadding="5dp"
-
                     android:layout_marginLeft="10dp"
                     android:layout_toRightOf="@+id/imageview_option_sort_relevance"
                     android:text="@string/relevance"
                     android:textColor="@color/selector_movie_dialog_option" />
 
                 <TextView
+                    android:id="@+id/textview_option_sort_publicationDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/sort_baseicon"
+                    android:drawableLeft="@drawable/selector_option_dialog"
                     android:drawablePadding="5dp"
                     android:layout_marginLeft="20dp"
                     android:layout_toRightOf="@+id/imageview_option_sort_publicationDate"
@@ -129,9 +63,10 @@
                     android:textColor="@color/selector_movie_dialog_option" />
 
                 <TextView
+                    android:id="@+id/textview_option_sort_sales"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/sort_baseicon"
+                    android:drawableLeft="@drawable/selector_option_dialog"
                     android:drawablePadding="5dp"
                     android:layout_marginLeft="20dp"
                     android:layout_toRightOf="@+id/imageview_option_sort_sales"
@@ -142,97 +77,59 @@
                 android:id="@+id/tv2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/lay2"
+                android:layout_below="@id/ll_sort"
                 android:text="범위"
                 android:layout_marginTop="20dp"
                 android:textColor="@color/black"
                 android:textSize="25dp" />
-            <RelativeLayout
-                android:id="@+id/lay3"
+            <LinearLayout
+                android:id="@+id/latout_option_range_select"
                 android:layout_marginTop="20dp"
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tv2">
-                <ImageView
-                    android:id="@+id/imageview_option_range_all"
-                    android:layout_width="5dp"
-                    android:layout_height="5dp"
-                    android:layout_centerInParent="true"
-                    android:layout_marginLeft="10dp"
-                    android:layout_alignParentLeft="true"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/sort_selecticon" />
                 <TextView
                     android:id="@+id/textview_option_range_all"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:layout_marginLeft="5dp"
-                    android:layout_toRightOf="@+id/imageview_option_range_all"
+                    android:layout_marginLeft="10dp"
+                    android:drawableLeft="@drawable/selector_option_dialog"
+                    android:drawablePadding="5dp"
                     android:text="@string/main_option_range_all"
-                    android:textColor="@color/black" />
-                <ImageView
-                    android:id="@+id/imageview_option_range_title"
-                    android:layout_width="5dp"
-                    android:layout_height="5dp"
-                    android:layout_centerInParent="true"
-                    android:layout_marginLeft="20dp"
-                    android:layout_toRightOf="@id/textview_option_range_all"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/sort_baseicon" />
+                    android:textColor="@color/selector_movie_dialog_option" />
 
                 <TextView
                     android:id="@+id/textview_option_range_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginLeft="5dp"
-                    android:layout_toRightOf="@+id/imageview_option_range_title"
-                    android:text="책제목"
-                    android:textColor="@color/baseTextColor" />
-
-                <ImageView
-                    android:id="@+id/imageview_option_range_author"
-                    android:layout_width="5dp"
-                    android:layout_height="5dp"
-                    android:layout_toRightOf="@id/textview_option_range_title"
-                    android:layout_centerInParent="true"
                     android:layout_marginLeft="20dp"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/sort_baseicon" />
+                    android:text="책제목"
+                    android:drawableLeft="@drawable/selector_option_dialog"
+                    android:drawablePadding="5dp"
+                    android:textColor="@color/selector_movie_dialog_option" />
                 <TextView
                     android:id="@+id/textview_option_range_author"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:layout_marginLeft="5dp"
-                    android:layout_toRightOf="@+id/imageview_option_range_author"
-                    android:text="저자"
-                    android:textColor="@color/baseTextColor" />
-
-                <ImageView
-                    android:id="@+id/imageview_option_range_publisher"
-                    android:layout_width="5dp"
-                    android:layout_height="5dp"
-                    android:layout_toRightOf="@id/textview_option_range_author"
                     android:layout_marginLeft="20dp"
-                    android:layout_centerInParent="true"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/sort_baseicon" />
+                    android:text="저자"
+                    android:drawableLeft="@drawable/selector_option_dialog"
+                    android:drawablePadding="5dp"
+                    android:textColor="@color/selector_movie_dialog_option" />
 
                 <TextView
                     android:id="@+id/textview_option_range_publisher"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:layout_marginLeft="5dp"
-                    android:layout_toRightOf="@+id/imageview_option_range_publisher"
+                    android:layout_marginLeft="20dp"
                     android:text="출판사"
-                    android:textColor="@color/baseTextColor" />
+                    android:drawableLeft="@drawable/selector_option_dialog"
+                    android:drawablePadding="5dp"
+                    android:textColor="@color/selector_movie_dialog_option" />
 
-            </RelativeLayout>
+            </LinearLayout>
         </RelativeLayout>
-
 
     </LinearLayout>
 

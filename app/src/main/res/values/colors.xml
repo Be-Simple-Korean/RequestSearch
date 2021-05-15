@@ -14,4 +14,5 @@
     <color name="naver_color">#2DB400</color>
     <color name="baseTextColor">#717171</color>
     <color name="backgroundColor">#C5C5C5</color>
+    <color name="changeWordColor">#0068c3</color>
 </resources>

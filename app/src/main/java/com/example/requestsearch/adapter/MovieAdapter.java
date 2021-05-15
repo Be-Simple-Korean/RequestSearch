@@ -189,7 +189,7 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         public NoResultViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvFindWord = itemView.findViewById(R.id.tv_find_word);
+           // tvFindWord = itemView.findViewById(R.id.tv_find_word);
         }
     }
 

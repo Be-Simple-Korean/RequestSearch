@@ -1,4 +1,4 @@
-package com.example.requestsearch.data.detail;
+package com.example.requestsearch.data.book;
 
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;

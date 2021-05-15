@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.Display;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -24,8 +23,8 @@ import android.widget.TextView;
 
 
 import com.example.requestsearch.ItemDecoration;
-import com.example.requestsearch.data.detail.Item;
-import com.example.requestsearch.data.detail.Rss;
+import com.example.requestsearch.data.book.Item;
+import com.example.requestsearch.data.book.Rss;
 import com.example.requestsearch.dialog.SelectOptionDialog;
 import com.example.requestsearch.listenerInterface.OnBookDataCallback;
 import com.example.requestsearch.listenerInterface.OnDetailBookDataCallback;
@@ -99,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
 
 //TODO
     //         * Q.StringBuilder
-    //         * Q.textview- drawble start - bounds
+    //         * Q.textview- drawble start - drawble.setbounds
 
 
     @Override
@@ -324,7 +323,7 @@ public class MainActivity extends AppCompatActivity {
                     if (response.body() != null) {
                         int total = response.body().getTotal();
                         String resultTotal=new TotalFormat().getTotalFormat("영화",total);
-                        tvBookTab.setText(resultTotal);
+                        tvMovieTab.setText(resultTotal);
                     }
                 }
             }
@@ -408,6 +407,14 @@ public class MainActivity extends AppCompatActivity {
                             Log.e("수행","4");
                             setBookDataInList(response, word);
                         } else { //size==0
+                            //오타변환 api 요청
+                            /*
+                            TODO 오타변환 데이터 요청
+                                  받은 데이터를 어댑터에 보내서 띄우고
+                                  어댑터에서는 리스너를 통해 데이터를 다시 리턴하거나
+                                  여기에 저장된 데이터를 이용해서 검색창에 데이터를 세팅하고
+                                  결과수행해서 어댑터 NOTIFY
+                             */
                             showNoResultBookData(word);
                         }
                     } else { //body==null
@@ -580,8 +587,8 @@ public class MainActivity extends AppCompatActivity {
                     start += DISPLAY;
                 }
             }
-            String resultTotal=new TotalFormat().getTotalFormat("책",maxMovieSize);
-            tvBookTab.setText(resultTotal);
+            String resultTotal=new TotalFormat().getTotalFormat("영화",maxMovieSize);
+            tvMovieTab.setText(resultTotal);
             movieAdapter.setWord(word);
             movieAdapter.setMovieMainItemsArrayList(movieMainItemsArrayList);
             movieAdapter.notifyDataSetChanged();

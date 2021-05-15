@@ -1,7 +1,6 @@
 package com.example.requestsearch.listenerInterface;
 
-import com.example.requestsearch.data.book.SearchBookVO;
-import com.example.requestsearch.data.detail.Rss;
+import com.example.requestsearch.data.book.Rss;
 
 import retrofit2.Call;
 import retrofit2.Response;

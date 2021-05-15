@@ -1,7 +1,15 @@
 package com.example.requestsearch.adapter;
 
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.text.Html;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.style.AbsoluteSizeSpan;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -18,7 +26,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
-import com.example.requestsearch.data.detail.Item;
+import com.example.requestsearch.data.book.Item;
 import com.example.requestsearch.util.DateForamt;
 import com.example.requestsearch.listenerInterface.OnItemClick;
 import com.example.requestsearch.R;
@@ -103,21 +111,61 @@ public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         int type = getItemViewType(position);
         switch (type) {
             case NOREUSLT_TYPE: //결과없음 ui 처리
-                ((NoResultViewHolder) holder).tvFindWord.setText(word);
-                int recyclerViewHeight = recyclerView.getHeight(); //리사이클러뷰 높이
-                RecyclerView.LayoutParams header = (RecyclerView.LayoutParams) headerView.getLayoutParams();
-                int headerHeight = header.height; //헤더의 높이
-                RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) noResultview.getLayoutParams();
-                //dp->px
-                int marginTop = getDpToPx(holder);
-                params.height = recyclerViewHeight - (headerHeight + marginTop);
-                noResultview.setLayoutParams(params);
+                setNoResultHeight(holder);
+
+                ((NoResultViewHolder) holder).tvFindWord.setText(getSpannableData(holder));
                 break;
             case MAIN_TYPE:
                 //메인 아이템 이벤트처리
                 showMainItems(((BookItemViewHolder) holder), position);
                 break;
         }
+    }
+
+    /**
+     * 결과없음 단어 안내 세팅팅
+     * @param holder
+     * @return
+     */
+    private SpannableStringBuilder getSpannableData(RecyclerView.ViewHolder holder) {
+        String guideText=holder.itemView.getResources().getString(R.string.text_no_result_guide);
+        SpannableStringBuilder spannableString=new SpannableStringBuilder(guideText);
+
+        spannableString.setSpan(new ForegroundColorSpan(Color.RED),0,2, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+        spannableString.setSpan(new StyleSpan(Typeface.BOLD),0,2,Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+        int firstIndex=guideText.indexOf("\n");
+        spannableString.setSpan(new AbsoluteSizeSpan(20,true),0,firstIndex,Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+
+        int lastIndex= guideText.lastIndexOf("'");
+        spannableString.setSpan(new ForegroundColorSpan(
+                        holder.itemView.getResources().getColor(R.color.changeWordColor)),
+                lastIndex-1,
+                lastIndex+1,
+                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+
+        spannableString.insert(1,word);
+
+        String midResult = spannableString.toString();
+        String newWord = "귀멸";
+        int index = midResult.lastIndexOf("'");
+        spannableString.insert(index,newWord);
+        return spannableString;
+    }
+
+    /**
+     * 결과없음 스크롤방지 height값 설정
+     * @param holder
+     */
+    private void setNoResultHeight(RecyclerView.ViewHolder holder) {
+        int recyclerViewHeight = recyclerView.getHeight(); //리사이클러뷰 높이
+        RecyclerView.LayoutParams header = (RecyclerView.LayoutParams) headerView.getLayoutParams();
+        int headerHeight = header.height; //헤더의 높이
+        RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) noResultview.getLayoutParams();
+        //dp->px
+        int marginTop = getDpToPx(holder);
+        params.height = recyclerViewHeight - (headerHeight + marginTop);
+        noResultview.setLayoutParams(params);
     }
 
     /**
@@ -219,7 +267,7 @@ public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         public NoResultViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvFindWord = itemView.findViewById(R.id.tv_find_word);
+           tvFindWord=itemView.findViewById(R.id.textview_item_noresult);
             layoutNoResult = itemView.findViewById(R.id.layout_no_result);
         }
     }

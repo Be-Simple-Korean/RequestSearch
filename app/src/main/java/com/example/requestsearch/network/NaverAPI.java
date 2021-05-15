@@ -1,10 +1,7 @@
 package com.example.requestsearch.network;
 
 
-import androidx.annotation.XmlRes;
-
-import com.example.requestsearch.data.book.SearchBookVO;
-import com.example.requestsearch.data.detail.Rss;
+import com.example.requestsearch.data.book.Rss;
 import com.example.requestsearch.data.movie.SearchMovieVO;
 
 import java.lang.annotation.ElementType;
@@ -14,7 +11,6 @@ import java.lang.annotation.Target;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
-import retrofit2.http.Header;
 import retrofit2.http.Query;
 
 /**

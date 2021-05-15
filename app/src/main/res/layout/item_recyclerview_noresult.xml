@@ -4,47 +4,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    android:padding="10dp"
+    android:paddingLeft="5dp"
+    android:gravity="left"
     android:background="@color/white">
-    <LinearLayout
-        android:id="@+id/nowordlayout"
-        android:layout_centerInParent="true"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="'"
-            android:textColor="@color/red"
-            android:textSize="25sp"/>
-        <TextView
-            android:id="@+id/tv_find_word"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:text="검색어"
-            android:textColor="@color/red"
-            android:textSize="25sp"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="'"
-            android:textColor="@color/red"
-            android:textSize="25sp"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="에 대한 검색결과가 없습니다."
-            android:textColor="@color/black"
-            android:textSize="25dp"/>
-    </LinearLayout>
 
     <TextView
-        android:layout_below="@id/nowordlayout"
-        android:layout_alignLeft="@id/nowordlayout"
+        android:id="@+id/textview_item_noresult"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="단어를 확인해주세요"
-        android:layout_marginTop="10dp"/>
+        android:layout_centerInParent="true"
+        android:textSize="15dp"
+        android:lineSpacingExtra="10dp"
+        tools:text="'검색단어'에 대한 검색결과를 찾을 수 없습니다.\n''오타변환단어' 검색 결과 보기"
+        android:textColor="@color/black"/>
 
 </RelativeLayout>

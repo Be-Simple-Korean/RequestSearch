@@ -7,7 +7,7 @@ import com.example.requestsearch.listenerInterface.OnBookDataCallback;
 import com.example.requestsearch.listenerInterface.OnDetailBookDataCallback;
 import com.example.requestsearch.listenerInterface.OnMovieDataCallback;
 
-import com.example.requestsearch.data.detail.Rss;
+import com.example.requestsearch.data.book.Rss;
 import com.example.requestsearch.data.movie.SearchMovieVO;
 
 import java.io.IOException;

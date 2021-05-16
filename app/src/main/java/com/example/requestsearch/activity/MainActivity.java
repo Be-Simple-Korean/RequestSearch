@@ -25,9 +25,11 @@ import android.widget.TextView;
 import com.example.requestsearch.ItemDecoration;
 import com.example.requestsearch.data.book.Item;
 import com.example.requestsearch.data.book.Rss;
+import com.example.requestsearch.data.errata.ErrAtaVo;
 import com.example.requestsearch.dialog.SelectOptionDialog;
 import com.example.requestsearch.listenerInterface.OnBookDataCallback;
 import com.example.requestsearch.listenerInterface.OnDetailBookDataCallback;
+import com.example.requestsearch.listenerInterface.OnErrAtaDataCallback;
 import com.example.requestsearch.listenerInterface.OnMovieDataCallback;
 import com.example.requestsearch.adapter.BookAdapter;
 import com.example.requestsearch.adapter.MovieAdapter;
@@ -96,6 +98,11 @@ public class MainActivity extends AppCompatActivity {
     private NoWordGuideDialog noWordGuideDialog;
     private InputMethodManager inputMethodManager;
 
+    /*TODO
+    * 현재 완성도 오타변환단어 요청 및 보여주기
+    * 해야할것 - 변환단어 없을 시 테스트
+    *          - 변환 단어 클릭이벤트 - 리스너 처리, 텍스트 ABSOULUTE크기 좀 키우기
+    * */
 //TODO
     //         * Q.StringBuilder
     //         * Q.textview- drawble start - drawble.setbounds
@@ -136,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
             if (etMainWord.getText().length() == 0) {
                 noWordGuideDialog = new NoWordGuideDialog(this);
                 noWordGuideDialog.show();
-            }else{
+            } else {
                 resetAndSearch();
             }
         });
@@ -205,9 +212,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 //변경된 이후
-                if (etMainWord.getText().length()>0) {
+                if (etMainWord.getText().length() > 0) {
                     ibDeleteWord.setVisibility(View.VISIBLE); //삭제버튼 보이기
-                }else if(etMainWord.getText().length()==0){
+                } else if (etMainWord.getText().length() == 0) {
                     ibDeleteWord.setVisibility(View.INVISIBLE); //삭제버튼 보이기
                 }
             }
@@ -304,7 +311,7 @@ public class MainActivity extends AppCompatActivity {
                 if (response.code() == SUCCESS_CODE) {
                     if (response.body() != null) {
                         int total = Integer.parseInt(response.body().getChannel().getTotal());
-                        String resultTotal=new TotalFormat().getTotalFormat("책",total);
+                        String resultTotal = new TotalFormat().getTotalFormat("책", total);
                         tvBookTab.setText(resultTotal);
                     }
                 }
@@ -322,7 +329,7 @@ public class MainActivity extends AppCompatActivity {
                 if (response.code() == SUCCESS_CODE) {
                     if (response.body() != null) {
                         int total = response.body().getTotal();
-                        String resultTotal=new TotalFormat().getTotalFormat("영화",total);
+                        String resultTotal = new TotalFormat().getTotalFormat("영화", total);
                         tvMovieTab.setText(resultTotal);
                     }
                 }
@@ -379,7 +386,7 @@ public class MainActivity extends AppCompatActivity {
                 public void onResponse(Call<SearchMovieVO> call, Response<SearchMovieVO> response) {
                     if (response.code() == SUCCESS_CODE) {
                         if (response.body() != null) {
-                            Log.e("검색 수행","1");
+                            Log.e("검색 수행", "1");
                             setMovieDataInList(response, word);
                         } else {
                             setNoResultMovieDataInList(word);
@@ -395,30 +402,25 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         } else if (type.equals(TYPE_BOOK)) {
-            Log.e("수행","2");
+            Log.e("수행", "2");
             recycleBookList();
             networkManager.requestBookData(word, start, DISPLAY, sort, new OnBookDataCallback() {
                 @Override
                 public void onResponse(Call<Rss> call, Response<Rss> response) {
                     Log.e("code", response.code() + "");
                     if (response.code() == SUCCESS_CODE) {
-                        Log.e("수행","3");
+                        Log.e("수행", "3");
                         if (response.body() != null) {
-                            Log.e("수행","4");
-                            setBookDataInList(response, word);
-                        } else { //size==0
-                            //오타변환 api 요청
-                            /*
-                            TODO 오타변환 데이터 요청
-                                  받은 데이터를 어댑터에 보내서 띄우고
-                                  어댑터에서는 리스너를 통해 데이터를 다시 리턴하거나
-                                  여기에 저장된 데이터를 이용해서 검색창에 데이터를 세팅하고
-                                  결과수행해서 어댑터 NOTIFY
-                             */
+                            Log.e("수행", "4");
+                            if (Integer.parseInt(response.body().getChannel().getTotal()) != EMPTY_SIZE) {
+                                setBookDataInList(response, word);
+                            } else { //toal ==0
+                                Log.e("책검색없음수행", "1");
+                                requestErrAtaData(word);
+                            }
+                        } else { //response==null
                             showNoResultBookData(word);
                         }
-                    } else { //body==null
-                        showNoResultBookData(word);
                     }
                 }
 
@@ -428,8 +430,7 @@ public class MainActivity extends AppCompatActivity {
                     Log.e(TAG, t.getMessage());
                 }
             });
-        }
-        else if (type.equals(TYPE_DETAIL)) {
+        } else if (type.equals(TYPE_DETAIL)) {
             recycleBookList();
             networkManager.requestDetailBookData(d_range, word, start, DISPLAY, sort, new OnDetailBookDataCallback() {
                 @Override
@@ -450,12 +451,11 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onFailure(Call<Rss> call, Throwable t) {
                     showNoResultBookData(word);
-                    Log.e(TAG,t.getMessage());
+                    Log.e(TAG, t.getMessage());
 
                 }
             });
-        }
-        else { //영화 장르검색
+        } else { //영화 장르검색
             recycleMovieList();
             networkManager.requestMovieGenreData(word, start, DISPLAY, curPosition, new OnMovieDataCallback() {
                 @Override
@@ -477,6 +477,42 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    /**
+     * 오타변환 단어 요청
+     *
+     * @param word
+     */
+    private void requestErrAtaData(String word) {
+        Log.e("책검색없음수행", "2");
+        networkManager.requestErrAtaData(word, new OnErrAtaDataCallback() {
+            @Override
+            public void onResponse(Call<ErrAtaVo> call, Response<ErrAtaVo> response) {
+                Log.e("책검색없음수행", "3");
+                if (response.code() == 200) {
+                    Item header = new Item();
+                    header.setViewType(HEADER_TYPE);
+                    detailMainItemArrayList.add(header); //헤더
+                    Item loadMoreBtn = new Item();
+                    loadMoreBtn.setViewType(NORESULT_TYPE);
+                    detailMainItemArrayList.add(loadMoreBtn); //결과없음
+                    bookAdapter.setWord(word);
+                    bookAdapter.setDetailMainItemArrayList(detailMainItemArrayList);
+                    tvBookTab.setText("책(0)");
+                    if (response.body().getErrata() != null) {
+                        Log.e("책검색없음수행", "4, data = "+response.body().getErrata());
+                       bookAdapter.setErrata(response.body().getErrata());
+                    }
+                    bookAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ErrAtaVo> call, Throwable t) {
+                Log.e("error Errata", t.getMessage());
+            }
+        });
     }
 
     /**
@@ -513,30 +549,27 @@ public class MainActivity extends AppCompatActivity {
      */
     private void setBookDataInList(Response<Rss> response, String word) {
         maxBookSize = Integer.parseInt(response.body().getChannel().getTotal());
-        if (maxBookSize != EMPTY_SIZE) {
-            Log.e("수행","5");
-            if (start == START_POSITION) {
-                Item header = new Item();
-                header.setViewType(HEADER_TYPE);
-                detailMainItemArrayList.add(header); //헤더처리
-            }
-            detailMainItemArrayList.addAll(response.body().getChannel().getItem());
 
-            if (start != 1) {
-                bookAdapter.notifyDataSetChanged();
+        Log.e("수행", "5");
+        if (start == START_POSITION) {
+            Item header = new Item();
+            header.setViewType(HEADER_TYPE);
+            detailMainItemArrayList.add(header); //헤더처리
+        }
+        detailMainItemArrayList.addAll(response.body().getChannel().getItem());
+
+        if (start != 1) {
+            bookAdapter.notifyDataSetChanged();
+        }
+        String resultTotal = new TotalFormat().getTotalFormat("책", maxBookSize);
+        tvBookTab.setText(resultTotal);
+        if (maxBookSize > DISPLAY) { //더보기
+            if (maxBookSize > start + DISPLAY) {
+                Item btnBookItems = new Item();
+                btnBookItems.setViewType(LOADMORE_TYPE);
+                detailMainItemArrayList.add(btnBookItems);
+                start += DISPLAY;
             }
-            String resultTotal=new TotalFormat().getTotalFormat("책",maxBookSize);
-            tvBookTab.setText(resultTotal);
-            if (maxBookSize > DISPLAY) { //더보기
-                if (maxBookSize > start + DISPLAY) {
-                    Item btnBookItems = new Item();
-                    btnBookItems.setViewType(LOADMORE_TYPE);
-                    detailMainItemArrayList.add(btnBookItems);
-                    start += DISPLAY;
-                }
-            }
-        } else {
-            showNoResultBookData(word);
         }
         bookAdapter.setDetailMainItemArrayList(detailMainItemArrayList);
         bookAdapter.setWord(word);
@@ -587,7 +620,7 @@ public class MainActivity extends AppCompatActivity {
                     start += DISPLAY;
                 }
             }
-            String resultTotal=new TotalFormat().getTotalFormat("영화",maxMovieSize);
+            String resultTotal = new TotalFormat().getTotalFormat("영화", maxMovieSize);
             tvMovieTab.setText(resultTotal);
             movieAdapter.setWord(word);
             movieAdapter.setMovieMainItemsArrayList(movieMainItemsArrayList);
@@ -646,16 +679,16 @@ public class MainActivity extends AppCompatActivity {
                     }
                     break;
                 case R.id.layout_main_option: // 탭 - 책 - 옵션
-                    SelectOptionDialog selectOptionDialog = new SelectOptionDialog(MainActivity.this,sort,d_range);
+                    SelectOptionDialog selectOptionDialog = new SelectOptionDialog(MainActivity.this, sort, d_range);
                     selectOptionDialog.show();
                     selectOptionDialog.setOnItemClick(onItemClick);
                     break;
                 case R.id.textview_option_sort_relevance: //옵션 - 정렬 - 관련도순
-                    Log.e("관련도","1");
-                    start=1;
+                    Log.e("관련도", "1");
+                    start = 1;
                     sort = "sim";
                     word = checkWord();
-                    if(!word.equals("")){
+                    if (!word.equals("")) {
                         if (d_range.equals("전체")) {
                             requestSearchData("book", word);
                         } else {
@@ -664,13 +697,13 @@ public class MainActivity extends AppCompatActivity {
                     }
                     break;
                 case R.id.textview_option_sort_publicationDate: //옵션 - 정렬 - 출간일
-                    Log.e("출간일","1");
-                    start=1;
+                    Log.e("출간일", "1");
+                    start = 1;
                     sort = "date";
                     word = checkWord();
-                    if(!word.equals("")){
+                    if (!word.equals("")) {
                         if (d_range.equals("전체")) {
-                            Log.e("수행","1");
+                            Log.e("수행", "1");
                             requestSearchData("book", word);
                         } else {
                             requestSearchData("detail", word);
@@ -678,11 +711,11 @@ public class MainActivity extends AppCompatActivity {
                     }
                     break;
                 case R.id.textview_option_sort_sales: //옵션 - 정렬 - 판매일
-                    Log.e("판매량","1");
-                    start=1;
+                    Log.e("판매량", "1");
+                    start = 1;
                     sort = "count";
                     word = checkWord();
-                    if(!word.equals("")){
+                    if (!word.equals("")) {
                         if (d_range.equals("전체")) {
                             requestSearchData("book", word);
                         } else {
@@ -691,43 +724,43 @@ public class MainActivity extends AppCompatActivity {
                     }
                     break;
                 case R.id.textview_option_range_all: // 옵션 - 범위 - 전체
-                    Log.e("수행","전체1");
-                    start=1;
-                    d_range="전체";
-                    word=checkWord();
-                    if(!word.equals("")){
-                        Log.e("수행","전체1");
-                        requestSearchData("book",word);
+                    Log.e("수행", "전체1");
+                    start = 1;
+                    d_range = "전체";
+                    word = checkWord();
+                    if (!word.equals("")) {
+                        Log.e("수행", "전체1");
+                        requestSearchData("book", word);
                     }
                     break;
                 case R.id.textview_option_range_title: //옵션 - 범위 - 책제목
-                    start=1;
-                    Log.e("수행","4");
+                    start = 1;
+                    Log.e("수행", "4");
                     d_range = "책제목";
                     word = checkWord();
-                    Log.e("word","="+word);
-                    if(!word.equals("")){
-                        Log.e("수행","5");
-                        requestSearchData("detail",word);
+                    Log.e("word", "=" + word);
+                    if (!word.equals("")) {
+                        Log.e("수행", "5");
+                        requestSearchData("detail", word);
                     }
                     break;
                 case R.id.textview_option_range_author: //옵션 - 범위 - 저자
-                    start=1;
-                    Log.e("저자","4");
+                    start = 1;
+                    Log.e("저자", "4");
                     d_range = "저자";
                     word = checkWord();
-                    Log.e("저자 검색 단어","="+word);
-                    if(!word.equals("")){
-                        Log.e("저자","5");
-                        requestSearchData("detail",word);
+                    Log.e("저자 검색 단어", "=" + word);
+                    if (!word.equals("")) {
+                        Log.e("저자", "5");
+                        requestSearchData("detail", word);
                     }
                     break;
                 case R.id.textview_option_range_publisher: //옵션 - 범위 - 출판사
-                    start=1;
+                    start = 1;
                     d_range = "출판사";
                     word = checkWord();
-                    if(!word.equals("")){
-                        requestSearchData("detail",word);
+                    if (!word.equals("")) {
+                        requestSearchData("detail", word);
                     }
                     break;
             }

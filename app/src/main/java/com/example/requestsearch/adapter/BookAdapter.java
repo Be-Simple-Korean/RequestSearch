@@ -49,6 +49,7 @@ public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private ArrayList<Item> detailMainItemArrayList;
     private String word;
+    private String errata="";
     private OnItemClick onItemClick = null;
     private RecyclerView recyclerView;
     private View noResultview;
@@ -71,6 +72,18 @@ public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         this.word = word;
     }
 
+    /**
+     * 오타 변환 단어 세팅
+     * @param errata
+     */
+    public void setErrata(String errata) {
+        this.errata = errata;
+    }
+
+    /**
+     * 검색 데이터 아이템 리스트 세팅
+     * @param detailMainItemArrayList
+     */
     public void setDetailMainItemArrayList(ArrayList<Item> detailMainItemArrayList) {
         this.detailMainItemArrayList = detailMainItemArrayList;
     }
@@ -129,27 +142,36 @@ public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
      */
     private SpannableStringBuilder getSpannableData(RecyclerView.ViewHolder holder) {
         String guideText=holder.itemView.getResources().getString(R.string.text_no_result_guide);
+        Log.e("errata",errata);
+        if(errata.equals("")){
+            int index= guideText.lastIndexOf("\n");
+            Log.e("no data index",index+"");
+            guideText=guideText.substring(0,index);
+        }
         SpannableStringBuilder spannableString=new SpannableStringBuilder(guideText);
 
+        //기존검색단어 처리
         spannableString.setSpan(new ForegroundColorSpan(Color.RED),0,2, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
         spannableString.setSpan(new StyleSpan(Typeface.BOLD),0,2,Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-        int firstIndex=guideText.indexOf("\n");
+        int firstIndex=guideText.indexOf(".")+1;
         spannableString.setSpan(new AbsoluteSizeSpan(20,true),0,firstIndex,Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        if(!errata.equals("")){
+            int lastIndex= guideText.lastIndexOf("'");
+            spannableString.setSpan(new ForegroundColorSpan(
+                            holder.itemView.getResources().getColor(R.color.changeWordColor)),
+                    lastIndex-1,
+                    lastIndex+1,
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-        int lastIndex= guideText.lastIndexOf("'");
-        spannableString.setSpan(new ForegroundColorSpan(
-                        holder.itemView.getResources().getColor(R.color.changeWordColor)),
-                lastIndex-1,
-                lastIndex+1,
-                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-
+        }
         spannableString.insert(1,word);
 
-        String midResult = spannableString.toString();
-        String newWord = "귀멸";
-        int index = midResult.lastIndexOf("'");
-        spannableString.insert(index,newWord);
+        if(!errata.equals("")){
+            String midResult = spannableString.toString();
+            int index = midResult.lastIndexOf("'");
+            spannableString.insert(index,errata);
+        }
+
         return spannableString;
     }
 

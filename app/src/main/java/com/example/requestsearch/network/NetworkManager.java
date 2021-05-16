@@ -3,8 +3,10 @@ package com.example.requestsearch.network;
 import android.util.Log;
 
 import com.example.requestsearch.XmlOrJsonConverterFactory;
+import com.example.requestsearch.data.errata.ErrAtaVo;
 import com.example.requestsearch.listenerInterface.OnBookDataCallback;
 import com.example.requestsearch.listenerInterface.OnDetailBookDataCallback;
+import com.example.requestsearch.listenerInterface.OnErrAtaDataCallback;
 import com.example.requestsearch.listenerInterface.OnMovieDataCallback;
 
 import com.example.requestsearch.data.book.Rss;
@@ -27,12 +29,16 @@ public class NetworkManager {
 
     private Retrofit retrofit;
     private NaverAPI naverAPI;
+
     private Call<Rss> callBookData;
     private Response<Rss> tmpBookResponse=null;
+
     private Call<SearchMovieVO> callMovieData;
     private Response<SearchMovieVO> tmpMovieResponse = null;
-//    private Call<Rss> callDetailBookData;
-//    private Response<Rss> tmpDetailResponse = null;
+
+    private Call<ErrAtaVo> callErrAtaData;
+    private Response<ErrAtaVo> tmpErrAtaResponse=null;
+
     private Throwable t = null;
 
 
@@ -45,6 +51,7 @@ public class NetworkManager {
         naverAPI = retrofit.create(NaverAPI.class);
     }
 
+    //헤더 설정
     OkHttpClient.Builder client = new OkHttpClient.Builder().addInterceptor(new Interceptor() {
         @Override
         public okhttp3.Response intercept(Chain chain) throws IOException {
@@ -57,6 +64,7 @@ public class NetworkManager {
             return chain.proceed(request);
         }
     });
+
     /**
      * 책 검색 요청
      * @param word
@@ -87,6 +95,16 @@ public class NetworkManager {
             }
         });
     }
+
+    /**
+     * 책 상세검색
+     * @param d_range
+     * @param word
+     * @param start
+     * @param display
+     * @param sort
+     * @param onDetailBookDataCallback
+     */
     public void requestDetailBookData(String d_range, String word, int start, int display, String sort, OnDetailBookDataCallback onDetailBookDataCallback){
         naverAPI = retrofit.create(NaverAPI.class);
         Log.e("send in network",d_range+"/"+word+"/"+start+"/"+display+"/"+sort);
@@ -180,4 +198,30 @@ public class NetworkManager {
             }
         });
     }
+
+    /**
+     * 오타변환단어 요청
+     * @param query
+     * @param onErrAtaDataCallback
+     */
+    public void requestErrAtaData(String query, OnErrAtaDataCallback onErrAtaDataCallback){
+        callErrAtaData=naverAPI.getErrAtaData(query);
+        callErrAtaData.enqueue(new Callback<ErrAtaVo>() {
+            @Override
+            public void onResponse(Call<ErrAtaVo> call, Response<ErrAtaVo> response) {
+                tmpErrAtaResponse=response;
+                if(onErrAtaDataCallback!=null){
+                    onErrAtaDataCallback.onResponse(callErrAtaData,tmpErrAtaResponse);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ErrAtaVo> call, Throwable t) {
+                t = t;
+                if (onErrAtaDataCallback != null) {
+                    onErrAtaDataCallback.onFailure(callErrAtaData, t);
+                }
+            }
+        });
+    };
 }

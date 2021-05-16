@@ -2,6 +2,7 @@ package com.example.requestsearch.network;
 
 
 import com.example.requestsearch.data.book.Rss;
+import com.example.requestsearch.data.errata.ErrAtaVo;
 import com.example.requestsearch.data.movie.SearchMovieVO;
 
 import java.lang.annotation.ElementType;
@@ -17,7 +18,6 @@ import retrofit2.http.Query;
  * 네이버 OPEN API 인터페이스
  */
 public interface NaverAPI {
-
     @GET("/v1/search/movie.json")
     @Json
     Call<SearchMovieVO> getMovieData(
@@ -69,6 +69,12 @@ public interface NaverAPI {
             @Query("start") int start,
             @Query("display") int display,
             @Query("sort") String sort
+    );
+
+    @GET("/v1/search/errata.json")
+    @Json
+    Call<ErrAtaVo> getErrAtaData(
+            @Query("query") String query
     );
 
     @Target(ElementType.METHOD)

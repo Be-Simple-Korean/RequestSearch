@@ -56,6 +56,7 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private View noResultview;
 
 
+
     public MovieAdapter(RecyclerView recyclerView) {
         this.recyclerView = recyclerView;
     }

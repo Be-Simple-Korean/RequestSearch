@@ -24,57 +24,40 @@ import com.example.requestsearch.listenerInterface.OnItemClick;
 public class SpannableFormat {
     /**
      * 결과없음 단어 Spannble 처리 메소드
+     *
      * @param holder
      * @param errata
      * @param onItemClick
      * @param word
      * @return
      */
-    public SpannableStringBuilder getSpannableData(RecyclerView.ViewHolder holder, String errata, OnItemClick onItemClick, String word){
-        String guideText = holder.itemView.getResources().getString(R.string.text_no_result_guide);
-        Log.e("errata", errata);
-        if (errata.equals("")) {
-            int index = guideText.lastIndexOf("\n");
-            Log.e("no data index", index + "");
-            guideText = guideText.substring(0, index);
-        }
-        SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(guideText);
+    public SpannableStringBuilder getSpannableData(RecyclerView.ViewHolder holder, String errata, OnItemClick onItemClick, String word) {
 
-        //기존검색단어 처리
-        spannableStringBuilder.setSpan(new ForegroundColorSpan(Color.RED), 0, 2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        spannableStringBuilder.setSpan(new StyleSpan(Typeface.BOLD), 0, 2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        int firstIndex = guideText.indexOf(".") + 1;
-        spannableStringBuilder.setSpan(new AbsoluteSizeSpan(25, true), 0, firstIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        //오타변환단어 처리
+        //검색단어처리
+        SpannableStringBuilder curWordSpannable = new SpannableStringBuilder("'" + word + "'");
+        curWordSpannable.setSpan(new ForegroundColorSpan(Color.RED), 0, curWordSpannable.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        curWordSpannable.setSpan(new StyleSpan(Typeface.BOLD), 0, curWordSpannable.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        curWordSpannable.append("에 대한 검색결과를 찾을 수 없습니다.\n");
+        curWordSpannable.setSpan(new AbsoluteSizeSpan(25, true), 0, curWordSpannable.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        //오타변환단어처리
         if (!errata.equals("")) {
-            int lastIndex = guideText.lastIndexOf("'");
-            spannableStringBuilder.setSpan(new ForegroundColorSpan(
-                            holder.itemView.getResources().getColor(R.color.changeWordColor)),
-                    lastIndex - 1,
-                    lastIndex + 1,
-                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            //클릭이벤트처리
-            spannableStringBuilder.setSpan(new ClickableSpan() {
+            SpannableStringBuilder errataSpannable = new SpannableStringBuilder("'" + errata + "'");
+            errataSpannable.setSpan(new ClickableSpan() {
                 @Override
                 public void onClick(@NonNull View widget) {
-                    onItemClick.onItemClick(widget,0,errata);
+                    onItemClick.onItemClick(widget, 0, errata);
                 }
 
                 @Override
                 public void updateDrawState(@NonNull TextPaint ds) {
                     super.updateDrawState(ds);
-                    ds.setColor(holder.itemView.getResources().getColor(R.color.changeWordColor
-                    ));
+                    ds.setColor(holder.itemView.getResources().getColor(R.color.changeWordColor));
                 }
-            },lastIndex-1,lastIndex+1,Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }, 0, errataSpannable.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            errataSpannable.append(" 검색 결과 보기");
+            curWordSpannable.append(errataSpannable);
         }
-        spannableStringBuilder.insert(1, word);
 
-        if (!errata.equals("")) {
-            String midResult = spannableStringBuilder.toString();
-            int index = midResult.lastIndexOf("'");
-            spannableStringBuilder.insert(index, errata);
-        }
-        return spannableStringBuilder;
+        return curWordSpannable;
     }
 }

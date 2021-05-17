@@ -144,35 +144,6 @@ public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
-
-    /**
-     * 결과없음 스크롤방지 height값 설정
-     *
-     * @param holder
-     */
-    private void setNoResultHeight(RecyclerView.ViewHolder holder) {
-        int recyclerViewHeight = recyclerView.getHeight(); //리사이클러뷰 높이
-        RecyclerView.LayoutParams header = (RecyclerView.LayoutParams) headerView.getLayoutParams();
-        int headerHeight = header.height; //헤더의 높이
-        RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) noResultview.getLayoutParams();
-        //dp->px
-        int marginTop = getDpToPx(holder);
-        params.height = recyclerViewHeight - (headerHeight + marginTop);
-        noResultview.setLayoutParams(params);
-    }
-
-    /**
-     * 초기에 설정한 marginTop값 계산하여 반환
-     *
-     * @param holder
-     * @return
-     */
-    private int getDpToPx(RecyclerView.ViewHolder holder) {
-        return (int) TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP, 70,
-                holder.itemView.getResources().getDisplayMetrics());
-    }
-
     @Override
     public int getItemCount() {
         return detailMainItemArrayList != null ? detailMainItemArrayList.size() : 0;

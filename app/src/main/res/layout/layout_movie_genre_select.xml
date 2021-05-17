@@ -33,8 +33,9 @@
             android:id="@+id/recyclerview_movie_dialog"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="25dp">
+            android:paddingLeft="25dp"
+            android:paddingRight="25dp"
+            >
 
         </androidx.recyclerview.widget.RecyclerView>
     </LinearLayout>

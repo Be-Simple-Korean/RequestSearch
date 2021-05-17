@@ -16,7 +16,7 @@ public class MovieItemsVO {
     private String director;
     private String actor;
     private String userRating;
-    private int viewType=3;
+    private int viewType=4;
 
     public String getTitle() {
         return title;

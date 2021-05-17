@@ -1,8 +1,18 @@
 package com.example.requestsearch.adapter;
 
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.text.Html;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.TextPaint;
 import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
+import android.text.style.AbsoluteSizeSpan;
+import android.text.style.ClickableSpan;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -22,6 +32,8 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.requestsearch.listenerInterface.OnItemClick;
 import com.example.requestsearch.R;
 import com.example.requestsearch.data.movie.MovieItemsVO;
+import com.example.requestsearch.util.HeightFormat;
+import com.example.requestsearch.util.SpannableFormat;
 
 import java.util.ArrayList;
 
@@ -36,11 +48,13 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private static final int MAIN_TYPE = 3;
 
     private String word;
+    private String errata = "";
     private ArrayList<MovieItemsVO> movieMainItemsArrayList;
     private OnItemClick onItemClick = null;
     private RecyclerView recyclerView;
     private View headerView;
     private View noResultview;
+
 
     public MovieAdapter(RecyclerView recyclerView) {
         this.recyclerView = recyclerView;
@@ -55,6 +69,14 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         this.onItemClick = onItemClick;
     }
 
+    /**
+     * 오타변환단어 세팅
+     *
+     * @param errata
+     */
+    public void setErrata(String errata) {
+        this.errata = errata;
+    }
 
     /**
      * 영화 검색결과 없음을 나타내는 단어
@@ -104,17 +126,9 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         int viewType = getItemViewType(position);
         switch (viewType) {
             case NOREUSLT_TYPE:
-                ((NoResultViewHolder) holder).tvFindWord.setText(word);
-                int recyclerViewHeight = recyclerView.getHeight();
-                RecyclerView.LayoutParams header = (RecyclerView.LayoutParams) headerView.getLayoutParams();
-                int headerHeight = header.height;
-                RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) noResultview.getLayoutParams();
-                //dp->px
-                int marginTop = (int) TypedValue.applyDimension(
-                        TypedValue.COMPLEX_UNIT_DIP, 70,
-                        holder.itemView.getResources().getDisplayMetrics());
-                params.height = recyclerViewHeight - (headerHeight + marginTop);
-                noResultview.setLayoutParams(params);
+                noResultview.setLayoutParams(new HeightFormat().setNoResultViewHeight(recyclerView,holder,headerView,noResultview));
+                ((NoResultViewHolder) holder).tvFindWord.setText(new SpannableFormat().getSpannableData(holder,errata,onItemClick,word));
+                ((NoResultViewHolder) holder).tvFindWord.setMovementMethod(LinkMovementMethod.getInstance());
                 break;
             case MAIN_TYPE:
                 if (movieMainItemsArrayList.get(position) != null) {
@@ -189,7 +203,7 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         public NoResultViewHolder(@NonNull View itemView) {
             super(itemView);
-           // tvFindWord = itemView.findViewById(R.id.tv_find_word);
+            tvFindWord = itemView.findViewById(R.id.textview_item_noresult);
         }
     }
 

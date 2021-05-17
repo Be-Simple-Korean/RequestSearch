@@ -68,7 +68,6 @@ public class SelectOptionDialog extends Dialog {
         if (d_range.equals("책제목")) {
             rangeIndex = 1;
         } else if (d_range.equals("저자")) {
-            Log.e("범위수행", "1");
             rangeIndex = 2;
         } else if (d_range.equals("출판사")) {
             rangeIndex = 3;
@@ -115,11 +114,8 @@ public class SelectOptionDialog extends Dialog {
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.e("셀렉터수행", "0");
                     if (!view.isSelected()) {
-                        Log.e("셀렉터수행", "1");
                         if (onItemClick != null) {
-                            Log.e("셀렉터수행", "2");
                             dismiss();
                             onItemClick.onItemClick(v, 1, "");
                         }

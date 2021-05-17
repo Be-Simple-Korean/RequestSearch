@@ -107,7 +107,6 @@ public class NetworkManager {
      */
     public void requestDetailBookData(String d_range, String word, int start, int display, String sort, OnDetailBookDataCallback onDetailBookDataCallback){
         naverAPI = retrofit.create(NaverAPI.class);
-        Log.e("send in network",d_range+"/"+word+"/"+start+"/"+display+"/"+sort);
         switch (d_range){
             case "책제목":
                 callBookData=naverAPI.getRangeDataByTitle(word,start,display,sort);

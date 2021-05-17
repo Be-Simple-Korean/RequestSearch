@@ -6,8 +6,11 @@ import android.text.Html;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.text.TextPaint;
 import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
 import android.text.style.AbsoluteSizeSpan;
+import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.util.Log;
@@ -30,7 +33,9 @@ import com.example.requestsearch.data.book.Item;
 import com.example.requestsearch.util.DateForamt;
 import com.example.requestsearch.listenerInterface.OnItemClick;
 import com.example.requestsearch.R;
+import com.example.requestsearch.util.HeightFormat;
 import com.example.requestsearch.util.PriceFormat;
+import com.example.requestsearch.util.SpannableFormat;
 
 
 import java.util.ArrayList;
@@ -49,7 +54,7 @@ public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private ArrayList<Item> detailMainItemArrayList;
     private String word;
-    private String errata="";
+    private String errata = "";
     private OnItemClick onItemClick = null;
     private RecyclerView recyclerView;
     private View noResultview;
@@ -74,6 +79,7 @@ public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     /**
      * 오타 변환 단어 세팅
+     *
      * @param errata
      */
     public void setErrata(String errata) {
@@ -82,6 +88,7 @@ public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     /**
      * 검색 데이터 아이템 리스트 세팅
+     *
      * @param detailMainItemArrayList
      */
     public void setDetailMainItemArrayList(ArrayList<Item> detailMainItemArrayList) {
@@ -124,9 +131,11 @@ public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         int type = getItemViewType(position);
         switch (type) {
             case NOREUSLT_TYPE: //결과없음 ui 처리
-                setNoResultHeight(holder);
 
-                ((NoResultViewHolder) holder).tvFindWord.setText(getSpannableData(holder));
+                noResultview.setLayoutParams(new HeightFormat().setNoResultViewHeight(recyclerView,holder,headerView,noResultview));
+
+                ((NoResultViewHolder) holder).tvFindWord.setText(new SpannableFormat().getSpannableData(holder,errata,onItemClick,word));
+                ((NoResultViewHolder) holder).tvFindWord.setMovementMethod(LinkMovementMethod.getInstance());
                 break;
             case MAIN_TYPE:
                 //메인 아이템 이벤트처리
@@ -135,48 +144,10 @@ public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
-    /**
-     * 결과없음 단어 안내 세팅팅
-     * @param holder
-     * @return
-     */
-    private SpannableStringBuilder getSpannableData(RecyclerView.ViewHolder holder) {
-        String guideText=holder.itemView.getResources().getString(R.string.text_no_result_guide);
-        Log.e("errata",errata);
-        if(errata.equals("")){
-            int index= guideText.lastIndexOf("\n");
-            Log.e("no data index",index+"");
-            guideText=guideText.substring(0,index);
-        }
-        SpannableStringBuilder spannableString=new SpannableStringBuilder(guideText);
-
-        //기존검색단어 처리
-        spannableString.setSpan(new ForegroundColorSpan(Color.RED),0,2, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-        spannableString.setSpan(new StyleSpan(Typeface.BOLD),0,2,Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-        int firstIndex=guideText.indexOf(".")+1;
-        spannableString.setSpan(new AbsoluteSizeSpan(20,true),0,firstIndex,Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-        if(!errata.equals("")){
-            int lastIndex= guideText.lastIndexOf("'");
-            spannableString.setSpan(new ForegroundColorSpan(
-                            holder.itemView.getResources().getColor(R.color.changeWordColor)),
-                    lastIndex-1,
-                    lastIndex+1,
-                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-        }
-        spannableString.insert(1,word);
-
-        if(!errata.equals("")){
-            String midResult = spannableString.toString();
-            int index = midResult.lastIndexOf("'");
-            spannableString.insert(index,errata);
-        }
-
-        return spannableString;
-    }
 
     /**
      * 결과없음 스크롤방지 height값 설정
+     *
      * @param holder
      */
     private void setNoResultHeight(RecyclerView.ViewHolder holder) {
@@ -192,6 +163,7 @@ public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     /**
      * 초기에 설정한 marginTop값 계산하여 반환
+     *
      * @param holder
      * @return
      */
@@ -289,7 +261,7 @@ public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         public NoResultViewHolder(@NonNull View itemView) {
             super(itemView);
-           tvFindWord=itemView.findViewById(R.id.textview_item_noresult);
+            tvFindWord = itemView.findViewById(R.id.textview_item_noresult);
             layoutNoResult = itemView.findViewById(R.id.layout_no_result);
         }
     }

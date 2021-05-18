@@ -684,16 +684,30 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onDismissed(CopySelectOptionDialog dialog, int position,boolean isRange) {
             dialog.dismiss();
-            //TODO isRange판단후 범위에다넣을지 수정
             switch (position) {
                 case 0:
-                    sort = "sim";
+                    if(isRange){
+                        d_range="전체";
+                    }else{
+                        sort = "sim";
+                    }
                     break;
                 case 1:
-                    sort = "date";
+                    if(isRange){
+                        d_range="책제목";
+                    }else{
+                        sort = "date";
+                    }
                     break;
                 case 2:
-                    sort = "count";
+                    if(isRange){
+                        d_range="저자";
+                    }else{
+                        sort = "count";
+                    }
+                    break;
+                case 3:
+                    d_range="출판사";
                     break;
             }
             start=1;
@@ -752,50 +766,50 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.tv_genre:
                     Log.e("수행", "옵션밑케이스");
                     break;
-                case R.id.textview_option_sort_relevance: //옵션 - 정렬 - 관련도순
-                    start = 1;
-                    sort = "sim";
-                    word = checkWord();
-                    if (!word.equals("")) {
-                        if (d_range.equals("전체")) {
-                            requestSearchData("book", word);
-                        } else {
-                            requestSearchData("detail", word);
-                        }
-                    }
-                    break;
-                case R.id.textview_option_range_all: // 옵션 - 범위 - 전체
-                    start = 1;
-                    d_range = "전체";
-                    word = checkWord();
-                    if (!word.equals("")) {
-                        requestSearchData("book", word);
-                    }
-                    break;
-                case R.id.textview_option_range_title: //옵션 - 범위 - 책제목
-                    start = 1;
-                    d_range = "책제목";
-                    word = checkWord();
-                    if (!word.equals("")) {
-                        requestSearchData("detail", word);
-                    }
-                    break;
-                case R.id.textview_option_range_author: //옵션 - 범위 - 저자
-                    start = 1;
-                    d_range = "저자";
-                    word = checkWord();
-                    if (!word.equals("")) {
-                        requestSearchData("detail", word);
-                    }
-                    break;
-                case R.id.textview_option_range_publisher: //옵션 - 범위 - 출판사
-                    start = 1;
-                    d_range = "출판사";
-                    word = checkWord();
-                    if (!word.equals("")) {
-                        requestSearchData("detail", word);
-                    }
-                    break;
+//                case R.id.textview_option_sort_relevance: //옵션 - 정렬 - 관련도순
+//                    start = 1;
+//                    sort = "sim";
+//                    word = checkWord();
+//                    if (!word.equals("")) {
+//                        if (d_range.equals("전체")) {
+//                            requestSearchData("book", word);
+//                        } else {
+//                            requestSearchData("detail", word);
+//                        }
+//                    }
+//                    break;
+////                case R.id.textview_option_range_all: // 옵션 - 범위 - 전체
+////                    start = 1;
+////                    d_range = "전체";
+////                    word = checkWord();
+////                    if (!word.equals("")) {
+////                        requestSearchData("book", word);
+////                    }
+////                    break;
+//                case R.id.textview_option_range_title: //옵션 - 범위 - 책제목
+//                    start = 1;
+//                    d_range = "책제목";
+//                    word = checkWord();
+//                    if (!word.equals("")) {
+//                        requestSearchData("detail", word);
+//                    }
+//                    break;
+//                case R.id.textview_option_range_author: //옵션 - 범위 - 저자
+//                    start = 1;
+//                    d_range = "저자";
+//                    word = checkWord();
+//                    if (!word.equals("")) {
+//                        requestSearchData("detail", word);
+//                    }
+//                    break;
+//                case R.id.textview_option_range_publisher: //옵션 - 범위 - 출판사
+//                    start = 1;
+//                    d_range = "출판사";
+//                    word = checkWord();
+//                    if (!word.equals("")) {
+//                        requestSearchData("detail", word);
+//                    }
+//                    break;
                 case R.id.textview_item_noresult: // 결과없음 - 오타변환단어
                     etMainWord.setText(word);
                     resetAndSearch();

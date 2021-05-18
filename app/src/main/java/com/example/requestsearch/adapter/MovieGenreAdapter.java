@@ -50,14 +50,6 @@ public class MovieGenreAdapter extends RecyclerView.Adapter<MovieGenreAdapter.Ge
     @Override
     public void onBindViewHolder(@NonNull  GenreViewHolder holder, int position) {
         holder.tvGenre.setText(genreList.get(position).getgName());
-        holder.tvGenre.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.e("bottom",holder.tvGenre.getBottom()+"");
-                Log.e("right",holder.tvGenre.getRight()+"");
-                Log.e("width",holder.tvGenre.getWidth()+"");
-            }
-        });
         holder.tvGenre.setSelected(genreList.get(position).isSelected());
     }
 
@@ -75,23 +67,23 @@ public class MovieGenreAdapter extends RecyclerView.Adapter<MovieGenreAdapter.Ge
         public GenreViewHolder(@NonNull View itemView) {
             super(itemView);
             tvGenre = itemView.findViewById(R.id.textview_movie_dialog_genre);
-//
-//            tvGenre.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    int position = getAdapterPosition();
-//                    for (int i = 0; i < genreList.size(); i++) {
-//                        genreList.get(i).setSelected(false);
-//                    }
-//                    genreList.get(position).setSelected(true);
-//                    notifyDataSetChanged();
-//                    if (position != RecyclerView.NO_POSITION) {
-//                        if (onItemClickListener != null) {
-//                            onItemClickListener.setOnItemClick(v, position + 1);
-//                        }
-//                    }
-//                }
-//            });
+
+            tvGenre.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    for (int i = 0; i < genreList.size(); i++) {
+                        genreList.get(i).setSelected(false);
+                    }
+                    genreList.get(position).setSelected(true);
+                    notifyDataSetChanged();
+                    if (position != RecyclerView.NO_POSITION) {
+                        if (onItemClickListener != null) {
+                            onItemClickListener.setOnItemClick(v, position + 1);
+                        }
+                    }
+                }
+            });
         }
     }
 }

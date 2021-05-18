@@ -6,7 +6,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="320dp"
         android:background="@drawable/shape_option_background"
         android:orientation="vertical">
         <RelativeLayout
@@ -32,9 +32,10 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerview_movie_dialog"
             android:layout_width="match_parent"
+            android:layout_gravity="center"
             android:layout_height="match_parent"
-            android:paddingLeft="25dp"
-            android:paddingRight="25dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
             >
 
         </androidx.recyclerview.widget.RecyclerView>

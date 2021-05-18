@@ -299,9 +299,7 @@ public class MainActivity extends AppCompatActivity {
         setFilterData();
         setGenreList();
         String word = checkWord();
-        Log.e("8년","1");
-        if (!word.equals("")) {
-            Log.e("8년","2");
+        if (!word.equals("")) { ;
             requestResultCount(word);
         }
     }

@@ -75,8 +75,9 @@ public class GenreDialog extends Dialog {
 
         RecyclerView recyclerView=findViewById(R.id.recyclerview_movie_dialog);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(),3);
+
         recyclerView.setLayoutManager(gridLayoutManager);
-        recyclerView.addItemDecoration(new GenreItemDecoration(getContext()));
+        recyclerView.addItemDecoration(new GenreItemDecoration(getContext(),3));
 
 
         MovieGenreAdapter movieGenreAdapter=new MovieGenreAdapter(this,genreList);

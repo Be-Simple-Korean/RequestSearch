@@ -144,8 +144,8 @@ public class NetworkManager {
      * @param display
      * @param onMovieDataCallback
      */
-    public void requestMovieData(String word, int start, int display, OnMovieDataCallback onMovieDataCallback) {
-        callMovieData = naverAPI.getMovieData( word, start, display);
+    public void requestMovieData(String word, int start, int display,int genre, OnMovieDataCallback onMovieDataCallback) {
+        callMovieData = naverAPI.getMovieData( word, start, display,genre);
         callMovieData.enqueue(new Callback<SearchMovieVO>() {
             @Override
             public void onResponse(Call<SearchMovieVO> call, Response<SearchMovieVO> response) {
@@ -166,36 +166,6 @@ public class NetworkManager {
         });
 
 
-    }
-
-    /**
-     * 영화 장르 검색 요청
-     * @param word
-     * @param start
-     * @param display
-     * @param position
-     * @param onCallBack
-     */
-    public void requestMovieGenreData(String word, int start, int display, int position, OnMovieDataCallback onCallBack) {
-        callMovieData = naverAPI.getMovieDataWithGenre( word, start, display, position);
-        callMovieData.enqueue(new Callback<SearchMovieVO>() {
-            @Override
-            public void onResponse(Call<SearchMovieVO> call, Response<SearchMovieVO> response) {
-                tmpMovieResponse = response;
-                if (onCallBack != null) {
-                    onCallBack.onResponse(callMovieData, tmpMovieResponse);
-                }
-
-            }
-
-            @Override
-            public void onFailure(Call<SearchMovieVO> call, Throwable t) {
-                t = t;
-                if (onCallBack != null) {
-                    onCallBack.onFailure(callMovieData, t);
-                }
-            }
-        });
     }
 
     /**

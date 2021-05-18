@@ -4,22 +4,17 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.res.ResourcesCompat;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.requestsearch.GenreItemDecoration;
+import com.example.requestsearch.decoration.GenreItemDecoration;
 import com.example.requestsearch.adapter.MovieGenreAdapter;
 import com.example.requestsearch.listenerInterface.OnDimissListener;
 import com.example.requestsearch.listenerInterface.OnItemClickListener;
@@ -77,7 +72,7 @@ public class GenreDialog extends Dialog {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(),3);
 
         recyclerView.setLayoutManager(gridLayoutManager);
-        recyclerView.addItemDecoration(new GenreItemDecoration(getContext(),3));
+        recyclerView.addItemDecoration(new GenreItemDecoration(getContext(),3,genreList));
 
 
         MovieGenreAdapter movieGenreAdapter=new MovieGenreAdapter(this,genreList);

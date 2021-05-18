@@ -23,14 +23,6 @@ public interface NaverAPI {
     Call<SearchMovieVO> getMovieData(
             @Query("query") String query,
             @Query("start") int start,
-            @Query("display") int display
-    );
-
-    @GET("/v1/search/movie.json")
-    @Json
-    Call<SearchMovieVO> getMovieDataWithGenre(
-            @Query("query") String query,
-            @Query("start") int start,
             @Query("display") int display,
             @Query("genre") int genre
     );

@@ -8,23 +8,21 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-
-import com.example.requestsearch.listenerInterface.OnItemClickListener;
 import com.example.requestsearch.R;
-import com.example.requestsearch.data.movie.MovieGenreDataVO;
-import com.example.requestsearch.dialog.GenreDialog;
+import com.example.requestsearch.dialog.CopySelectOptionDialog;
+import com.example.requestsearch.listenerInterface.OnItemClickListener;
 
 import java.util.ArrayList;
 
 /**
  * 영화 장르 데이터 Recyclerview Adapter
  */
-public class MovieGenreAdapter extends RecyclerView.Adapter<MovieGenreAdapter.GenreViewHolder> {
+public class GridAdapter extends RecyclerView.Adapter<GridAdapter.GenreViewHolder> {
 
-    private ArrayList<MovieGenreDataVO> genreList;
-    private GenreDialog dialog;
+    private ArrayList<String> sortList;
+    private CopySelectOptionDialog dialog;
     private OnItemClickListener onItemClickListener =null;
-
+    ArrayList<Boolean> isSelected;
     /**
      * 영화 아이템 클릭 리스너
      * @param onItemClickListener
@@ -33,9 +31,10 @@ public class MovieGenreAdapter extends RecyclerView.Adapter<MovieGenreAdapter.Ge
         this.onItemClickListener = onItemClickListener;
     }
 
-    public MovieGenreAdapter(GenreDialog di, ArrayList<MovieGenreDataVO> genreList) {
+    public GridAdapter(CopySelectOptionDialog di, ArrayList<String> sortList, ArrayList<Boolean> isSelecte) {
         this.dialog=di;
-        this.genreList = genreList;
+        this.sortList = sortList;
+        this.isSelected=isSelecte;
     }
 
     @NonNull
@@ -48,13 +47,14 @@ public class MovieGenreAdapter extends RecyclerView.Adapter<MovieGenreAdapter.Ge
 
     @Override
     public void onBindViewHolder(@NonNull  GenreViewHolder holder, int position) {
-        holder.tvGenre.setText(genreList.get(position).getgName());
-        holder.tvGenre.setSelected(genreList.get(position).isSelected());
+        holder.tvGenre.setText(sortList.get(position));
+        holder.tvGenre.setSelected(isSelected.get(position));
+
     }
 
     @Override
     public int getItemCount() {
-        return genreList.size();
+        return sortList.size();
     }
 
     /**
@@ -62,8 +62,6 @@ public class MovieGenreAdapter extends RecyclerView.Adapter<MovieGenreAdapter.Ge
      */
     public class GenreViewHolder extends RecyclerView.ViewHolder {
         protected TextView tvGenre;
-
-        private boolean isSelected = false;
 
         public GenreViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -73,22 +71,13 @@ public class MovieGenreAdapter extends RecyclerView.Adapter<MovieGenreAdapter.Ge
                 @Override
                 public void onClick(View v) {
                     int position = getAdapterPosition();
-//                    for (int i = 0; i < genreList.size(); i++) {
-//                        genreList.get(i).setSelected(false);
-//                    }
-//                    genreList.get(position).setSelected(true);
-//                    notifyDataSetChanged();
                     if (position != RecyclerView.NO_POSITION) {
                         if (onItemClickListener != null) {
-                            onItemClickListener.setOnItemClick(v, position );
+                            onItemClickListener.setOnItemClick(v, position);
                         }
                     }
                 }
             });
-        }
-
-        public boolean isSelected() {
-            return tvGenre != null ? tvGenre.isSelected() : false;
         }
     }
 }

@@ -11,6 +11,7 @@
     <string name="main_option_range_publisher">출판사</string>
     <string name="text_no_result_guide">\'\'에 대한 검색결과를 찾을 수 없습니다.\n\'\' 검색 결과 보기</string>
     <string-array name="genre">
+        <item>전체</item>
         <item>드라마</item>
         <item>판타지</item>
         <item>서부</item>

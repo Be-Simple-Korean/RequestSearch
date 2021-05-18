@@ -28,6 +28,7 @@ import com.example.requestsearch.adapter.DataAdapter;
 import com.example.requestsearch.data.book.Item;
 import com.example.requestsearch.data.book.Rss;
 import com.example.requestsearch.data.errata.ErrAtaVo;
+import com.example.requestsearch.dialog.CopySelectOptionDialog;
 import com.example.requestsearch.dialog.SelectOptionDialog;
 import com.example.requestsearch.listenerInterface.OnBookDataCallback;
 import com.example.requestsearch.listenerInterface.OnDetailBookDataCallback;
@@ -57,8 +58,6 @@ import retrofit2.Response;
  */
 public class MainActivity extends AppCompatActivity {
 
-    private ArrayList<Item> detailMainItemArrayList;
-
     private static final String URL = "url";
     private static final int EMPTY_SIZE = 0;
     private static final int START_POSITION = 1;
@@ -67,7 +66,6 @@ public class MainActivity extends AppCompatActivity {
     private static final String TYPE_BOOK = "book";
     private static final String TYPE_MOVIE = "movie";
     private static final String TYPE_DETAIL = "detail";
-    private static final String TYPE_MOVIE_GENRE = "movie-genre";
     private static final int DISPLAY = 15;
     private static final int HEADER_TYPE = 0;
     private static final int MOVIE_HEADER_TYPE = 5;
@@ -85,12 +83,13 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayoutManager linearLayoutManager;
     private CurDataVO curDataVO;
     private int maxMovieSize = 0;
-//    private MovieAdapter movieAdapter;
+    //    private MovieAdapter movieAdapter;
 //    private BookAdapter bookAdapter;
     private DataAdapter dataAdapter;
     private NetworkManager networkManager;
     private ArrayList<MovieGenreDataVO> genreList;
     private ArrayList<MovieItemsVO> movieMainItemsArrayList;
+    private ArrayList<Item> detailMainItemArrayList;
     private int maxBookSize;
     private int start = 1;
     private int curPosition = 0;
@@ -106,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
 //TODO
     //         * Q.StringBuilder
     //         * Q.textview- drawble start - drawble.setbounds
-
+    //TODO 코드수정, 장르,옵션어댑터 합치기,옵션범위클릭시 검색수행,옵션범위UI구현
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -255,15 +254,15 @@ public class MainActivity extends AppCompatActivity {
                     ibDeleteWord.setVisibility(View.INVISIBLE);
                     break;
                 case R.id.textview_main_booktab: //탭 - 책
-                    Log.e("수행","!!");
+                    Log.e("수행", "!!");
                     if (!type.equals(TYPE_BOOK)) {
-                        Log.e("수행","!!!!");
+                        Log.e("수행", "!!!!");
                         type = TYPE_BOOK;
-                        start=1;
+                        start = 1;
                         tvBookTab.setTextColor(getResources().getColor(R.color.naver_color));
                         tvMovieTab.setTextColor(getResources().getColor(R.color.black));
-                        String word=checkWord();
-                        requestSearchData(type,word);
+                        String word = checkWord();
+                        requestSearchData(type, word);
                     }
                     break;
                 case R.id.textview_main_movietab: //탭 - 영화
@@ -271,6 +270,7 @@ public class MainActivity extends AppCompatActivity {
 //                        recyclerView.setAdapter(movieAdapter);
                         start = 1;
                         type = TYPE_MOVIE;
+                        curPosition = 0;
                         tvBookTab.setTextColor(getResources().getColor(R.color.black));
                         tvMovieTab.setTextColor(getResources().getColor(R.color.naver_color));
                         String word = checkWord();
@@ -299,7 +299,8 @@ public class MainActivity extends AppCompatActivity {
         setFilterData();
         setGenreList();
         String word = checkWord();
-        if (!word.equals("")) { ;
+        if (!word.equals("")) {
+            ;
             requestResultCount(word);
         }
     }
@@ -322,7 +323,7 @@ public class MainActivity extends AppCompatActivity {
                         String resultTotal = new TotalFormat().getTotalFormat("책", total);
                         tvBookTab.setText(resultTotal);
                     }
-                    networkManager.requestMovieData(word, start, DISPLAY, new OnMovieDataCallback() {
+                    networkManager.requestMovieData(word, start, DISPLAY, curPosition, new OnMovieDataCallback() {
                         @Override
                         public void onResponse(Call<SearchMovieVO> call, Response<SearchMovieVO> response) {
                             if (response.code() == SUCCESS_CODE) {
@@ -342,13 +343,13 @@ public class MainActivity extends AppCompatActivity {
                                     tvMovieTab.setTextColor(getResources().getColor(R.color.black));
 //                                    recyclerView.setAdapter(bookAdapter);
 //                                    recyclerView.setAdapter(dataAdapter);
-                                    type=TYPE_BOOK;
+                                    type = TYPE_BOOK;
                                     requestSearchData(TYPE_BOOK, word);
                                 } else {
                                     tvBookTab.setTextColor(getResources().getColor(R.color.black));
                                     tvMovieTab.setTextColor(getResources().getColor(R.color.naver_color));
 //                                    recyclerView.setAdapter(movieAdapter);
-                                    type=TYPE_MOVIE;
+                                    type = TYPE_MOVIE;
                                     requestSearchData(TYPE_MOVIE, word);
                                 }
                             }
@@ -379,6 +380,8 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < genreList.size(); i++) {
             genreList.get(i).setSelected(false);
         }
+        //DEFALUT = 전체
+        genreList.get(0).setSelected(true);
     }
 
     /**
@@ -411,7 +414,7 @@ public class MainActivity extends AppCompatActivity {
     private void requestSearchData(String type, String word) {
         if (type.equals(TYPE_MOVIE)) {
             recycleMovieList();
-            networkManager.requestMovieData(word, start, DISPLAY, new OnMovieDataCallback() {
+            networkManager.requestMovieData(word, start, DISPLAY, curPosition, new OnMovieDataCallback() {
                 @Override
                 public void onResponse(Call<SearchMovieVO> call, Response<SearchMovieVO> response) {
                     if (response.code() == SUCCESS_CODE) {
@@ -450,7 +453,6 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 }
-
                 @Override
                 public void onFailure(Call<Rss> call, Throwable t) {
                     requestErrAtaData(word);
@@ -480,30 +482,6 @@ public class MainActivity extends AppCompatActivity {
                     requestErrAtaData(word);
                     Log.e(TAG, t.getMessage());
 
-                }
-            });
-        } else { //영화 장르검색
-            recycleMovieList();
-            networkManager.requestMovieGenreData(word, start, DISPLAY, curPosition, new OnMovieDataCallback() {
-                @Override
-                public void onResponse(Call<SearchMovieVO> call, Response<SearchMovieVO> response) {
-                    if (response.code() == SUCCESS_CODE) {
-                        if (response.body() != null) {
-                            if (response.body().getTotal() != EMPTY_SIZE) {
-                                setMovieDataInList(response, word);
-                            } else {
-                                requestErrAtaData(word);
-                            }
-                        } else {
-                            requestErrAtaData(word);
-                        }
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<SearchMovieVO> call, Throwable t) {
-                    requestErrAtaData(word);
-                    Log.e(TAG, t.getMessage());
                 }
             });
         }
@@ -692,9 +670,44 @@ public class MainActivity extends AppCompatActivity {
                 dialog.dismiss();
                 curPosition = position;
                 start = START_POSITION;
-                requestSearchData(TYPE_MOVIE_GENRE, checkWord());
+                for (int i = 0; i < genreList.size(); i++) {
+                    if (i == curPosition) {
+                        genreList.get(i).setSelected(true);
+                    } else {
+                        genreList.get(i).setSelected(false);
+                    }
+                }
+                requestSearchData(TYPE_MOVIE, checkWord());
             }
         }
+
+        @Override
+        public void onDismissed(CopySelectOptionDialog dialog, int position,boolean isRange) {
+            dialog.dismiss();
+            //TODO isRange판단후 범위에다넣을지 수정
+            switch (position) {
+                case 0:
+                    sort = "sim";
+                    break;
+                case 1:
+                    sort = "date";
+                    break;
+                case 2:
+                    sort = "count";
+                    break;
+            }
+            start=1;
+            String word = checkWord();
+            if (!word.equals("")) {
+                if (d_range.equals("전체")) {
+                    requestSearchData("book", word);
+                } else {
+                    requestSearchData("detail", word);
+                }
+            }
+
+        }
+
     };
 
     /**
@@ -729,37 +742,19 @@ public class MainActivity extends AppCompatActivity {
                     }
                     break;
                 case R.id.layout_main_option: // 탭 - 책 - 옵션
-                    SelectOptionDialog selectOptionDialog = new SelectOptionDialog(MainActivity.this, sort, d_range);
-                    selectOptionDialog.show();
-                    selectOptionDialog.setOnItemClick(onItemClick);
+//                    SelectOptionDialog selectOptionDialog = new SelectOptionDialog(MainActivity.this, sort, d_range);
+//                    selectOptionDialog.show();
+//                    selectOptionDialog.setOnItemClick(onItemClick);
+                    CopySelectOptionDialog copySelectOptionDialog = new CopySelectOptionDialog(MainActivity.this, sort, d_range);
+                    copySelectOptionDialog.show();
+                    copySelectOptionDialog.setOnDimissListener(onDimissListener);
+                    break;
+                case R.id.tv_genre:
+                    Log.e("수행", "옵션밑케이스");
                     break;
                 case R.id.textview_option_sort_relevance: //옵션 - 정렬 - 관련도순
                     start = 1;
                     sort = "sim";
-                    word = checkWord();
-                    if (!word.equals("")) {
-                        if (d_range.equals("전체")) {
-                            requestSearchData("book", word);
-                        } else {
-                            requestSearchData("detail", word);
-                        }
-                    }
-                    break;
-                case R.id.textview_option_sort_publicationDate: //옵션 - 정렬 - 출간일
-                    start = 1;
-                    sort = "date";
-                    word = checkWord();
-                    if (!word.equals("")) {
-                        if (d_range.equals("전체")) {
-                            requestSearchData("book", word);
-                        } else {
-                            requestSearchData("detail", word);
-                        }
-                    }
-                    break;
-                case R.id.textview_option_sort_sales: //옵션 - 정렬 - 판매일
-                    start = 1;
-                    sort = "count";
                     word = checkWord();
                     if (!word.equals("")) {
                         if (d_range.equals("전체")) {

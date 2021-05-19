@@ -6,7 +6,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="350dp"
         android:layout_alignParentBottom="true"
         android:background="@drawable/shape_option_background"
         android:orientation="vertical">
@@ -31,104 +31,29 @@
                 android:text="정렬"
                 android:textColor="@color/black"
                 android:textSize="25dp" />
-
-            <LinearLayout
-                android:id="@+id/ll_sort"
-                android:layout_marginTop="20dp"
+            <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_below="@id/tv_option">
-
-                <TextView
-                    android:id="@+id/textview_option_sort_relevance"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/selector_option_dialog"
-                    android:drawablePadding="5dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_toRightOf="@+id/imageview_option_sort_relevance"
-                    android:text="@string/relevance"
-                    android:textColor="@color/selector_movie_dialog_option" />
-
-                <TextView
-                    android:id="@+id/textview_option_sort_publicationDate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/selector_option_dialog"
-                    android:drawablePadding="5dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_toRightOf="@+id/imageview_option_sort_publicationDate"
-                    android:text="@string/pDate"
-                    android:textColor="@color/selector_movie_dialog_option" />
-
-                <TextView
-                    android:id="@+id/textview_option_sort_sales"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/selector_option_dialog"
-                    android:drawablePadding="5dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_toRightOf="@+id/imageview_option_sort_sales"
-                    android:text="@string/sales"
-                    android:textColor="@color/selector_movie_dialog_option" />
-            </LinearLayout>
+                android:id="@+id/recyclerview_option_sort"
+                android:layout_marginTop="20dp"
+                android:paddingRight="10dp"
+                android:layout_below="@id/tv_option"/>
             <TextView
                 android:id="@+id/tv2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/ll_sort"
+                android:layout_below="@id/recyclerview_option_sort"
                 android:text="범위"
                 android:layout_marginTop="20dp"
                 android:textColor="@color/black"
                 android:textSize="25dp" />
-            <LinearLayout
-                android:id="@+id/latout_option_range_select"
-                android:layout_marginTop="20dp"
-                android:orientation="horizontal"
+            <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/tv2">
-                <TextView
-                    android:id="@+id/textview_option_range_all"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:drawableLeft="@drawable/selector_option_dialog"
-                    android:drawablePadding="5dp"
-                    android:text="@string/main_option_range_all"
-                    android:textColor="@color/selector_movie_dialog_option" />
-
-                <TextView
-                    android:id="@+id/textview_option_range_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:text="책제목"
-                    android:drawableLeft="@drawable/selector_option_dialog"
-                    android:drawablePadding="5dp"
-                    android:textColor="@color/selector_movie_dialog_option" />
-                <TextView
-                    android:id="@+id/textview_option_range_author"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:text="저자"
-                    android:drawableLeft="@drawable/selector_option_dialog"
-                    android:drawablePadding="5dp"
-                    android:textColor="@color/selector_movie_dialog_option" />
-
-                <TextView
-                    android:id="@+id/textview_option_range_publisher"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:text="출판사"
-                    android:drawableLeft="@drawable/selector_option_dialog"
-                    android:drawablePadding="5dp"
-                    android:textColor="@color/selector_movie_dialog_option" />
-
-            </LinearLayout>
+                android:id="@+id/recyclerview_option_range"
+                android:layout_marginTop="20dp"
+                android:paddingRight="10dp"
+                android:layout_below="@id/tv2"/>
         </RelativeLayout>
 
     </LinearLayout>

@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.requestsearch.R;
-import com.example.requestsearch.dialog.CopySelectOptionDialog;
+import com.example.requestsearch.dialog.SelectOptionDialog;
 import com.example.requestsearch.listenerInterface.OnItemClickListener;
 
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ import java.util.ArrayList;
 public class GridAdapter extends RecyclerView.Adapter<GridAdapter.GenreViewHolder> {
 
     private ArrayList<String> sortList;
-    private CopySelectOptionDialog dialog;
+    private SelectOptionDialog dialog;
     private OnItemClickListener onItemClickListener =null;
     ArrayList<Boolean> isSelected;
     /**
@@ -31,7 +31,7 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.GenreViewHolde
         this.onItemClickListener = onItemClickListener;
     }
 
-    public GridAdapter(CopySelectOptionDialog di, ArrayList<String> sortList, ArrayList<Boolean> isSelecte) {
+    public GridAdapter(SelectOptionDialog di, ArrayList<String> sortList, ArrayList<Boolean> isSelecte) {
         this.dialog=di;
         this.sortList = sortList;
         this.isSelected=isSelecte;

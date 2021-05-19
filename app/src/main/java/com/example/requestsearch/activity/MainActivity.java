@@ -20,7 +20,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 import com.example.requestsearch.ItemDecoration;
@@ -28,14 +27,11 @@ import com.example.requestsearch.adapter.DataAdapter;
 import com.example.requestsearch.data.book.Item;
 import com.example.requestsearch.data.book.Rss;
 import com.example.requestsearch.data.errata.ErrAtaVo;
-import com.example.requestsearch.dialog.CopySelectOptionDialog;
 import com.example.requestsearch.dialog.SelectOptionDialog;
 import com.example.requestsearch.listenerInterface.OnBookDataCallback;
 import com.example.requestsearch.listenerInterface.OnDetailBookDataCallback;
 import com.example.requestsearch.listenerInterface.OnErrAtaDataCallback;
 import com.example.requestsearch.listenerInterface.OnMovieDataCallback;
-import com.example.requestsearch.adapter.BookAdapter;
-import com.example.requestsearch.adapter.MovieAdapter;
 import com.example.requestsearch.listenerInterface.OnDimissListener;
 import com.example.requestsearch.listenerInterface.OnItemClick;
 import com.example.requestsearch.R;
@@ -105,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
 //TODO
     //         * Q.StringBuilder
     //         * Q.textview- drawble start - drawble.setbounds
-    //TODO 코드수정, 장르,옵션어댑터 합치기,옵션범위클릭시 검색수행,옵션범위UI구현
+    //TODO 코드수정, 장르,옵션어댑터 합치기
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -682,7 +678,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onDismissed(CopySelectOptionDialog dialog, int position,boolean isRange) {
+        public void onDismissed(SelectOptionDialog dialog, int position, boolean isRange) {
             dialog.dismiss();
             switch (position) {
                 case 0:
@@ -756,60 +752,10 @@ public class MainActivity extends AppCompatActivity {
                     }
                     break;
                 case R.id.layout_main_option: // 탭 - 책 - 옵션
-//                    SelectOptionDialog selectOptionDialog = new SelectOptionDialog(MainActivity.this, sort, d_range);
-//                    selectOptionDialog.show();
-//                    selectOptionDialog.setOnItemClick(onItemClick);
-                    CopySelectOptionDialog copySelectOptionDialog = new CopySelectOptionDialog(MainActivity.this, sort, d_range);
+                    SelectOptionDialog copySelectOptionDialog = new SelectOptionDialog(MainActivity.this, sort, d_range);
                     copySelectOptionDialog.show();
                     copySelectOptionDialog.setOnDimissListener(onDimissListener);
                     break;
-                case R.id.tv_genre:
-                    Log.e("수행", "옵션밑케이스");
-                    break;
-//                case R.id.textview_option_sort_relevance: //옵션 - 정렬 - 관련도순
-//                    start = 1;
-//                    sort = "sim";
-//                    word = checkWord();
-//                    if (!word.equals("")) {
-//                        if (d_range.equals("전체")) {
-//                            requestSearchData("book", word);
-//                        } else {
-//                            requestSearchData("detail", word);
-//                        }
-//                    }
-//                    break;
-////                case R.id.textview_option_range_all: // 옵션 - 범위 - 전체
-////                    start = 1;
-////                    d_range = "전체";
-////                    word = checkWord();
-////                    if (!word.equals("")) {
-////                        requestSearchData("book", word);
-////                    }
-////                    break;
-//                case R.id.textview_option_range_title: //옵션 - 범위 - 책제목
-//                    start = 1;
-//                    d_range = "책제목";
-//                    word = checkWord();
-//                    if (!word.equals("")) {
-//                        requestSearchData("detail", word);
-//                    }
-//                    break;
-//                case R.id.textview_option_range_author: //옵션 - 범위 - 저자
-//                    start = 1;
-//                    d_range = "저자";
-//                    word = checkWord();
-//                    if (!word.equals("")) {
-//                        requestSearchData("detail", word);
-//                    }
-//                    break;
-//                case R.id.textview_option_range_publisher: //옵션 - 범위 - 출판사
-//                    start = 1;
-//                    d_range = "출판사";
-//                    word = checkWord();
-//                    if (!word.equals("")) {
-//                        requestSearchData("detail", word);
-//                    }
-//                    break;
                 case R.id.textview_item_noresult: // 결과없음 - 오타변환단어
                     etMainWord.setText(word);
                     resetAndSearch();

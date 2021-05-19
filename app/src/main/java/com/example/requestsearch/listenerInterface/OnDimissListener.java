@@ -1,6 +1,6 @@
 package com.example.requestsearch.listenerInterface;
 
-import com.example.requestsearch.dialog.CopySelectOptionDialog;
+import com.example.requestsearch.dialog.SelectOptionDialog;
 import com.example.requestsearch.dialog.GenreDialog;
 
 /**
@@ -8,6 +8,6 @@ import com.example.requestsearch.dialog.GenreDialog;
  */
 public interface OnDimissListener {
     void onDismissed(GenreDialog dialog, boolean isItem,int position);
-    void onDismissed(CopySelectOptionDialog dialog, int position,boolean isRange);
+    void onDismissed(SelectOptionDialog dialog, int position, boolean isRange);
 
 }

@@ -7,18 +7,25 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.requestsearch.decoration.OptionItemDecoration;
 import com.example.requestsearch.R;
-import com.example.requestsearch.listenerInterface.OnItemClick;
+import com.example.requestsearch.adapter.GridAdapter;
+import com.example.requestsearch.listenerInterface.OnDimissListener;
+import com.example.requestsearch.listenerInterface.OnItemClickListener;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
- * 옵션 항목 표시 다이얼로그
+ * 옵션 항목 표시 ui수정 다이얼로그
  */
 public class SelectOptionDialog extends Dialog {
 
@@ -26,8 +33,11 @@ public class SelectOptionDialog extends Dialog {
     private String sort;
     private String d_range;
 
-    private OnItemClick onItemClick = null;
+    private OnDimissListener onDimissListener=null;
 
+    public void setOnDimissListener(OnDimissListener onDimissListener) {
+        this.onDimissListener = onDimissListener;
+    }
 
     public SelectOptionDialog(@NonNull Context context, String sort, String d_range) {
         super(context);
@@ -36,11 +46,10 @@ public class SelectOptionDialog extends Dialog {
         this.context = context;
     }
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.layout_option_select_use_dlg);
+        setContentView(R.layout.layout_option_select);
         Window window = getWindow();
         if (window != null) {
             window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -57,7 +66,7 @@ public class SelectOptionDialog extends Dialog {
         } else if (sort.equals("count")) {
             sortIndex = 2;
         }
-        setSortSelected(sortIndex);
+        setRecyclerViewSort(sortIndex);
 
         int rangeIndex = 0; // 기본 - 전체
         if (d_range.equals("책제목")) {
@@ -67,7 +76,7 @@ public class SelectOptionDialog extends Dialog {
         } else if (d_range.equals("출판사")) {
             rangeIndex = 3;
         }
-        setRangeSelected(rangeIndex);
+       setRecyclerViewRange(rangeIndex);
 
         // X(닫기) 이미지 버튼형식
         ImageView ivCloseDialog = findViewById(R.id.imageview_dialog_close);
@@ -79,79 +88,72 @@ public class SelectOptionDialog extends Dialog {
         });
     }
 
-
     /**
-     * 정렬 셀렉터 초기화
-     *
-     * @param index 전에 선택한 위치값
+     * 정렬 세팅
+     * @param sortIndex
      */
-    public void setSortSelected(int index) {
-        ViewGroup ll = findViewById(R.id.ll_sort);
-        int childCount = ll.getChildCount();
-
-        for (int i = 0; i < childCount; i++) {
-            View view = ll.getChildAt(i);
-
-            view.setSelected(i == index);
-//            if(i==index){
-//                view.setSelected(true);
-//                TextView textView =(TextView) view;
-//                Drawable drawable = context.getResources().getDrawable(R.drawable.sort_selecticon);
-//                drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight()); //drawble 크기 설정
-//                textView.setCompoundDrawables(drawable,null,null,null);
-//            }else{
-//                view.setSelected(false);
-//                TextView textView =(TextView) view;
-//                Drawable drawable = context.getResources().getDrawable(R.drawable.sort_baseicon);
-//                drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
-//                textView.setCompoundDrawables(drawable,null,null,null);
-//            }
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (!view.isSelected()) {
-                        if (onItemClick != null) {
-                            dismiss();
-                            onItemClick.onItemClick(v, 1, "");
-                        }
-                    }
-                }
-            });
+    private void setRecyclerViewSort(int sortIndex) {
+        String[] sortArray={"관련도순","출간일순","판매량순"};
+        ArrayList<String> sortTitle=new ArrayList<String>(Arrays.asList(sortArray));
+        ArrayList<Boolean> isSelected=new ArrayList<>();
+        for(int i=0;i<sortTitle.size();i++){
+            if(sortIndex==i){
+                isSelected.add(true);
+            }else{
+                isSelected.add(false);
+            }
         }
+        RecyclerView recyclerView= findViewById(R.id.recyclerview_option_sort);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(),sortTitle.size());
+
+        recyclerView.setLayoutManager(gridLayoutManager);
+        recyclerView.addItemDecoration(new OptionItemDecoration(getContext(),sortTitle.size(),isSelected));
+
+
+        GridAdapter optionSortAdapter=new GridAdapter(this,sortTitle,isSelected);
+
+        optionSortAdapter.setOnItemClick(new OnItemClickListener() {
+            @Override
+            public void setOnItemClick(View v,int position) {
+                onDimissListener.onDismissed(SelectOptionDialog.this,position,false);
+            }
+        });
+        recyclerView.setAdapter(optionSortAdapter);
     }
 
     /**
-     * 범위 셀렉터 초기화
-     *
-     * @param rangeIndex 전에 선택한 위치값
+     * 정렬 세팅
+     * @param rangeIndex
      */
-    private void setRangeSelected(int rangeIndex) {
-        ViewGroup ll = findViewById(R.id.latout_option_range_select);
-        int childCount = ll.getChildCount();
-        for (int i = 0; i < childCount; i++) {
-            View view = ll.getChildAt(i);
-            view.setSelected(i == rangeIndex);
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (!view.isSelected()) {
-                        if (onItemClick != null) {
-                            dismiss();
-                            onItemClick.onItemClick(v, 2, "");
-                        }
-                    }
-                }
-            });
+    private void setRecyclerViewRange(int rangeIndex) {
+        String[] rangeArray={"전체","책제목","저자","출판사"};
+        ArrayList<String> rangeTitle=new ArrayList<String>(Arrays.asList(rangeArray));
+        ArrayList<Boolean> isSelected=new ArrayList<>();
+        for(int i=0;i<rangeTitle.size();i++){
+            if(rangeIndex==i){
+                isSelected.add(true);
+            }else{
+                isSelected.add(false);
+            }
         }
+        RecyclerView recyclerView= findViewById(R.id.recyclerview_option_range);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(),rangeTitle.size());
+
+        recyclerView.setLayoutManager(gridLayoutManager);
+        recyclerView.addItemDecoration(new OptionItemDecoration(getContext(),rangeTitle.size(),isSelected));
+
+
+        GridAdapter optionSortAdapter=new GridAdapter(this,rangeTitle,isSelected);
+
+        optionSortAdapter.setOnItemClick(new OnItemClickListener() {
+            @Override
+            public void setOnItemClick(View v,int position) {
+
+                onDimissListener.onDismissed(SelectOptionDialog.this,position,true);
+            }
+        });
+        recyclerView.setAdapter(optionSortAdapter);
     }
 
-    /**
-     * 아이템 클릭 리스너 설정
-     *
-     * @param onItemClick
-     */
-    public void setOnItemClick(OnItemClick onItemClick) {
-        this.onItemClick = onItemClick;
-    }
 
 }

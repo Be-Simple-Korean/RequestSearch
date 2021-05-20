@@ -22,7 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 
-import com.example.requestsearch.ItemDecoration;
+import com.example.requestsearch.decoration.ItemDecoration;
 import com.example.requestsearch.adapter.DataAdapter;
 import com.example.requestsearch.data.book.Item;
 import com.example.requestsearch.data.book.Rss;
@@ -52,6 +52,8 @@ import retrofit2.Response;
 /**
  * 메인 액티비티
  */
+//         * Q.StringBuilder
+
 public class MainActivity extends AppCompatActivity {
 
     private static final String URL = "url";
@@ -67,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int MOVIE_HEADER_TYPE = 5;
     private static final int NORESULT_TYPE = 1;
     private static final int LOADMORE_TYPE = 2;
+    private static final int FINISH_VIEW_TYPE=-1;
 
     private EditText etMainWord;
     private ImageButton ibDeleteWord;
@@ -98,10 +101,6 @@ public class MainActivity extends AppCompatActivity {
     private NoWordGuideDialog noWordGuideDialog;
     private InputMethodManager inputMethodManager;
 
-//TODO
-    //         * Q.StringBuilder
-    //         * Q.textview- drawble start - drawble.setbounds
-    //TODO 코드수정, 장르,옵션어댑터 합치기
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -250,9 +249,7 @@ public class MainActivity extends AppCompatActivity {
                     ibDeleteWord.setVisibility(View.INVISIBLE);
                     break;
                 case R.id.textview_main_booktab: //탭 - 책
-                    Log.e("수행", "!!");
                     if (!type.equals(TYPE_BOOK)) {
-                        Log.e("수행", "!!!!");
                         type = TYPE_BOOK;
                         start = 1;
                         tvBookTab.setTextColor(getResources().getColor(R.color.naver_color));
@@ -267,6 +264,7 @@ public class MainActivity extends AppCompatActivity {
                         start = 1;
                         type = TYPE_MOVIE;
                         curPosition = 0;
+                        setGenreList();
                         tvBookTab.setTextColor(getResources().getColor(R.color.black));
                         tvMovieTab.setTextColor(getResources().getColor(R.color.naver_color));
                         String word = checkWord();
@@ -296,7 +294,6 @@ public class MainActivity extends AppCompatActivity {
         setGenreList();
         String word = checkWord();
         if (!word.equals("")) {
-            ;
             requestResultCount(word);
         }
     }
@@ -597,16 +594,23 @@ public class MainActivity extends AppCompatActivity {
 //            bookAdapter.notifyDataSetChanged();
             dataAdapter.notifyDataSetChanged();
         }
+
         String resultTotal = new TotalFormat().getTotalFormat("책", maxBookSize);
         tvBookTab.setText(resultTotal);
-        if (maxBookSize > DISPLAY) { //더보기
-            if (maxBookSize > start + DISPLAY) {
-                Item btnBookItems = new Item();
-                btnBookItems.setViewType(LOADMORE_TYPE);
-                detailMainItemArrayList.add(btnBookItems);
-                start += DISPLAY;
-            }
+
+        Log.e("max/size",maxBookSize+"/"+detailMainItemArrayList.size());
+        if (maxBookSize>detailMainItemArrayList.size()){
+            Item btnBookItems = new Item();
+            btnBookItems.setViewType(LOADMORE_TYPE);
+            detailMainItemArrayList.add(btnBookItems);
+            start += DISPLAY;
+        }else{
+            Log.e("finish","수행");
+            Item btnBookItems = new Item();
+            btnBookItems.setViewType(FINISH_VIEW_TYPE);
+            detailMainItemArrayList.add(btnBookItems);
         }
+
         dataAdapter.setTypeNumber(0);
         dataAdapter.setDetailMainItemArrayList(detailMainItemArrayList);
         dataAdapter.setWord(word);
@@ -637,13 +641,15 @@ public class MainActivity extends AppCompatActivity {
             dataAdapter.notifyDataSetChanged();
         }
 
-        if (maxMovieSize > DISPLAY) {
-            if (maxMovieSize > start + DISPLAY) {
-                MovieItemsVO loadMoreMovieItems = new MovieItemsVO();
-                loadMoreMovieItems.setViewType(LOADMORE_TYPE);
-                movieMainItemsArrayList.add(loadMoreMovieItems);//더보기 버튼 처리
-                start += DISPLAY;
-            }
+        if (maxMovieSize>movieMainItemsArrayList.size()){
+            MovieItemsVO loadMoreMovieItems = new MovieItemsVO();
+            loadMoreMovieItems.setViewType(LOADMORE_TYPE);
+            movieMainItemsArrayList.add(loadMoreMovieItems);//더보기 버튼 처리
+            start += DISPLAY;
+        }else{
+            MovieItemsVO finishItem = new MovieItemsVO();
+            finishItem.setViewType(FINISH_VIEW_TYPE);
+            movieMainItemsArrayList.add(finishItem);//더보기 버튼 처리
         }
         String resultTotal = new TotalFormat().getTotalFormat("영화", maxMovieSize);
         tvMovieTab.setText(resultTotal);
@@ -663,59 +669,81 @@ public class MainActivity extends AppCompatActivity {
             if (!isItem) { //닫기 버튼 클릭시
                 dialog.dismiss();
             } else { //아이템 클릭시
-                dialog.dismiss();
-                curPosition = position;
-                start = START_POSITION;
-                for (int i = 0; i < genreList.size(); i++) {
-                    if (i == curPosition) {
-                        genreList.get(i).setSelected(true);
-                    } else {
-                        genreList.get(i).setSelected(false);
+                new Thread(){
+                    @Override
+                    public void run() {
+                        try {
+                            sleep(500);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        dialog.dismiss();
+                        curPosition = position;
+                        start = START_POSITION;
+                        for (int i = 0; i < genreList.size(); i++) {
+                            if (i == curPosition) {
+                                genreList.get(i).setSelected(true);
+                            } else {
+                                genreList.get(i).setSelected(false);
+                            }
+                        }
+                        requestSearchData(TYPE_MOVIE, checkWord());
                     }
-                }
-                requestSearchData(TYPE_MOVIE, checkWord());
+                }.start();
+
             }
         }
 
         @Override
         public void onDismissed(SelectOptionDialog dialog, int position, boolean isRange) {
-            dialog.dismiss();
-            switch (position) {
-                case 0:
-                    if(isRange){
-                        d_range="전체";
-                    }else{
-                        sort = "sim";
-                    }
-                    break;
-                case 1:
-                    if(isRange){
-                        d_range="책제목";
-                    }else{
-                        sort = "date";
-                    }
-                    break;
-                case 2:
-                    if(isRange){
-                        d_range="저자";
-                    }else{
-                        sort = "count";
-                    }
-                    break;
-                case 3:
-                    d_range="출판사";
-                    break;
-            }
-            start=1;
-            String word = checkWord();
-            if (!word.equals("")) {
-                if (d_range.equals("전체")) {
-                    requestSearchData("book", word);
-                } else {
-                    requestSearchData("detail", word);
-                }
-            }
+            Thread t = new Thread(){
+                @Override
+                public void run() {
+                    try {
+                        Thread.sleep(500);
 
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    dialog.dismiss();
+                    switch (position) {
+                        case 0:
+                            if(isRange){
+                                d_range="전체";
+                            }else{
+                                sort = "sim";
+                            }
+                            break;
+                        case 1:
+                            if(isRange){
+                                d_range="책제목";
+                            }else{
+                                sort = "date";
+                            }
+                            break;
+                        case 2:
+                            if(isRange){
+                                d_range="저자";
+                            }else{
+                                sort = "count";
+                            }
+                            break;
+                        case 3:
+                            d_range="출판사";
+                            break;
+                    }
+                    start=1;
+                    String word = checkWord();
+                    if (!word.equals("")) {
+                        if (d_range.equals("전체")) {
+                            requestSearchData("book", word);
+                        } else {
+                            requestSearchData("detail", word);
+                        }
+                    }
+                }
+            };
+            t.start();
         }
 
     };
@@ -738,7 +766,7 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(intent);
                     break;
                 case R.id.layout_movie_genre: // 탭 - 영화 - 헤더 - 장르
-                    genreDialog = new GenreDialog(MainActivity.this, genreList);
+                    genreDialog = new GenreDialog(MainActivity.this, genreList,type);
                     genreDialog.setOnDimissListener(onDimissListener);
                     genreDialog.show();
                     break;
@@ -752,7 +780,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     break;
                 case R.id.layout_main_option: // 탭 - 책 - 옵션
-                    SelectOptionDialog copySelectOptionDialog = new SelectOptionDialog(MainActivity.this, sort, d_range);
+                    SelectOptionDialog copySelectOptionDialog = new SelectOptionDialog(MainActivity.this, sort, d_range,type);
                     copySelectOptionDialog.show();
                     copySelectOptionDialog.setOnDimissListener(onDimissListener);
                     break;

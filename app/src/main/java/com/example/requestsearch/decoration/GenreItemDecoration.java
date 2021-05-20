@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.requestsearch.R;
-import com.example.requestsearch.adapter.MovieGenreAdapter;
+import com.example.requestsearch.adapter.GridAdapter;
 import com.example.requestsearch.data.movie.MovieGenreDataVO;
 
 import java.util.ArrayList;
@@ -29,21 +29,14 @@ public class GenreItemDecoration extends RecyclerView.ItemDecoration {
     private static final int THIRD = 2;
 
     private Drawable mDivider;
-    private Drawable mDividerSel;
-    private int spanCount;
-    private int lastIndex;
     private int left;
     private int right;
     private int bottom;
     private int top;
-    private ArrayList<MovieGenreDataVO> genreList;
     private Context context;
 
-    public GenreItemDecoration(Context context, int spanCount, ArrayList<MovieGenreDataVO> genreList) {
+    public GenreItemDecoration(Context context) {
         this.context = context;
-        this.spanCount = spanCount;
-        this.genreList = genreList;
-        lastIndex = spanCount - 1;
     }
 
     @Override
@@ -64,8 +57,8 @@ public class GenreItemDecoration extends RecyclerView.ItemDecoration {
         for (int i = 0; i < childCount; i++) { // 0 = selected
             View childView = parent.getChildAt(i);
             RecyclerView.ViewHolder viewHolder = parent.getChildViewHolder(childView);
-            if (viewHolder instanceof MovieGenreAdapter.GenreViewHolder) {
-                MovieGenreAdapter.GenreViewHolder genreHolder = (MovieGenreAdapter.GenreViewHolder) viewHolder;
+            if (viewHolder instanceof GridAdapter.GenreViewHolder) {
+                GridAdapter.GenreViewHolder genreHolder = (GridAdapter.GenreViewHolder) viewHolder;
 
                 if (genreHolder.isSelected()) {
                     drawRect(i, c, childView,true);
@@ -107,7 +100,6 @@ public class GenreItemDecoration extends RecyclerView.ItemDecoration {
 
         //왼쪽구분선
         left = child.getLeft() - child.getPaddingLeft();
-        Log.e("left",left+"");
         right = left + mDivider.getIntrinsicWidth();
         top = child.getTop();
         bottom = child.getBottom();
@@ -119,7 +111,6 @@ public class GenreItemDecoration extends RecyclerView.ItemDecoration {
         int verticalBottom = child.getBottom();
         int verticalLeft = child.getRight();
         int verticalRight = verticalLeft + mDivider.getIntrinsicWidth();
-        Log.e("Light",verticalLeft+"/"+verticalRight);
         mDivider.setBounds(verticalLeft, verticalTop, verticalRight, verticalBottom);
         mDivider.draw(c);
     }

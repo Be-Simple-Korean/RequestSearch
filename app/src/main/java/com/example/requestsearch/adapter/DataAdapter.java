@@ -32,6 +32,7 @@ import java.util.ArrayList;
 public class DataAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int BOOK_TYPE = 0;
     private static final int MOVIE_TYPE = 1;
+    private static final int FINISH_VIEW_TYPE=-1;
     private static final int BOOK_HEADER_TYPE = 0;
     private static final int NOREUSLT_TYPE = 1;
     private static final int LOADMORE_TYPE = 2;
@@ -49,8 +50,15 @@ public class DataAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private RecyclerView recyclerView;
     private View noResultview;
     private View headerView;
+    private Boolean isFinish=false;
 
+    public DataAdapter(RecyclerView recyclerView) {
+        this.recyclerView = recyclerView;
+    }
 
+    public Boolean isFinished(){
+        return isFinish;
+    }
     @Override
     public int getItemViewType(int position) {
         if (typeNumber == BOOK_TYPE) {
@@ -91,6 +99,10 @@ public class DataAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             case LOADMORE_TYPE:
                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recyclerview_footer, parent, false);
                 return new LoadMoreViewHolder(view);
+            case FINISH_VIEW_TYPE:
+                Log.e("여백 수행","!");
+                View finishView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recyclerview_finish, parent, false);
+                return new FinishViewHolder(finishView);
         }
 
         return null;
@@ -99,6 +111,19 @@ public class DataAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        if (typeNumber == BOOK_TYPE) {
+            if(position==detailMainItemArrayList.size()-1){
+                isFinish=true;
+            }else{
+                isFinish=false;
+            }
+        } else{
+            if(position==movieItemsArrayList.size()-1){
+                isFinish=true;
+            }else{
+                isFinish=false;
+            }
+        }
         int type = getItemViewType(position);
         switch (type) {
             case NOREUSLT_TYPE: //결과없음 ui 처리
@@ -176,6 +201,16 @@ public class DataAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     }
                 }
             });
+        }
+    }
+
+    /**
+     * 여백아이템 뷰홀더
+     */
+    public class FinishViewHolder extends RecyclerView.ViewHolder {
+
+        public FinishViewHolder(@NonNull View itemView) {
+            super(itemView);
         }
     }
 
@@ -336,26 +371,41 @@ public class DataAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
+    /**
+     * 데이터 타입 설정 = 책 = 0 / 영화 = 1
+     * @param typeNumber
+     */
     public void setTypeNumber(int typeNumber) {
         this.typeNumber = typeNumber;
     }
 
-    public DataAdapter(RecyclerView recyclerView) {
-        this.recyclerView = recyclerView;
-    }
-
+    /**
+     * 책 데이터 리스트 설정
+     * @param detailMainItemArrayList
+     */
     public void setDetailMainItemArrayList(ArrayList<Item> detailMainItemArrayList) {
         this.detailMainItemArrayList = detailMainItemArrayList;
     }
 
+    /**
+     * 영화 데이터 리스트 설정
+     */
     public void setMovieItemsArrayList(ArrayList<MovieItemsVO> movieItemsArrayList) {
         this.movieItemsArrayList = movieItemsArrayList;
     }
 
+    /**
+     * 검색 단어 설정
+     * @param word
+     */
     public void setWord(String word) {
         this.word = word;
     }
 
+    /**
+     * 오타변환단어 설정
+     * @param errata
+     */
     public void setErrata(String errata) {
         this.errata = errata;
     }

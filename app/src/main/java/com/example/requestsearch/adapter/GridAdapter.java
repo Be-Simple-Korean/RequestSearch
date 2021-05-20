@@ -1,5 +1,6 @@
 package com.example.requestsearch.adapter;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,33 +10,23 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.requestsearch.R;
+import com.example.requestsearch.data.movie.MovieGenreDataVO;
 import com.example.requestsearch.dialog.SelectOptionDialog;
 import com.example.requestsearch.listenerInterface.OnItemClickListener;
 
 import java.util.ArrayList;
 
 /**
- * 영화 장르 데이터 Recyclerview Adapter
+ * 옵션 데이터 Recyclerview Adapter
  */
 public class GridAdapter extends RecyclerView.Adapter<GridAdapter.GenreViewHolder> {
 
     private ArrayList<String> sortList;
-    private SelectOptionDialog dialog;
+    private ArrayList<MovieGenreDataVO> genreList;
+    private String type;
     private OnItemClickListener onItemClickListener =null;
-    ArrayList<Boolean> isSelected;
-    /**
-     * 영화 아이템 클릭 리스너
-     * @param onItemClickListener
-     */
-    public void setOnItemClick(OnItemClickListener onItemClickListener) {
-        this.onItemClickListener = onItemClickListener;
-    }
+    private ArrayList<Boolean> isSelected;
 
-    public GridAdapter(SelectOptionDialog di, ArrayList<String> sortList, ArrayList<Boolean> isSelecte) {
-        this.dialog=di;
-        this.sortList = sortList;
-        this.isSelected=isSelecte;
-    }
 
     @NonNull
     @Override
@@ -47,18 +38,30 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.GenreViewHolde
 
     @Override
     public void onBindViewHolder(@NonNull  GenreViewHolder holder, int position) {
-        holder.tvGenre.setText(sortList.get(position));
-        holder.tvGenre.setSelected(isSelected.get(position));
+        if(type.equals("book")){
+            holder.tvGenre.setText(sortList.get(position));
+            holder.tvGenre.setSelected(isSelected.get(position));
+        }else{
+            holder.tvGenre.setText(genreList.get(position).getgName());
+            holder.tvGenre.setSelected(genreList.get(position).isSelected());
+        }
+
 
     }
 
     @Override
     public int getItemCount() {
-        return sortList.size();
+        if(type.equals("book")){
+            return sortList.size();
+        }else if (type.equals("movie")){
+            return genreList.size();
+        }else{
+            return 0;
+        }
     }
 
     /**
-     * 영화 장르 항목 뷰홀더
+     * 옵션항목 뷰홀더
      */
     public class GenreViewHolder extends RecyclerView.ViewHolder {
         protected TextView tvGenre;
@@ -71,6 +74,25 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.GenreViewHolde
                 @Override
                 public void onClick(View v) {
                     int position = getAdapterPosition();
+                    if(type.equals("book")){
+                        isSelected.clear();
+                        for (int i = 0; i < sortList.size(); i++) {
+                            if (i == position) {
+                                isSelected.add(true);
+                            } else {
+                                isSelected.add(false);
+                            }
+                        }
+                    }else if (type.equals("movie")){
+                        for (int i = 0; i < genreList.size(); i++) {
+                            if (i == position) {
+                                genreList.get(i).setSelected(true);
+                            } else {
+                                genreList.get(i).setSelected(false);
+                            }
+                        }
+                    }
+                    notifyDataSetChanged();
                     if (position != RecyclerView.NO_POSITION) {
                         if (onItemClickListener != null) {
                             onItemClickListener.setOnItemClick(v, position);
@@ -79,5 +101,49 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.GenreViewHolde
                 }
             });
         }
+        public boolean isSelected() {
+            return tvGenre != null ? tvGenre.isSelected() : false;
+        }
+    }
+
+    /**
+     * 옵션 아이템 클릭 리스너
+     * @param onItemClickListener
+     */
+    public void setOnItemClick(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
+
+
+    /**
+     * 장르 데이터 리스트 설정
+     * @param genreList
+     */
+    public void setGenreList(ArrayList<MovieGenreDataVO> genreList) {
+        this.genreList = genreList;
+    }
+
+    /**
+     * 옵션데이터 리스트 설정
+     * @param sortList
+     */
+    public void setSortList(ArrayList<String> sortList) {
+        this.sortList = sortList;
+    }
+
+    /**
+     * 선택항목값 리스트 설정
+     * @param isSelected
+     */
+    public void setIsSelected(ArrayList<Boolean> isSelected) {
+        this.isSelected = isSelected;
+    }
+
+    /**
+     * 데이터 타입 설정 =  book / movie
+     * @param type
+     */
+    public void setType(String type) {
+        this.type = type;
     }
 }

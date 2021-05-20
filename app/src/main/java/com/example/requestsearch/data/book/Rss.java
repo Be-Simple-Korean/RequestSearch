@@ -1,10 +1,12 @@
 package com.example.requestsearch.data.book;
 
+import com.example.requestsearch.data.BaseVO;
+
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
 @Root(name="rss",strict = false)
-public class Rss {
+public class Rss extends BaseVO {
     @Element(name = "channel",required = false)
     Channel channel;
 

@@ -1,11 +1,13 @@
 package com.example.requestsearch.data.movie;
 
+import com.example.requestsearch.data.BaseVO;
+
 import java.util.ArrayList;
 
 /**
  * 영화 전체 검색 데이터
  */
-public class SearchMovieVO {
+public class SearchMovieVO extends BaseVO {
     private String lastBuildDate;
     private int total;
     private int start;

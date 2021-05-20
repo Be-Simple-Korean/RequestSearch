@@ -3,9 +3,11 @@ package com.example.requestsearch.data.errata;
 
 import androidx.annotation.NonNull;
 
+import com.example.requestsearch.data.BaseVO;
+
 import java.util.ArrayList;
 
-public class ErrAtaVo {
+public class ErrAtaVo extends BaseVO {
     String errata;
 
     public ErrAtaVo(String errata) {

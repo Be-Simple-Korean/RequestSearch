@@ -4,10 +4,7 @@ import android.util.Log;
 
 import com.example.requestsearch.XmlOrJsonConverterFactory;
 import com.example.requestsearch.data.errata.ErrAtaVo;
-import com.example.requestsearch.listenerInterface.OnBookDataCallback;
-import com.example.requestsearch.listenerInterface.OnDetailBookDataCallback;
-import com.example.requestsearch.listenerInterface.OnErrAtaDataCallback;
-import com.example.requestsearch.listenerInterface.OnMovieDataCallback;
+import com.example.requestsearch.listenerInterface.OnCallbackListener;
 
 import com.example.requestsearch.data.book.Rss;
 import com.example.requestsearch.data.movie.SearchMovieVO;
@@ -73,7 +70,7 @@ public class NetworkManager {
      * @param sort
      * @param onBookDataCallback
      */
-    public void requestBookData(String word, int start, int display, String sort,OnBookDataCallback onBookDataCallback){
+    public void requestBookData(String word, int start, int display, String sort,OnCallbackListener onBookDataCallback){
 //        callBookData=naverAPI.getBookData(clientDataVO.getClientId(),clientDataVO.getClientSecret(),word,start,display,sort);
         callBookData=naverAPI.getBookData(word,start,display,sort);
         callBookData.enqueue(new Callback<Rss>() {
@@ -97,15 +94,46 @@ public class NetworkManager {
     }
 
     /**
+     * 책 검색 요청
+     * @param word
+     * @param start
+     * @param display
+     * @param sort
+     * @param onCallbackListener
+     */
+    public void requestBookData2(String word, int start, int display, String sort, OnCallbackListener<Rss> onCallbackListener){
+//        callBookData=naverAPI.getBookData(clientDataVO.getClientId(),clientDataVO.getClientSecret(),word,start,display,sort);
+        callBookData=naverAPI.getBookData(word,start,display,sort);
+        callBookData.enqueue(new Callback<Rss>() {
+            @Override
+            public void onResponse(Call<Rss> call, Response<Rss> response) {
+
+                tmpBookResponse=response;
+                if(onCallbackListener!=null){
+                    onCallbackListener.onResponse(callBookData,tmpBookResponse);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Rss> call, Throwable t) {
+                Log.e("TAG",t.getMessage());
+                if (onCallbackListener != null) {
+                    onCallbackListener.onFailure(callBookData, t);
+                }
+            }
+        });
+    }
+
+    /**
      * 책 상세검색
      * @param d_range
      * @param word
      * @param start
      * @param display
      * @param sort
-     * @param onDetailBookDataCallback
+     * @param onCallbackListener
      */
-    public void requestDetailBookData(String d_range, String word, int start, int display, String sort, OnDetailBookDataCallback onDetailBookDataCallback){
+    public void requestDetailBookData(String d_range, String word, int start, int display, String sort, OnCallbackListener onCallbackListener){
         naverAPI = retrofit.create(NaverAPI.class);
         switch (d_range){
             case "책제목":
@@ -122,16 +150,16 @@ public class NetworkManager {
             @Override
             public void onResponse(Call<Rss> call, Response<Rss> response) {
                 tmpBookResponse=response;
-                if(onDetailBookDataCallback!=null){
-                    onDetailBookDataCallback.onResponse(callBookData,tmpBookResponse);
+                if(onCallbackListener!=null){
+                    onCallbackListener.onResponse(callBookData,tmpBookResponse);
                 }
             }
 
             @Override
             public void onFailure(Call<Rss> call, Throwable t) {
                 t = t;
-                if (onDetailBookDataCallback != null) {
-                    onDetailBookDataCallback.onFailure(callBookData, t);
+                if (onCallbackListener != null) {
+                    onCallbackListener.onFailure(callBookData, t);
                 }
             }
         });
@@ -142,16 +170,16 @@ public class NetworkManager {
      * @param word
      * @param start
      * @param display
-     * @param onMovieDataCallback
+     * @param onCallbackListener
      */
-    public void requestMovieData(String word, int start, int display,int genre, OnMovieDataCallback onMovieDataCallback) {
+    public void requestMovieData(String word, int start, int display,int genre, OnCallbackListener onCallbackListener) {
         callMovieData = naverAPI.getMovieData( word, start, display,genre);
         callMovieData.enqueue(new Callback<SearchMovieVO>() {
             @Override
             public void onResponse(Call<SearchMovieVO> call, Response<SearchMovieVO> response) {
                 tmpMovieResponse = response;
-                if (onMovieDataCallback != null) {
-                    onMovieDataCallback.onResponse(callMovieData, tmpMovieResponse);
+                if (onCallbackListener != null) {
+                    onCallbackListener.onResponse(callMovieData, tmpMovieResponse);
                 }
             }
 
@@ -159,8 +187,8 @@ public class NetworkManager {
             public void onFailure(Call<SearchMovieVO> call, Throwable t) {
                 Log.e("TAG",t.getMessage());
                 t = t;
-                if (onMovieDataCallback != null) {
-                    onMovieDataCallback.onFailure(callMovieData, t);
+                if (onCallbackListener != null) {
+                    onCallbackListener.onFailure(callMovieData, t);
                 }
             }
         });
@@ -173,7 +201,7 @@ public class NetworkManager {
      * @param query
      * @param onErrAtaDataCallback
      */
-    public void requestErrAtaData(String query, OnErrAtaDataCallback onErrAtaDataCallback){
+    public void requestErrAtaData(String query, OnCallbackListener onErrAtaDataCallback){
         callErrAtaData=naverAPI.getErrAtaData(query);
         callErrAtaData.enqueue(new Callback<ErrAtaVo>() {
             @Override

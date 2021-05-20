@@ -1,20 +1,8 @@
 package com.example.requestsearch.adapter;
 
-import android.graphics.Color;
-import android.graphics.Typeface;
-import android.os.Build;
 import android.text.Html;
-import android.text.SpannableStringBuilder;
-import android.text.Spanned;
-import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
-import android.text.style.AbsoluteSizeSpan;
-import android.text.style.ClickableSpan;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.StyleSpan;
-import android.util.Log;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,8 +20,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.requestsearch.listenerInterface.OnItemClick;
 import com.example.requestsearch.R;
 import com.example.requestsearch.data.movie.MovieItemsVO;
-import com.example.requestsearch.util.HeightFormat;
-import com.example.requestsearch.util.SpannableFormat;
+//import com.example.requestsearch.util.HeightFormat;
 
 import java.util.ArrayList;
 
@@ -127,8 +114,8 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         int viewType = getItemViewType(position);
         switch (viewType) {
             case NOREUSLT_TYPE:
-                noResultview.setLayoutParams(new HeightFormat().setNoResultViewHeight(recyclerView,holder,headerView,noResultview));
-                ((NoResultViewHolder) holder).tvFindWord.setText(new SpannableFormat().getSpannableData(holder,errata,onItemClick,word));
+//                noResultview.setLayoutParams(new ValueFormat().setNoResultViewHeight(recyclerView,holder,headerView,noResultview));
+//                ((NoResultViewHolder) holder).tvFindWord.setText(new ValueFormat().getSpannableData(holder,errata,onItemClick,word));
                 ((NoResultViewHolder) holder).tvFindWord.setMovementMethod(LinkMovementMethod.getInstance());
                 break;
             case MAIN_TYPE:

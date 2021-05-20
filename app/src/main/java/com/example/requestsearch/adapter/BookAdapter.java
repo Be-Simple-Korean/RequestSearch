@@ -1,20 +1,8 @@
 package com.example.requestsearch.adapter;
 
-import android.graphics.Color;
-import android.graphics.Typeface;
 import android.text.Html;
-import android.text.SpannableString;
-import android.text.SpannableStringBuilder;
-import android.text.Spanned;
-import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
-import android.text.style.AbsoluteSizeSpan;
-import android.text.style.ClickableSpan;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.StyleSpan;
-import android.util.Log;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,12 +18,9 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.requestsearch.data.book.Item;
-import com.example.requestsearch.util.DateForamt;
 import com.example.requestsearch.listenerInterface.OnItemClick;
 import com.example.requestsearch.R;
-import com.example.requestsearch.util.HeightFormat;
-import com.example.requestsearch.util.PriceFormat;
-import com.example.requestsearch.util.SpannableFormat;
+import com.example.requestsearch.util.ValueFormat;
 
 
 import java.util.ArrayList;
@@ -132,9 +117,9 @@ public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         switch (type) {
             case NOREUSLT_TYPE: //결과없음 ui 처리
 
-                noResultview.setLayoutParams(new HeightFormat().setNoResultViewHeight(recyclerView,holder,headerView,noResultview));
+                noResultview.setLayoutParams(new ValueFormat().setNoResultViewHeight(recyclerView,holder,headerView,noResultview));
 
-                ((NoResultViewHolder) holder).tvFindWord.setText(new SpannableFormat().getSpannableData(holder,errata,onItemClick,word));
+                ((NoResultViewHolder) holder).tvFindWord.setText(new ValueFormat().getSpannableData(holder,errata,onItemClick,word));
                 ((NoResultViewHolder) holder).tvFindWord.setMovementMethod(LinkMovementMethod.getInstance());
                 break;
             case MAIN_TYPE:
@@ -257,10 +242,10 @@ public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             String publisher = TextUtils.isEmpty(items.getPublisher()) ? "" : Html.fromHtml(items.getPublisher()).toString();
             holder.tvBookPublisher.setText(publisher);
 
-            String date = new DateForamt().getDateFormat(items.getPubdate());
+            String date = new ValueFormat().getDateFormat(items.getPubdate());
             holder.tvBookPubDate.setText(date);
 
-            String price = TextUtils.isEmpty(items.getPrice()) ? "" : new PriceFormat().getPriceFormat(items.getPrice());
+            String price = TextUtils.isEmpty(items.getPrice()) ? "" : new ValueFormat().getPriceFormat(items.getPrice());
             holder.tvBookPrice.setText(price);
 
             if (items.getImage() == null) {

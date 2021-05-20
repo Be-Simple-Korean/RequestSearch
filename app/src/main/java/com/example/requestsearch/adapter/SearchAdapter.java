@@ -3,7 +3,6 @@ package com.example.requestsearch.adapter;
 import android.text.Html;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,14 +21,11 @@ import com.example.requestsearch.R;
 import com.example.requestsearch.data.book.Item;
 import com.example.requestsearch.data.movie.MovieItemsVO;
 import com.example.requestsearch.listenerInterface.OnItemClick;
-import com.example.requestsearch.util.DateForamt;
-import com.example.requestsearch.util.HeightFormat;
-import com.example.requestsearch.util.PriceFormat;
-import com.example.requestsearch.util.SpannableFormat;
+import com.example.requestsearch.util.ValueFormat;
 
 import java.util.ArrayList;
 
-public class DataAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int BOOK_TYPE = 0;
     private static final int MOVIE_TYPE = 1;
     private static final int FINISH_VIEW_TYPE=-1;
@@ -52,7 +48,7 @@ public class DataAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private View headerView;
     private Boolean isFinish=false;
 
-    public DataAdapter(RecyclerView recyclerView) {
+    public SearchAdapter(RecyclerView recyclerView) {
         this.recyclerView = recyclerView;
     }
 
@@ -71,43 +67,32 @@ public class DataAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if(typeNumber==BOOK_TYPE){
-            View view;
-            switch (viewType) {
-                case BOOK_HEADER_TYPE:
-                    headerView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recyclerview_book_header, parent, false);
-                    return new BookHeaderViewHolder(headerView);
-                case BOOK_MAIN_TYPE:
-                    view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recyclerview_book, parent, false);
-                    return new BookItemViewHolder(view);
-            }
-        }else{
-            View view;
-            switch (viewType) {
-                case MOVIE_HEADER_TYPE:
-                    headerView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recyclerview_movie_header, parent, false);
-                    return new MovieHeaderHolder(headerView);
-                case MOVIE_MAIN_TYPE:
-                    view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recyclerview_movie, parent, false);
-                    return new MovieItemViewHolder(view);
-            }
-        }
+        View view;
         switch (viewType) {
+            case BOOK_HEADER_TYPE:
+                headerView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recyclerview_book_header, parent, false);
+                return new BookHeaderViewHolder(headerView);
+            case BOOK_MAIN_TYPE:
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recyclerview_book, parent, false);
+                return new BookItemViewHolder(view);
+            case MOVIE_HEADER_TYPE:
+                headerView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recyclerview_movie_header, parent, false);
+                return new MovieHeaderHolder(headerView);
+            case MOVIE_MAIN_TYPE:
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recyclerview_movie, parent, false);
+                return new MovieItemViewHolder(view);
             case NOREUSLT_TYPE:
                 noResultview = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recyclerview_noresult, parent, false);
                 return new NoResultViewHolder(noResultview);
             case LOADMORE_TYPE:
-               View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recyclerview_footer, parent, false);
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recyclerview_footer, parent, false);
                 return new LoadMoreViewHolder(view);
             case FINISH_VIEW_TYPE:
-                Log.e("여백 수행","!");
                 View finishView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recyclerview_finish, parent, false);
                 return new FinishViewHolder(finishView);
         }
-
         return null;
     }
-
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
@@ -127,8 +112,8 @@ public class DataAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         int type = getItemViewType(position);
         switch (type) {
             case NOREUSLT_TYPE: //결과없음 ui 처리
-                noResultview.setLayoutParams(new HeightFormat().setNoResultViewHeight(recyclerView, holder, headerView, noResultview));
-                ((NoResultViewHolder) holder).tvFindWord.setText(new SpannableFormat().getSpannableData(holder, errata, onItemClick, word));
+                noResultview.setLayoutParams(new ValueFormat().setNoResultViewHeight(recyclerView, holder, headerView, noResultview));
+                ((NoResultViewHolder) holder).tvFindWord.setText(new ValueFormat().getSpannableData(holder, errata, onItemClick, word));
                 ((NoResultViewHolder) holder).tvFindWord.setMovementMethod(LinkMovementMethod.getInstance());
                 break;
             case BOOK_MAIN_TYPE:
@@ -286,10 +271,10 @@ public class DataAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             String publisher = TextUtils.isEmpty(items.getPublisher()) ? "" : Html.fromHtml(items.getPublisher()).toString();
             holder.tvBookPublisher.setText(publisher);
 
-            String date = new DateForamt().getDateFormat(items.getPubdate());
+            String date = new ValueFormat().getDateFormat(items.getPubdate());
             holder.tvBookPubDate.setText(date);
 
-            String price = TextUtils.isEmpty(items.getPrice()) ? "" : new PriceFormat().getPriceFormat(items.getPrice());
+            String price = TextUtils.isEmpty(items.getPrice()) ? "" : new ValueFormat().getPriceFormat(items.getPrice());
             holder.tvBookPrice.setText(price);
 
             if (items.getImage() == null) {

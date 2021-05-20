@@ -17,7 +17,7 @@ import com.example.requestsearch.listenerInterface.OnItemClickListener;
 import java.util.ArrayList;
 
 /**
- * 옵션 데이터 Recyclerview Adapter
+ * 옵션&장르 데이터 Recyclerview Adapter
  */
 public class GridAdapter extends RecyclerView.Adapter<GridAdapter.GenreViewHolder> {
 

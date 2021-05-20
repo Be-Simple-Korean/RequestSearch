@@ -1,5 +1,6 @@
 package com.example.requestsearch.data.movie;
 
+import com.example.requestsearch.data.BaseVO;
 import com.google.gson.annotations.SerializedName;
 
 /**

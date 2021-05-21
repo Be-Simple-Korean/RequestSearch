@@ -21,7 +21,10 @@ import com.example.requestsearch.listenerInterface.OnItemClick;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
-public class ValueFormat {  // ex) commonUtils, Utils
+/**
+ * 데이터 포맷 Util 클래스
+ */
+public class Utils {  // ex) commonUtils, Utils
     /**
      * 날짜 형식 필터링메소드
      * @param date 네이버에서 가져오는 날짜데이터

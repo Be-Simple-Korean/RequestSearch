@@ -40,7 +40,7 @@ import com.example.requestsearch.listenerInterface.OnCallbackListener;
 import com.example.requestsearch.listenerInterface.OnDimissListener;
 import com.example.requestsearch.listenerInterface.OnItemClick;
 import com.example.requestsearch.network.NetworkManager;
-import com.example.requestsearch.util.ValueFormat;
+import com.example.requestsearch.util.Utils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -355,7 +355,7 @@ public class MainActivity extends AppCompatActivity {
                         } else {
                             requestErrAtaData(TYPE_BOOK,word);
                         }
-                        String resultTotal = new ValueFormat().getTotalFormat("책", total);
+                        String resultTotal = new Utils().getTotalFormat("책", total);
                         tvBookTab.setText(resultTotal);
                     }
                     requestMovieCount(word, total);
@@ -390,7 +390,7 @@ public class MainActivity extends AppCompatActivity {
                         }else{
                             requestErrAtaData(TYPE_MOVIE,word);
                         }
-                        String resultTotal = new ValueFormat().getTotalFormat("영화", movieTotal);
+                        String resultTotal = new Utils().getTotalFormat("영화", movieTotal);
                         tvMovieTab.setText(resultTotal);
                     }
                     // book or movie 탭 선택 결정 로직
@@ -593,7 +593,6 @@ public class MainActivity extends AppCompatActivity {
 //                        setSearchAdapter(TYPE_MOVIE,word);
                         searchAdapter.notifyDataSetChanged();
 
-
                     }
                 }
             }
@@ -650,7 +649,7 @@ public class MainActivity extends AppCompatActivity {
             searchAdapter.notifyDataSetChanged();
         }
 
-        String resultTotal = new ValueFormat().getTotalFormat("책", maxBookSize);
+        String resultTotal = new Utils().getTotalFormat("책", maxBookSize);
         tvBookTab.setText(resultTotal);
 
         if (maxBookSize > detailMainItemVOArrayList.size()) {
@@ -698,7 +697,7 @@ public class MainActivity extends AppCompatActivity {
             finishItem.setViewType(SearchAdapter.FINISH_VIEW_TYPE);
             movieMainItemsArrayList.add(finishItem);//더보기 버튼 처리
         }
-        String resultTotal = new ValueFormat().getTotalFormat("영화", maxMovieSize);
+        String resultTotal = new Utils().getTotalFormat("영화", maxMovieSize);
         tvMovieTab.setText(resultTotal);
 
     }

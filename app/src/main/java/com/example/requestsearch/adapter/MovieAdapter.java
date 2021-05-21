@@ -27,6 +27,7 @@ import java.util.ArrayList;
 /**
  * 영화 데이터 Recyclerview Adapter
  */
+@Deprecated
 public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final int HEADER_TYPE = 0;

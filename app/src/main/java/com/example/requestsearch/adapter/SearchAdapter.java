@@ -3,7 +3,6 @@ package com.example.requestsearch.adapter;
 import android.text.Html;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,10 +21,13 @@ import com.example.requestsearch.R;
 import com.example.requestsearch.network.data.book.ItemVO;
 import com.example.requestsearch.network.data.movie.MovieItemsVO;
 import com.example.requestsearch.listenerInterface.OnItemClick;
-import com.example.requestsearch.util.ValueFormat;
+import com.example.requestsearch.util.Utils;
 
 import java.util.ArrayList;
 
+/**
+ * Book & Movie 데이터 Recyclerview Adapter
+ */
 public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public static final int BOOK_TYPE = 0;
@@ -103,8 +105,8 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 //        holder.itemView.setOnClickListener();
         switch (type) {
             case NORESULT_TYPE: //결과없음 ui 처리
-                noResultview.setLayoutParams(new ValueFormat().setNoResultViewHeight(recyclerView, holder, headerView, noResultview));
-                ((NoResultViewHolder) holder).tvFindWord.setText(new ValueFormat().getSpannableData(holder, errata, onItemClick, word));
+                noResultview.setLayoutParams(new Utils().setNoResultViewHeight(recyclerView, holder, headerView, noResultview));
+                ((NoResultViewHolder) holder).tvFindWord.setText(new Utils().getSpannableData(holder, errata, onItemClick, word));
                 ((NoResultViewHolder) holder).tvFindWord.setMovementMethod(LinkMovementMethod.getInstance());
                 break;
             case BOOK_MAIN_TYPE:
@@ -262,10 +264,10 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             String publisher = TextUtils.isEmpty(items.getPublisher()) ? "" : Html.fromHtml(items.getPublisher()).toString();
             holder.tvBookPublisher.setText(publisher);
 
-            String date = new ValueFormat().getDateFormat(items.getPubdate());
+            String date = new Utils().getDateFormat(items.getPubdate());
             holder.tvBookPubDate.setText(date);
 
-            String price = TextUtils.isEmpty(items.getPrice()) ? "" : new ValueFormat().getPriceFormat(items.getPrice());
+            String price = TextUtils.isEmpty(items.getPrice()) ? "" : new Utils().getPriceFormat(items.getPrice());
             holder.tvBookPrice.setText(price);
 
             if (items.getImage() == null) {

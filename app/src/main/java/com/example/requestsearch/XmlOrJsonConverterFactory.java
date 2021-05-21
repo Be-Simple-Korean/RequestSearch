@@ -20,6 +20,9 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 
+/**
+ * Retrofit Custom Converter Class
+ */
 public class XmlOrJsonConverterFactory extends Converter.Factory {
     final Converter.Factory xml =SimpleXmlConverterFactory.create();
     final Converter.Factory json = GsonConverterFactory.create();

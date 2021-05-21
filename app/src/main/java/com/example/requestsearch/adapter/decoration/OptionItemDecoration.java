@@ -25,14 +25,14 @@ public class OptionItemDecoration extends RecyclerView.ItemDecoration {
 
     public OptionItemDecoration(Context context, ArrayList<Boolean> isSelected) {
         this.context = context;
-        mDivider = ContextCompat.getDrawable(context, R.drawable.divider);
+        mDivider = ContextCompat.getDrawable(context, R.drawable.divider_decoration);
         this.isSelected = isSelected;
     }
 
     @Override
     public void onDraw(@NonNull Canvas c, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
         int childCount = parent.getChildCount();
-        mDivider = ContextCompat.getDrawable(context, R.drawable.divider);
+        mDivider = ContextCompat.getDrawable(context, R.drawable.divider_decoration);
         for (int i = 0; i < childCount; i++) {
             View child = parent.getChildAt(i);
             drawRect(i,c,child);
@@ -45,7 +45,7 @@ public class OptionItemDecoration extends RecyclerView.ItemDecoration {
         for (int i = 0; i < childCount; i++) {
             if (isSelected.get(i) != null) {
                 if (isSelected.get(i)) {
-                    mDivider = ContextCompat.getDrawable(context, R.drawable.select_divider);
+                    mDivider = ContextCompat.getDrawable(context, R.drawable.select_divider_decoration);
                     View child = parent.getChildAt(i);
                     drawRect(i,c,child);
                 }

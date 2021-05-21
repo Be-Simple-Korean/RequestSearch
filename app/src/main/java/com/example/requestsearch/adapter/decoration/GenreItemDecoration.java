@@ -2,6 +2,7 @@ package com.example.requestsearch.adapter.decoration;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 
@@ -31,11 +32,11 @@ public class GenreItemDecoration extends RecyclerView.ItemDecoration {
 
     @Override
     public void onDraw(@NonNull Canvas c, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
-        mDivider = ContextCompat.getDrawable(context, R.drawable.divider);
+        mDivider = ContextCompat.getDrawable(context, R.drawable.divider_decoration);
         int childCount = parent.getChildCount();
         for (int i = 0; i < childCount; i++) {
             View child = parent.getChildAt(i);
-            drawRect(i, c, child,false);
+            drawRect(i, c, child, false);
         }
 
     }
@@ -43,7 +44,7 @@ public class GenreItemDecoration extends RecyclerView.ItemDecoration {
     @Override
     public void onDrawOver(Canvas c, RecyclerView parent, RecyclerView.State state) {
         int childCount = parent.getChildCount();
-        mDivider = ContextCompat.getDrawable(context, R.drawable.select_divider);
+        mDivider = ContextCompat.getDrawable(context, R.drawable.select_divider_decoration);
         for (int i = 0; i < childCount; i++) { // 0 = selected
             View childView = parent.getChildAt(i);
             RecyclerView.ViewHolder viewHolder = parent.getChildViewHolder(childView);
@@ -51,7 +52,7 @@ public class GenreItemDecoration extends RecyclerView.ItemDecoration {
                 GridAdapter.GenreViewHolder genreHolder = (GridAdapter.GenreViewHolder) viewHolder;
 
                 if (genreHolder.isSelected()) {
-                    drawRect(i, c, childView,true);
+                    drawRect(i, c, childView, true);
                 }
             }
 
@@ -66,15 +67,21 @@ public class GenreItemDecoration extends RecyclerView.ItemDecoration {
      * @param c
      * @param child
      */
-    private void drawRect(int i, Canvas c, View child,boolean isSelect) {
+    private void drawRect(int i, Canvas c, View child, boolean isSelect) {
+
+        // Rect rect = new Rect();
+        // Paint paint = new Paint();
+//        c.drawRect(rect, paint);
+
+
 
         //위쪽구분선
         left = child.getLeft() - child.getPaddingLeft();
         right = child.getRight();
         top = child.getTop();
-        if(i==FIRST||i==SECOND||i==THIRD||isSelect){
+        if (i == FIRST || i == SECOND || i == THIRD || isSelect) {
             bottom = top + mDivider.getIntrinsicHeight();
-        }else{
+        } else {
             bottom = top - mDivider.getIntrinsicHeight();
         }
         mDivider.setBounds(left, top, right, bottom);
@@ -97,11 +104,11 @@ public class GenreItemDecoration extends RecyclerView.ItemDecoration {
         mDivider.draw(c);
 
         //오른쪽
-        int verticalTop = child.getTop();
-        int verticalBottom = child.getBottom();
-        int verticalLeft = child.getRight();
-        int verticalRight = verticalLeft + mDivider.getIntrinsicWidth();
-        mDivider.setBounds(verticalLeft, verticalTop, verticalRight, verticalBottom);
+        top = child.getTop();
+        bottom = child.getBottom();
+        left = child.getRight();
+        right = left + mDivider.getIntrinsicWidth();
+        mDivider.setBounds(left, top, right, bottom);
         mDivider.draw(c);
     }
 

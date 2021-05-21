@@ -1,6 +1,5 @@
 package com.example.requestsearch.adapter;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +29,7 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.GenreViewHolde
     @NonNull
     @Override
     public GenreViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.grid_item,parent,false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_dialog_recyclerview,parent,false);
         GenreViewHolder viewHolder = new GenreViewHolder(v);
         return viewHolder;
     }

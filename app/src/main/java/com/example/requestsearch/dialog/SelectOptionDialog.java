@@ -118,7 +118,6 @@ public class SelectOptionDialog extends Dialog {
         gridAdapter.setOnItemClick(new OnItemClickListener() {
             @Override
             public void setOnItemClick(View v, int position) {
-                d_range="전체";
                 switch (position) {
                     case 0:
                         sort = "sim";

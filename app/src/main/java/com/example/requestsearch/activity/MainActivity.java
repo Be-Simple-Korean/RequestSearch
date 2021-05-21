@@ -395,9 +395,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     // book or movie 탭 선택 결정 로직
                     // book total > 0 ? booklist set : (movie total > 0) ? movielist set :
-                    Log.e("수행",0+"");
                     if (bookTotal == 0 && movieTotal != 0) {
-                        Log.e("수행","0-1");
                         //어댑터에 영화 데이터 set
                         type = TYPE_MOVIE;
                         tvBookTab.setTextColor(getResources().getColor(R.color.black));
@@ -405,7 +403,6 @@ public class MainActivity extends AppCompatActivity {
                         setSearchAdapter(TYPE_MOVIE, word);
                     } else {
                         //어댑터에 책 데이터 set
-                        Log.e("수행","0-2");
                         type = TYPE_BOOK;
                         tvBookTab.setTextColor(getResources().getColor(R.color.naver_color));
                         tvMovieTab.setTextColor(getResources().getColor(R.color.black));
@@ -416,7 +413,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Throwable t) {
-                Log.e("TAG", t.getMessage());
+                Log.e(TAG, t.getMessage());
             }
         });
     }

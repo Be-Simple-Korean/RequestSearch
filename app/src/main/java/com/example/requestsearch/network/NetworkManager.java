@@ -1,12 +1,9 @@
 package com.example.requestsearch.network;
 
-import android.util.Log;
-
 import com.example.requestsearch.XmlOrJsonConverterFactory;
-import com.example.requestsearch.network.data.errata.ErrAtaVO;
 import com.example.requestsearch.listenerInterface.OnCallbackListener;
-
 import com.example.requestsearch.network.data.book.RssVO;
+import com.example.requestsearch.network.data.errata.ErrAtaVO;
 import com.example.requestsearch.network.data.movie.SearchMovieVO;
 
 import java.io.IOException;
@@ -85,7 +82,6 @@ public class NetworkManager {
 
             @Override
             public void onFailure(Call<RssVO> call, Throwable t) {
-                Log.e("TAG",t.getMessage());
                 if (onBookDataCallback != null) {
                     onBookDataCallback.onFailure(t);
                 }
@@ -154,7 +150,6 @@ public class NetworkManager {
 
             @Override
             public void onFailure(Call<SearchMovieVO> call, Throwable t) {
-                Log.e("TAG",t.getMessage());
                 t = t;
                 if (onCallbackListener != null) {
                     onCallbackListener.onFailure(t);

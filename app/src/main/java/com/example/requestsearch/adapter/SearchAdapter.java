@@ -73,7 +73,6 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 headerView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recyclerview_book_header, parent, false);
                 return new BookHeaderViewHolder(headerView);
             case BOOK_MAIN_TYPE:
-                Log.e("수행","메인아이템 생성");
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recyclerview_book, parent, false);
                 return new BookItemViewHolder(view);
             case MOVIE_HEADER_TYPE:
@@ -111,7 +110,6 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             case BOOK_MAIN_TYPE:
                 //메인 아이템 이벤트처리
                 if (typeNumber == BOOK_TYPE) {
-                    Log.e("수행","메인");
                     showMainItems(((BookItemViewHolder) holder), position);
                 }
                 break;
@@ -253,12 +251,9 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
      */
     private void showMainItems(BookItemViewHolder holder, int position) {
         if (detailMainItemVOArrayList.get(position) != null) {
-            Log.e("수행","메인아이템세팅");
             ItemVO items = detailMainItemVOArrayList.get(position);
 
-
             String title = TextUtils.isEmpty(items.getTitle()) ? "" : Html.fromHtml(items.getTitle()).toString();
-            Log.e("title",title);
             holder.tvBookTitle.setText(title);
 
             String author = TextUtils.isEmpty(items.getAuthor()) ? "" : slashDataFilter(Html.fromHtml(items.getAuthor()).toString());

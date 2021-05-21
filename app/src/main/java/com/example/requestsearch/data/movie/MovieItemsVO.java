@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
 /**
  * 영화 검색 결과 데이터
  */
-public class MovieItemsVO {
+public class MovieItemsVO extends BaseVO{
     private String title;
     private String link;
     @SerializedName("image")

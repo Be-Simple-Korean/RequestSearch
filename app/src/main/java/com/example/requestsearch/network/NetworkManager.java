@@ -79,7 +79,7 @@ public class NetworkManager {
 
                 tmpBookResponse=response;
                 if(onBookDataCallback!=null){
-                    onBookDataCallback.onResponse(callBookData,tmpBookResponse);
+                    onBookDataCallback.onResponse(tmpBookResponse);
                 }
             }
 
@@ -87,38 +87,7 @@ public class NetworkManager {
             public void onFailure(Call<Rss> call, Throwable t) {
                 Log.e("TAG",t.getMessage());
                 if (onBookDataCallback != null) {
-                    onBookDataCallback.onFailure(callBookData, t);
-                }
-            }
-        });
-    }
-
-    /**
-     * 책 검색 요청
-     * @param word
-     * @param start
-     * @param display
-     * @param sort
-     * @param onCallbackListener
-     */
-    public void requestBookData2(String word, int start, int display, String sort, OnCallbackListener<Rss> onCallbackListener){
-//        callBookData=naverAPI.getBookData(clientDataVO.getClientId(),clientDataVO.getClientSecret(),word,start,display,sort);
-        callBookData=naverAPI.getBookData(word,start,display,sort);
-        callBookData.enqueue(new Callback<Rss>() {
-            @Override
-            public void onResponse(Call<Rss> call, Response<Rss> response) {
-
-                tmpBookResponse=response;
-                if(onCallbackListener!=null){
-                    onCallbackListener.onResponse(callBookData,tmpBookResponse);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Rss> call, Throwable t) {
-                Log.e("TAG",t.getMessage());
-                if (onCallbackListener != null) {
-                    onCallbackListener.onFailure(callBookData, t);
+                    onBookDataCallback.onFailure(t);
                 }
             }
         });
@@ -151,7 +120,7 @@ public class NetworkManager {
             public void onResponse(Call<Rss> call, Response<Rss> response) {
                 tmpBookResponse=response;
                 if(onCallbackListener!=null){
-                    onCallbackListener.onResponse(callBookData,tmpBookResponse);
+                    onCallbackListener.onResponse(tmpBookResponse);
                 }
             }
 
@@ -159,7 +128,7 @@ public class NetworkManager {
             public void onFailure(Call<Rss> call, Throwable t) {
                 t = t;
                 if (onCallbackListener != null) {
-                    onCallbackListener.onFailure(callBookData, t);
+                    onCallbackListener.onFailure(t);
                 }
             }
         });
@@ -179,7 +148,7 @@ public class NetworkManager {
             public void onResponse(Call<SearchMovieVO> call, Response<SearchMovieVO> response) {
                 tmpMovieResponse = response;
                 if (onCallbackListener != null) {
-                    onCallbackListener.onResponse(callMovieData, tmpMovieResponse);
+                    onCallbackListener.onResponse(tmpMovieResponse);
                 }
             }
 
@@ -188,7 +157,7 @@ public class NetworkManager {
                 Log.e("TAG",t.getMessage());
                 t = t;
                 if (onCallbackListener != null) {
-                    onCallbackListener.onFailure(callMovieData, t);
+                    onCallbackListener.onFailure(t);
                 }
             }
         });
@@ -208,7 +177,7 @@ public class NetworkManager {
             public void onResponse(Call<ErrAtaVo> call, Response<ErrAtaVo> response) {
                 tmpErrAtaResponse=response;
                 if(onErrAtaDataCallback!=null){
-                    onErrAtaDataCallback.onResponse(callErrAtaData,tmpErrAtaResponse);
+                    onErrAtaDataCallback.onResponse(tmpErrAtaResponse);
                 }
             }
 
@@ -216,7 +185,7 @@ public class NetworkManager {
             public void onFailure(Call<ErrAtaVo> call, Throwable t) {
                 t = t;
                 if (onErrAtaDataCallback != null) {
-                    onErrAtaDataCallback.onFailure(callErrAtaData, t);
+                    onErrAtaDataCallback.onFailure(t);
                 }
             }
         });

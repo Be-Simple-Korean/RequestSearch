@@ -3,6 +3,7 @@ package com.example.requestsearch.adapter;
 import android.text.Html;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,13 +27,15 @@ import com.example.requestsearch.util.ValueFormat;
 import java.util.ArrayList;
 
 public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
     private static final int BOOK_TYPE = 0;
     private static final int MOVIE_TYPE = 1;
+
     private static final int FINISH_VIEW_TYPE=-1;
     private static final int BOOK_HEADER_TYPE = 0;
-    private static final int NOREUSLT_TYPE = 1;
-    private static final int LOADMORE_TYPE = 2;
     private static final int BOOK_MAIN_TYPE = 3;
+    public static final int NOREUSLT_TYPE = 1;
+    private static final int LOADMORE_TYPE = 2;
     private static final int MOVIE_MAIN_TYPE = 4;
     private static final int MOVIE_HEADER_TYPE = 5;
 
@@ -52,9 +55,6 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         this.recyclerView = recyclerView;
     }
 
-    public Boolean isFinished(){
-        return isFinish;
-    }
     @Override
     public int getItemViewType(int position) {
         if (typeNumber == BOOK_TYPE) {
@@ -76,6 +76,7 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recyclerview_book, parent, false);
                 return new BookItemViewHolder(view);
             case MOVIE_HEADER_TYPE:
+                Log.e("수행","무비헤더설정");
                 headerView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recyclerview_movie_header, parent, false);
                 return new MovieHeaderHolder(headerView);
             case MOVIE_MAIN_TYPE:
@@ -96,20 +97,11 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        if (typeNumber == BOOK_TYPE) {
-            if(position==detailMainItemArrayList.size()-1){
-                isFinish=true;
-            }else{
-                isFinish=false;
-            }
-        } else{
-            if(position==movieItemsArrayList.size()-1){
-                isFinish=true;
-            }else{
-                isFinish=false;
-            }
-        }
         int type = getItemViewType(position);
+        // no data, finish
+//        holder.itemView.setOnClickListener(null);
+//        else
+//        holder.itemView.setOnClickListener();
         switch (type) {
             case NOREUSLT_TYPE: //결과없음 ui 처리
                 noResultview.setLayoutParams(new ValueFormat().setNoResultViewHeight(recyclerView, holder, headerView, noResultview));

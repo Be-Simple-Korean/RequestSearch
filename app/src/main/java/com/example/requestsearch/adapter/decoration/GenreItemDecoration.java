@@ -1,9 +1,8 @@
-package com.example.requestsearch.decoration;
+package com.example.requestsearch.adapter.decoration;
 
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -11,54 +10,80 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.requestsearch.R;
+import com.example.requestsearch.adapter.GridAdapter;
 
-import java.util.ArrayList;
+public class GenreItemDecoration extends RecyclerView.ItemDecoration {
 
-public class OptionItemDecoration extends RecyclerView.ItemDecoration {
+    private static final int FIRST = 0;
+    private static final int SECOND = 1;
+    private static final int THIRD = 2;
 
     private Drawable mDivider;
     private int left;
     private int right;
     private int bottom;
     private int top;
-    private ArrayList<Boolean> isSelected;
     private Context context;
 
-    public OptionItemDecoration(Context context, ArrayList<Boolean> isSelected) {
+    public GenreItemDecoration(Context context) {
         this.context = context;
-        mDivider = ContextCompat.getDrawable(context, R.drawable.divider);
-        this.isSelected = isSelected;
     }
 
     @Override
     public void onDraw(@NonNull Canvas c, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
-        int childCount = parent.getChildCount();
         mDivider = ContextCompat.getDrawable(context, R.drawable.divider);
+        int childCount = parent.getChildCount();
         for (int i = 0; i < childCount; i++) {
             View child = parent.getChildAt(i);
-            drawRect(i,c,child);
+            drawRect(i, c, child,false);
         }
+
     }
 
     @Override
     public void onDrawOver(Canvas c, RecyclerView parent, RecyclerView.State state) {
         int childCount = parent.getChildCount();
-        for (int i = 0; i < childCount; i++) {
-            if (isSelected.get(i) != null) {
-                if (isSelected.get(i)) {
-                    mDivider = ContextCompat.getDrawable(context, R.drawable.select_divider);
-                    View child = parent.getChildAt(i);
-                    drawRect(i,c,child);
+        mDivider = ContextCompat.getDrawable(context, R.drawable.select_divider);
+        for (int i = 0; i < childCount; i++) { // 0 = selected
+            View childView = parent.getChildAt(i);
+            RecyclerView.ViewHolder viewHolder = parent.getChildViewHolder(childView);
+            if (viewHolder instanceof GridAdapter.GenreViewHolder) {
+                GridAdapter.GenreViewHolder genreHolder = (GridAdapter.GenreViewHolder) viewHolder;
+
+                if (genreHolder.isSelected()) {
+                    drawRect(i, c, childView,true);
                 }
             }
+
         }
+
     }
 
-    private void drawRect(int i, Canvas c, View child){
-        //위쪽
+    /**
+     * 아이템 테두리 draw
+     *
+     * @param i
+     * @param c
+     * @param child
+     */
+    private void drawRect(int i, Canvas c, View child,boolean isSelect) {
+
+        //위쪽구분선
         left = child.getLeft() - child.getPaddingLeft();
         right = child.getRight();
         top = child.getTop();
+        if(i==FIRST||i==SECOND||i==THIRD||isSelect){
+            bottom = top + mDivider.getIntrinsicHeight();
+        }else{
+            bottom = top - mDivider.getIntrinsicHeight();
+        }
+        mDivider.setBounds(left, top, right, bottom);
+        mDivider.draw(c);
+
+        //아래쪽구분선
+        left = child.getLeft() - child.getPaddingLeft();
+        right = child.getRight();
+        top = child.getBottom();
         bottom = top + mDivider.getIntrinsicHeight();
         mDivider.setBounds(left, top, right, bottom);
         mDivider.draw(c);
@@ -71,14 +96,6 @@ public class OptionItemDecoration extends RecyclerView.ItemDecoration {
         mDivider.setBounds(left, top, right, bottom);
         mDivider.draw(c);
 
-        //아래쪽구분선
-        left = child.getLeft() - child.getPaddingLeft();
-        right = child.getRight();
-        top = child.getBottom() - mDivider.getIntrinsicHeight();
-        bottom = top + mDivider.getIntrinsicHeight();
-        mDivider.setBounds(left, top, right, bottom);
-        mDivider.draw(c);
-
         //오른쪽
         int verticalTop = child.getTop();
         int verticalBottom = child.getBottom();
@@ -86,6 +103,6 @@ public class OptionItemDecoration extends RecyclerView.ItemDecoration {
         int verticalRight = verticalLeft + mDivider.getIntrinsicWidth();
         mDivider.setBounds(verticalLeft, verticalTop, verticalRight, verticalBottom);
         mDivider.draw(c);
-
     }
+
 }

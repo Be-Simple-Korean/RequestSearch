@@ -1,10 +1,10 @@
-package com.example.requestsearch.data.book;
+package com.example.requestsearch.network.data.book;
 
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
 @Root(name="item",strict = false)
-public class Item {
+public class ItemVO {
     @Element(name = "title",required = false)
     String title;
     @Element(name = "link",required = false)
@@ -35,7 +35,7 @@ public class Item {
         this.viewType = viewType;
     }
 
-    public Item() {
+    public ItemVO() {
     }
 
     @Override

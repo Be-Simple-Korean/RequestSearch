@@ -19,7 +19,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.requestsearch.listenerInterface.OnItemClick;
 import com.example.requestsearch.R;
-import com.example.requestsearch.data.movie.MovieItemsVO;
+import com.example.requestsearch.network.data.movie.MovieItemsVO;
 //import com.example.requestsearch.util.HeightFormat;
 
 import java.util.ArrayList;

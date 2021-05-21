@@ -10,8 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.requestsearch.R;
-import com.example.requestsearch.data.movie.MovieGenreDataVO;
-import com.example.requestsearch.dialog.SelectOptionDialog;
+import com.example.requestsearch.network.data.movie.MovieGenreDataVO;
 import com.example.requestsearch.listenerInterface.OnItemClickListener;
 
 import java.util.ArrayList;
@@ -52,9 +51,9 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.GenreViewHolde
     @Override
     public int getItemCount() {
         if(type.equals("book")){
-            return sortList.size();
+            return sortList!=null?sortList.size():0;
         }else if (type.equals("movie")){
-            return genreList.size();
+            return genreList!=null?genreList.size():0;
         }else{
             return 0;
         }

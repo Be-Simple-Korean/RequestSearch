@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -15,11 +16,11 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.requestsearch.adapter.GridAdapter;
-import com.example.requestsearch.decoration.GenreItemDecoration;
+import com.example.requestsearch.adapter.decoration.GenreItemDecoration;
 import com.example.requestsearch.listenerInterface.OnDimissListener;
 import com.example.requestsearch.listenerInterface.OnItemClickListener;
 import com.example.requestsearch.R;
-import com.example.requestsearch.data.movie.MovieGenreDataVO;
+import com.example.requestsearch.network.data.movie.MovieGenreDataVO;
 
 import java.util.ArrayList;
 
@@ -76,7 +77,6 @@ public class GenreDialog extends Dialog {
 
         recyclerView.setLayoutManager(gridLayoutManager);
         recyclerView.addItemDecoration(new GenreItemDecoration(getContext()));
-
 
         GridAdapter gridAdapter = new GridAdapter();
         gridAdapter.setGenreList(genreList);

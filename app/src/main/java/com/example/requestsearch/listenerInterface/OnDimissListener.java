@@ -8,6 +8,6 @@ import com.example.requestsearch.dialog.GenreDialog;
  */
 public interface OnDimissListener {
     void onDismissed(GenreDialog dialog, boolean isItem,int position);
-    void onDismissed(SelectOptionDialog dialog, int position, boolean isRange);
+    void onDismissed(SelectOptionDialog dialog, int position, String sorte,String range);
 
 }

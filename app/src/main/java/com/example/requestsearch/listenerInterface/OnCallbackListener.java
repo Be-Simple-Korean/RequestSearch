@@ -1,9 +1,7 @@
 package com.example.requestsearch.listenerInterface;
 
-import com.example.requestsearch.data.BaseVO;
-import com.example.requestsearch.data.book.Rss;
+import com.example.requestsearch.network.data.BaseVO;
 
-import retrofit2.Call;
 import retrofit2.Response;
 
 public interface OnCallbackListener<T extends BaseVO> {

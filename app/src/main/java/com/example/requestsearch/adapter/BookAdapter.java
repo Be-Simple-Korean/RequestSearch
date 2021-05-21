@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
-import com.example.requestsearch.data.book.Item;
+import com.example.requestsearch.network.data.book.ItemVO;
 import com.example.requestsearch.listenerInterface.OnItemClick;
 import com.example.requestsearch.R;
 import com.example.requestsearch.util.ValueFormat;
@@ -37,7 +37,7 @@ public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int MAIN_TYPE = 3;
 
 
-    private ArrayList<Item> detailMainItemArrayList;
+    private ArrayList<ItemVO> detailMainItemVOArrayList;
     private String word;
     private String errata = "";
     private OnItemClick onItemClick = null;
@@ -74,10 +74,10 @@ public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     /**
      * 검색 데이터 아이템 리스트 세팅
      *
-     * @param detailMainItemArrayList
+     * @param detailMainItemVOArrayList
      */
-    public void setDetailMainItemArrayList(ArrayList<Item> detailMainItemArrayList) {
-        this.detailMainItemArrayList = detailMainItemArrayList;
+    public void setDetailMainItemVOArrayList(ArrayList<ItemVO> detailMainItemVOArrayList) {
+        this.detailMainItemVOArrayList = detailMainItemVOArrayList;
     }
 
     /**
@@ -87,7 +87,7 @@ public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public int getItemViewType(int position) {
-        return detailMainItemArrayList.get(position).getViewType();
+        return detailMainItemVOArrayList.get(position).getViewType();
     }
 
     @NonNull
@@ -131,7 +131,7 @@ public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return detailMainItemArrayList != null ? detailMainItemArrayList.size() : 0;
+        return detailMainItemVOArrayList != null ? detailMainItemVOArrayList.size() : 0;
     }
 
     /**
@@ -230,8 +230,8 @@ public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
      */
     private void showMainItems(BookItemViewHolder holder, int position) {
 
-        if (detailMainItemArrayList.get(position) != null) {
-            Item items = detailMainItemArrayList.get(position);
+        if (detailMainItemVOArrayList.get(position) != null) {
+            ItemVO items = detailMainItemVOArrayList.get(position);
 
             String title = TextUtils.isEmpty(items.getTitle()) ? "" : Html.fromHtml(items.getTitle()).toString();
             holder.tvBookTitle.setText(title);

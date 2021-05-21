@@ -19,8 +19,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.requestsearch.R;
-import com.example.requestsearch.data.book.Item;
-import com.example.requestsearch.data.movie.MovieItemsVO;
+import com.example.requestsearch.network.data.book.ItemVO;
+import com.example.requestsearch.network.data.movie.MovieItemsVO;
 import com.example.requestsearch.listenerInterface.OnItemClick;
 import com.example.requestsearch.util.ValueFormat;
 
@@ -28,19 +28,19 @@ import java.util.ArrayList;
 
 public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private static final int BOOK_TYPE = 0;
-    private static final int MOVIE_TYPE = 1;
+    public static final int BOOK_TYPE = 0;
+    public static final int MOVIE_TYPE = 1;
 
-    private static final int FINISH_VIEW_TYPE=-1;
-    private static final int BOOK_HEADER_TYPE = 0;
-    private static final int BOOK_MAIN_TYPE = 3;
-    public static final int NOREUSLT_TYPE = 1;
-    private static final int LOADMORE_TYPE = 2;
-    private static final int MOVIE_MAIN_TYPE = 4;
-    private static final int MOVIE_HEADER_TYPE = 5;
+    public static final int FINISH_VIEW_TYPE=-1;
+    public static final int BOOK_HEADER_TYPE = 0;
+    public static final int BOOK_MAIN_TYPE = 3;
+    public static final int NORESULT_TYPE = 1;
+    public static final int LOADMORE_TYPE = 2;
+    public static final int MOVIE_MAIN_TYPE = 4;
+    public static final int MOVIE_HEADER_TYPE = 5;
 
 
-    private ArrayList<Item> detailMainItemArrayList; // 책 데이터 리스트
+    private ArrayList<ItemVO> detailMainItemVOArrayList; // 책 데이터 리스트
     private ArrayList<MovieItemsVO> movieItemsArrayList; // 영화 데이터 리스트
     private String word;
     private String errata = "";
@@ -58,7 +58,7 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     @Override
     public int getItemViewType(int position) {
         if (typeNumber == BOOK_TYPE) {
-            return detailMainItemArrayList.get(position).getViewType();
+            return detailMainItemVOArrayList.get(position).getViewType();
         } else {
             return movieItemsArrayList.get(position).getViewType();
         }
@@ -73,16 +73,16 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 headerView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recyclerview_book_header, parent, false);
                 return new BookHeaderViewHolder(headerView);
             case BOOK_MAIN_TYPE:
+                Log.e("수행","메인아이템 생성");
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recyclerview_book, parent, false);
                 return new BookItemViewHolder(view);
             case MOVIE_HEADER_TYPE:
-                Log.e("수행","무비헤더설정");
                 headerView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recyclerview_movie_header, parent, false);
                 return new MovieHeaderHolder(headerView);
             case MOVIE_MAIN_TYPE:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recyclerview_movie, parent, false);
                 return new MovieItemViewHolder(view);
-            case NOREUSLT_TYPE:
+            case NORESULT_TYPE:
                 noResultview = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recyclerview_noresult, parent, false);
                 return new NoResultViewHolder(noResultview);
             case LOADMORE_TYPE:
@@ -103,7 +103,7 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 //        else
 //        holder.itemView.setOnClickListener();
         switch (type) {
-            case NOREUSLT_TYPE: //결과없음 ui 처리
+            case NORESULT_TYPE: //결과없음 ui 처리
                 noResultview.setLayoutParams(new ValueFormat().setNoResultViewHeight(recyclerView, holder, headerView, noResultview));
                 ((NoResultViewHolder) holder).tvFindWord.setText(new ValueFormat().getSpannableData(holder, errata, onItemClick, word));
                 ((NoResultViewHolder) holder).tvFindWord.setMovementMethod(LinkMovementMethod.getInstance());
@@ -111,6 +111,7 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             case BOOK_MAIN_TYPE:
                 //메인 아이템 이벤트처리
                 if (typeNumber == BOOK_TYPE) {
+                    Log.e("수행","메인");
                     showMainItems(((BookItemViewHolder) holder), position);
                 }
                 break;
@@ -124,7 +125,7 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     @Override
     public int getItemCount() {
         if (typeNumber == BOOK_TYPE) {
-            return detailMainItemArrayList != null ? detailMainItemArrayList.size() : 0;
+            return detailMainItemVOArrayList != null ? detailMainItemVOArrayList.size() : 0;
         } else {
             return movieItemsArrayList != null ? movieItemsArrayList.size() : 0;
         }
@@ -251,10 +252,13 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
      * @param position
      */
     private void showMainItems(BookItemViewHolder holder, int position) {
-        if (detailMainItemArrayList.get(position) != null) {
-            Item items = detailMainItemArrayList.get(position);
+        if (detailMainItemVOArrayList.get(position) != null) {
+            Log.e("수행","메인아이템세팅");
+            ItemVO items = detailMainItemVOArrayList.get(position);
+
 
             String title = TextUtils.isEmpty(items.getTitle()) ? "" : Html.fromHtml(items.getTitle()).toString();
+            Log.e("title",title);
             holder.tvBookTitle.setText(title);
 
             String author = TextUtils.isEmpty(items.getAuthor()) ? "" : slashDataFilter(Html.fromHtml(items.getAuthor()).toString());
@@ -358,10 +362,10 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     /**
      * 책 데이터 리스트 설정
-     * @param detailMainItemArrayList
+     * @param detailMainItemVOArrayList
      */
-    public void setDetailMainItemArrayList(ArrayList<Item> detailMainItemArrayList) {
-        this.detailMainItemArrayList = detailMainItemArrayList;
+    public void setDetailMainItemVOArrayList(ArrayList<ItemVO> detailMainItemVOArrayList) {
+        this.detailMainItemVOArrayList = detailMainItemVOArrayList;
     }
 
     /**

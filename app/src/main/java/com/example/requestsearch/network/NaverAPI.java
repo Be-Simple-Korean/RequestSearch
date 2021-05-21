@@ -1,9 +1,9 @@
 package com.example.requestsearch.network;
 
 
-import com.example.requestsearch.data.book.Rss;
-import com.example.requestsearch.data.errata.ErrAtaVo;
-import com.example.requestsearch.data.movie.SearchMovieVO;
+import com.example.requestsearch.network.data.book.RssVO;
+import com.example.requestsearch.network.data.errata.ErrAtaVO;
+import com.example.requestsearch.network.data.movie.SearchMovieVO;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -29,7 +29,7 @@ public interface NaverAPI {
 
     @GET("/v1/search/book.xml")
     @Xml
-    Call<Rss> getBookData(
+    Call<RssVO> getBookData(
             @Query("query") String query,
             @Query("start") int start,
             @Query("display") int display,
@@ -38,7 +38,7 @@ public interface NaverAPI {
 
     @GET("/v1/search/book_adv.xml")
     @Xml
-    Call<Rss> getRangeDataByTitle(
+    Call<RssVO> getRangeDataByTitle(
             @Query("d_titl") String d_titl,
             @Query("start") int start,
             @Query("display") int display,
@@ -47,7 +47,7 @@ public interface NaverAPI {
 
     @GET("/v1/search/book_adv.xml")
     @Xml
-    Call<Rss> getRangeDataByAuthor(
+    Call<RssVO> getRangeDataByAuthor(
             @Query("d_auth") String d_author,
             @Query("start") int start,
             @Query("display") int display,
@@ -56,7 +56,7 @@ public interface NaverAPI {
 
     @GET("/v1/search/book_adv.xml")
     @Xml
-    Call<Rss> getRangeDataByPubl(
+    Call<RssVO> getRangeDataByPubl(
             @Query("d_publ") String d_publ,
             @Query("start") int start,
             @Query("display") int display,
@@ -65,7 +65,7 @@ public interface NaverAPI {
 
     @GET("/v1/search/errata.json")
     @Json
-    Call<ErrAtaVo> getErrAtaData(
+    Call<ErrAtaVO> getErrAtaData(
             @Query("query") String query
     );
 

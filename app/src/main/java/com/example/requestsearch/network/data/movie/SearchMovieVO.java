@@ -1,6 +1,6 @@
-package com.example.requestsearch.data.movie;
+package com.example.requestsearch.network.data.movie;
 
-import com.example.requestsearch.data.BaseVO;
+import com.example.requestsearch.network.data.BaseVO;
 
 import java.util.ArrayList;
 

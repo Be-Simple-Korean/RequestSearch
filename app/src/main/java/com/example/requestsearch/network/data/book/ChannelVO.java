@@ -1,4 +1,4 @@
-package com.example.requestsearch.data.book;
+package com.example.requestsearch.network.data.book;
 
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
@@ -7,7 +7,7 @@ import org.simpleframework.xml.Root;
 import java.util.ArrayList;
 
 @Root(name="channel",strict = false)
-public class Channel {
+public class ChannelVO {
     @Element(name="title",required = false)
     String title;
     @Element(name="link",required = false)
@@ -23,17 +23,17 @@ public class Channel {
     @Element(name="display",required = false)
     String display;
     @ElementList(entry="item",inline = true,required = false)
-    ArrayList<Item> item;
+    ArrayList<ItemVO> itemVO;
 
-    public Channel() {
+    public ChannelVO() {
     }
 
-    public Channel(String lastBuildDate, String total, String start, String display, ArrayList<Item> item) {
+    public ChannelVO(String lastBuildDate, String total, String start, String display, ArrayList<ItemVO> itemVO) {
         this.lastBuildDate = lastBuildDate;
         this.total = total;
         this.start = start;
         this.display = display;
-        this.item = item;
+        this.itemVO = itemVO;
     }
 
     @Override
@@ -43,7 +43,7 @@ public class Channel {
                 ", total='" + total + '\'' +
                 ", start='" + start + '\'' +
                 ", display='" + display + '\'' +
-                ", item=" + item +
+                ", item=" + itemVO +
                 '}';
     }
 
@@ -64,7 +64,7 @@ public class Channel {
         return display;
     }
 
-    public ArrayList<Item> getItem() {
-        return item;
+    public ArrayList<ItemVO> getItemVO() {
+        return itemVO;
     }
 }

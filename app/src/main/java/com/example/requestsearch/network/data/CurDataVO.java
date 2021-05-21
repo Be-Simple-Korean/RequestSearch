@@ -1,4 +1,4 @@
-package com.example.requestsearch.data;
+package com.example.requestsearch.network.data;
 
 
 /**

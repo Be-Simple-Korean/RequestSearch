@@ -1,4 +1,4 @@
-package com.example.requestsearch.data.movie;
+package com.example.requestsearch.network.data.movie;
 
 /**
  * 영화 장르 항목 데이터

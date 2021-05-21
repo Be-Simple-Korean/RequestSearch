@@ -5,7 +5,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -16,7 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.requestsearch.decoration.OptionItemDecoration;
+import com.example.requestsearch.adapter.decoration.OptionItemDecoration;
 import com.example.requestsearch.R;
 import com.example.requestsearch.adapter.GridAdapter;
 import com.example.requestsearch.listenerInterface.OnDimissListener;
@@ -119,12 +118,23 @@ public class SelectOptionDialog extends Dialog {
         gridAdapter.setOnItemClick(new OnItemClickListener() {
             @Override
             public void setOnItemClick(View v, int position) {
-                onDimissListener.onDismissed(SelectOptionDialog.this, position, false);
+                d_range="전체";
+                switch (position) {
+                    case 0:
+                        sort = "sim";
+                        break;
+                    case 1:
+                        sort = "date";
+                        break;
+                    case 2:
+                        sort = "count";
+                        break;
+                }
+                onDimissListener.onDismissed(SelectOptionDialog.this, position, sort,d_range);
             }
         });
         recyclerView.setAdapter(gridAdapter);
     }
-
 
 
     /**
@@ -158,7 +168,21 @@ public class SelectOptionDialog extends Dialog {
         gridRandgeAdapter.setOnItemClick(new OnItemClickListener() {
             @Override
             public void setOnItemClick(View v, int position) {
-                onDimissListener.onDismissed(SelectOptionDialog.this, position, true);
+                switch (position) {
+                    case 0:
+                        d_range = "전체";
+                        break;
+                    case 1:
+                        d_range = "책제목";
+                        break;
+                    case 2:
+                        d_range = "저자";
+                        break;
+                    case 3:
+                        d_range = "출판사";
+                        break;
+                }
+                onDimissListener.onDismissed(SelectOptionDialog.this, position, sort,d_range);
             }
         });
         recyclerView.setAdapter(gridRandgeAdapter);

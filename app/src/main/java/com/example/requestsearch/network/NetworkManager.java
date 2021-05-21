@@ -3,11 +3,11 @@ package com.example.requestsearch.network;
 import android.util.Log;
 
 import com.example.requestsearch.XmlOrJsonConverterFactory;
-import com.example.requestsearch.data.errata.ErrAtaVo;
+import com.example.requestsearch.network.data.errata.ErrAtaVO;
 import com.example.requestsearch.listenerInterface.OnCallbackListener;
 
-import com.example.requestsearch.data.book.Rss;
-import com.example.requestsearch.data.movie.SearchMovieVO;
+import com.example.requestsearch.network.data.book.RssVO;
+import com.example.requestsearch.network.data.movie.SearchMovieVO;
 
 import java.io.IOException;
 
@@ -27,14 +27,14 @@ public class NetworkManager {
     private Retrofit retrofit;
     private NaverAPI naverAPI;
 
-    private Call<Rss> callBookData;
-    private Response<Rss> tmpBookResponse=null;
+    private Call<RssVO> callBookData;
+    private Response<RssVO> tmpBookResponse=null;
 
     private Call<SearchMovieVO> callMovieData;
     private Response<SearchMovieVO> tmpMovieResponse = null;
 
-    private Call<ErrAtaVo> callErrAtaData;
-    private Response<ErrAtaVo> tmpErrAtaResponse=null;
+    private Call<ErrAtaVO> callErrAtaData;
+    private Response<ErrAtaVO> tmpErrAtaResponse=null;
 
     private Throwable t = null;
 
@@ -73,9 +73,9 @@ public class NetworkManager {
     public void requestBookData(String word, int start, int display, String sort,OnCallbackListener onBookDataCallback){
 //        callBookData=naverAPI.getBookData(clientDataVO.getClientId(),clientDataVO.getClientSecret(),word,start,display,sort);
         callBookData=naverAPI.getBookData(word,start,display,sort);
-        callBookData.enqueue(new Callback<Rss>() {
+        callBookData.enqueue(new Callback<RssVO>() {
             @Override
-            public void onResponse(Call<Rss> call, Response<Rss> response) {
+            public void onResponse(Call<RssVO> call, Response<RssVO> response) {
 
                 tmpBookResponse=response;
                 if(onBookDataCallback!=null){
@@ -84,7 +84,7 @@ public class NetworkManager {
             }
 
             @Override
-            public void onFailure(Call<Rss> call, Throwable t) {
+            public void onFailure(Call<RssVO> call, Throwable t) {
                 Log.e("TAG",t.getMessage());
                 if (onBookDataCallback != null) {
                     onBookDataCallback.onFailure(t);
@@ -115,9 +115,9 @@ public class NetworkManager {
                 callBookData=naverAPI.getRangeDataByPubl(word,start,display,sort);
                 break;
         }
-        callBookData.enqueue(new Callback<Rss>() {
+        callBookData.enqueue(new Callback<RssVO>() {
             @Override
-            public void onResponse(Call<Rss> call, Response<Rss> response) {
+            public void onResponse(Call<RssVO> call, Response<RssVO> response) {
                 tmpBookResponse=response;
                 if(onCallbackListener!=null){
                     onCallbackListener.onResponse(tmpBookResponse);
@@ -125,7 +125,7 @@ public class NetworkManager {
             }
 
             @Override
-            public void onFailure(Call<Rss> call, Throwable t) {
+            public void onFailure(Call<RssVO> call, Throwable t) {
                 t = t;
                 if (onCallbackListener != null) {
                     onCallbackListener.onFailure(t);
@@ -172,9 +172,9 @@ public class NetworkManager {
      */
     public void requestErrAtaData(String query, OnCallbackListener onErrAtaDataCallback){
         callErrAtaData=naverAPI.getErrAtaData(query);
-        callErrAtaData.enqueue(new Callback<ErrAtaVo>() {
+        callErrAtaData.enqueue(new Callback<ErrAtaVO>() {
             @Override
-            public void onResponse(Call<ErrAtaVo> call, Response<ErrAtaVo> response) {
+            public void onResponse(Call<ErrAtaVO> call, Response<ErrAtaVO> response) {
                 tmpErrAtaResponse=response;
                 if(onErrAtaDataCallback!=null){
                     onErrAtaDataCallback.onResponse(tmpErrAtaResponse);
@@ -182,7 +182,7 @@ public class NetworkManager {
             }
 
             @Override
-            public void onFailure(Call<ErrAtaVo> call, Throwable t) {
+            public void onFailure(Call<ErrAtaVO> call, Throwable t) {
                 t = t;
                 if (onErrAtaDataCallback != null) {
                     onErrAtaDataCallback.onFailure(t);

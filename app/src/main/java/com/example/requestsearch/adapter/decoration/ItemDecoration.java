@@ -1,15 +1,12 @@
-package com.example.requestsearch.decoration;
+package com.example.requestsearch.adapter.decoration;
 
 import android.content.Context;
 import android.graphics.Rect;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.requestsearch.adapter.SearchAdapter;
 
 /**
  * Recyclerview 아이템 여백 설정
